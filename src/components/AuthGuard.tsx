@@ -43,36 +43,58 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        // Not logged in -> redirect to login
+      let profile: UserProfile | null = null;
+
+      if (user) {
+        profile = await getUserProfile(user.uid);
+      } else {
+        // Check local storage fallback session
+        const cached = localStorage.getItem('userProfile');
+        if (cached) {
+          try { profile = JSON.parse(cached); } catch {}
+        }
+      }
+
+      if (!profile && !user) {
+        // Not logged in -> redirect to auth
         router.replace('/auth');
         setChecking(false);
         return;
       }
 
-      try {
-        const profile = await getUserProfile(user.uid);
-        setUserProfile(profile);
-
-        // Check if current route requires a specific role
-        const expectedRole = ROUTE_ROLE_MAP[pathname];
-        if (expectedRole && profile) {
-          const isAllowed = profile.role === expectedRole || profile.role === 'authority';
-
-          if (!isAllowed) {
-            setRequiredRole(expectedRole);
-            setUnauthorized(true);
-            setChecking(false);
-            return;
-          }
-        }
-
-        setUnauthorized(false);
-      } catch (err) {
-        console.error('Error verifying user role:', err);
-      } finally {
-        setChecking(false);
+      // If we have a user but no profile yet, create a default Citizen profile
+      if (user && !profile) {
+        profile = {
+          uid: user.uid,
+          name: user.displayName || user.email?.split('@')[0] || 'User',
+          age: '25',
+          mobile: '9876543210',
+          role: 'citizen',
+          village: 'Vijayawada',
+          district: 'NTR District',
+          state: 'Andhra Pradesh',
+          email: user.email || '',
+        };
+        await saveUserProfile(profile);
       }
+
+      setUserProfile(profile);
+
+      // Check if current route requires a specific role
+      const expectedRole = ROUTE_ROLE_MAP[pathname];
+      if (expectedRole && profile) {
+        const isAllowed = profile.role === expectedRole || profile.role === 'authority';
+
+        if (!isAllowed) {
+          setRequiredRole(expectedRole);
+          setUnauthorized(true);
+          setChecking(false);
+          return;
+        }
+      }
+
+      setUnauthorized(false);
+      setChecking(false);
     });
 
     return () => unsub();
@@ -94,7 +116,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
     setUnlocking(true);
     try {
-      // Upgrade / switch role in Firestore and local state
       const updatedProfile: UserProfile = {
         ...userProfile,
         role: requiredRole as any,
