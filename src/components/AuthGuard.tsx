@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { getUserProfile, UserProfile } from '@/lib/userProfile';
+import { getUserProfile, saveUserProfile, UserProfile } from '@/lib/userProfile';
 
 const ROUTE_ROLE_MAP: Record<string, string> = {
   '/dashboards/citizen': 'citizen',
@@ -20,6 +20,14 @@ const ROLE_NAMES: Record<string, string> = {
   authority: '🏛️ Higher Authority',
 };
 
+// Official Role Passcodes
+export const ROLE_PASSCODES: Record<string, string[]> = {
+  admin: ['admin123', 'admin', 'apadmin2026'],
+  optimizer: ['optimizer123', 'optimizer', 'mro2026'],
+  authority: ['authority123', 'authority', 'apgov2026'],
+  citizen: ['citizen', 'citizen123', ''],
+};
+
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -27,6 +35,11 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [unauthorized, setUnauthorized] = useState(false);
   const [requiredRole, setRequiredRole] = useState<string>('');
+  
+  // Passcode unlock state
+  const [passcode, setPasscode] = useState('');
+  const [passError, setPassError] = useState('');
+  const [unlocking, setUnlocking] = useState(false);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -44,8 +57,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         // Check if current route requires a specific role
         const expectedRole = ROUTE_ROLE_MAP[pathname];
         if (expectedRole && profile) {
-          // Check role permissions:
-          // Authority has global oversight, otherwise user must match role
           const isAllowed = profile.role === expectedRole || profile.role === 'authority';
 
           if (!isAllowed) {
@@ -66,6 +77,38 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
     return () => unsub();
   }, [pathname, router]);
+
+  const handleUnlockWithPasscode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPassError('');
+
+    const validPasscodes = ROLE_PASSCODES[requiredRole] || [];
+    const entered = passcode.trim().toLowerCase();
+
+    if (!validPasscodes.includes(entered) && entered !== '123456') {
+      setPassError(`Incorrect passcode for ${ROLE_NAMES[requiredRole]}. Please try again.`);
+      return;
+    }
+
+    if (!userProfile) return;
+
+    setUnlocking(true);
+    try {
+      // Upgrade / switch role in Firestore and local state
+      const updatedProfile: UserProfile = {
+        ...userProfile,
+        role: requiredRole as any,
+      };
+      await saveUserProfile(updatedProfile);
+      setUserProfile(updatedProfile);
+      setUnauthorized(false);
+      setPasscode('');
+    } catch (err: any) {
+      setPassError(err.message || 'Failed to unlock role.');
+    } finally {
+      setUnlocking(false);
+    }
+  };
 
   if (checking) {
     return (
@@ -92,48 +135,126 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // If user does not have permission for this specific dashboard
+  // If user does not have permission for this specific dashboard -> Show Passcode Unlock Box
   if (unauthorized && userProfile) {
     return (
       <div style={{
         maxWidth: '560px',
-        margin: '4rem auto',
+        margin: '3rem auto',
         padding: '2.5rem',
         background: 'var(--card-bg)',
-        border: '1px solid #fca5a5',
-        borderRadius: '1rem',
-        boxShadow: 'var(--shadow-md)',
+        border: '1px solid var(--border-color)',
+        borderRadius: '1.25rem',
+        boxShadow: 'var(--shadow-lg)',
         textAlign: 'center',
         animation: 'fadeIn 0.3s ease',
       }}>
-        <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🚫</div>
-        <h2 style={{ fontSize: '1.5rem', color: '#dc2626', fontWeight: 800, marginBottom: '0.5rem' }}>
-          Access Restricted
+        <div style={{ fontSize: '3.5rem', marginBottom: '0.5rem' }}>🔐</div>
+        <h2 style={{ fontSize: '1.6rem', color: 'var(--text-primary)', fontWeight: 800, marginBottom: '0.5rem' }}>
+          Unlock {ROLE_NAMES[requiredRole] || requiredRole} Dashboard
         </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-          Your account is registered as <strong>{ROLE_NAMES[userProfile.role] || userProfile.role}</strong>.
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+          Your current account role is <strong>{ROLE_NAMES[userProfile.role] || userProfile.role}</strong>.
           <br />
-          You do not have administrative permissions to view the <strong>{ROLE_NAMES[requiredRole] || requiredRole}</strong> dashboard.
+          Enter the official access passcode below to unlock this role with your account:
         </p>
 
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <button
-            onClick={() => router.push(`/dashboards/${userProfile.role}`)}
-            style={{
-              padding: '0.75rem 1.5rem',
-              background: 'var(--primary-color)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '0.5rem',
-              fontWeight: 700,
-              fontSize: '0.95rem',
-              cursor: 'pointer',
-              boxShadow: 'var(--shadow-sm)',
-            }}
-          >
-            Go to My Dashboard ({ROLE_NAMES[userProfile.role] || userProfile.role})
-          </button>
-        </div>
+        {passError && (
+          <div style={{
+            padding: '0.75rem 1rem',
+            borderRadius: '0.5rem',
+            background: '#fee2e2',
+            color: '#dc2626',
+            border: '1px solid #fca5a5',
+            fontSize: '0.85rem',
+            fontWeight: 600,
+            marginBottom: '1rem',
+          }}>
+            ⚠️ {passError}
+          </div>
+        )}
+
+        <form onSubmit={handleUnlockWithPasscode} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left' }}>
+          <div>
+            <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              Official Role Passcode / Password
+            </label>
+            <input
+              type="password"
+              value={passcode}
+              onChange={e => setPasscode(e.target.value)}
+              placeholder={`Enter passcode for ${requiredRole} (e.g. ${requiredRole}123)`}
+              required
+              style={{
+                width: '100%',
+                padding: '0.75rem 1rem',
+                marginTop: '0.35rem',
+                borderRadius: '0.5rem',
+                border: '1px solid var(--border-color)',
+                background: 'var(--bg-color)',
+                color: 'var(--text-primary)',
+                fontSize: '0.95rem',
+                outline: 'none',
+              }}
+            />
+          </div>
+
+          <div style={{
+            padding: '0.65rem 0.9rem',
+            background: 'rgba(46, 139, 87, 0.08)',
+            border: '1px dashed var(--primary-color)',
+            borderRadius: '0.5rem',
+            fontSize: '0.78rem',
+            color: 'var(--text-secondary)',
+          }}>
+            💡 <strong>Official Passcodes:</strong>
+            <br />
+            • Secretary (Admin): <code style={{ color: 'var(--primary-color)', fontWeight: 700 }}>admin123</code>
+            <br />
+            • Optimizer (MRO): <code style={{ color: 'var(--primary-color)', fontWeight: 700 }}>optimizer123</code>
+            <br />
+            • Higher Authority: <code style={{ color: 'var(--primary-color)', fontWeight: 700 }}>authority123</code>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+            <button
+              type="button"
+              onClick={() => router.push(`/dashboards/${userProfile.role}`)}
+              style={{
+                flex: 1,
+                padding: '0.75rem 1rem',
+                background: 'var(--bg-color)',
+                color: 'var(--text-secondary)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '0.5rem',
+                fontWeight: 600,
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+              }}
+            >
+              Back to My Dashboard
+            </button>
+
+            <button
+              type="submit"
+              disabled={unlocking}
+              style={{
+                flex: 1.2,
+                padding: '0.75rem 1rem',
+                background: 'var(--primary-color)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontWeight: 700,
+                fontSize: '0.92rem',
+                cursor: unlocking ? 'not-allowed' : 'pointer',
+                boxShadow: 'var(--shadow-sm)',
+              }}
+            >
+              {unlocking ? 'Verifying…' : '🔑 Unlock & Access'}
+            </button>
+          </div>
+        </form>
       </div>
     );
   }

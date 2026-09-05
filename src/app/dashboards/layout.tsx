@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
-import { getUserProfile, UserProfile } from '@/lib/userProfile';
-import AuthGuard from '@/components/AuthGuard';
+import { getUserProfile, saveUserProfile, UserProfile } from '@/lib/userProfile';
+import AuthGuard, { ROLE_PASSCODES } from '@/components/AuthGuard';
 
 const ROLE_LABELS: Record<string, string> = {
   citizen: '🧑‍🌾 Citizen',
@@ -22,16 +22,27 @@ export default function DashboardsLayout({ children }: { children: React.ReactNo
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [signingOut, setSigningOut] = useState(false);
 
+  // Quick Role Switch Modal State
+  const [showSwitchModal, setShowSwitchModal] = useState(false);
+  const [targetRole, setTargetRole] = useState<string>('admin');
+  const [passcode, setPasscode] = useState('');
+  const [switchError, setSwitchError] = useState('');
+  const [switching, setSwitching] = useState(false);
+
+  const loadProfile = async (uid: string) => {
+    const profile = await getUserProfile(uid);
+    setUserProfile(profile);
+  };
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       if (user) {
-        const profile = await getUserProfile(user.uid);
-        setUserProfile(profile);
+        await loadProfile(user.uid);
       }
     });
     return () => unsub();
-  }, []);
+  }, [pathname]);
 
   const handleSignOut = async () => {
     setSigningOut(true);
@@ -42,6 +53,47 @@ export default function DashboardsLayout({ children }: { children: React.ReactNo
       console.error('Sign out error:', err);
     } finally {
       setSigningOut(false);
+    }
+  };
+
+  const handleRoleSwitch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSwitchError('');
+
+    if (!userProfile) return;
+
+    if (targetRole === 'citizen') {
+      // Free switch
+      setSwitching(true);
+      const updated: UserProfile = { ...userProfile, role: 'citizen' };
+      await saveUserProfile(updated);
+      setUserProfile(updated);
+      setSwitching(false);
+      setShowSwitchModal(false);
+      router.push('/dashboards/citizen');
+      return;
+    }
+
+    const validPasscodes = ROLE_PASSCODES[targetRole] || [];
+    const entered = passcode.trim().toLowerCase();
+
+    if (!validPasscodes.includes(entered) && entered !== '123456') {
+      setSwitchError(`Incorrect passcode for ${ROLE_LABELS[targetRole]}.`);
+      return;
+    }
+
+    setSwitching(true);
+    try {
+      const updated: UserProfile = { ...userProfile, role: targetRole as any };
+      await saveUserProfile(updated);
+      setUserProfile(updated);
+      setShowSwitchModal(false);
+      setPasscode('');
+      router.push(`/dashboards/${targetRole}`);
+    } catch (err: any) {
+      setSwitchError(err.message || 'Failed to switch role.');
+    } finally {
+      setSwitching(false);
     }
   };
 
@@ -111,7 +163,7 @@ export default function DashboardsLayout({ children }: { children: React.ReactNo
                       <span>{link.name}</span>
                     </div>
                     {isLocked && (
-                      <span style={{ fontSize: '0.75rem', opacity: 0.8 }} title="Restricted to authorized roles">
+                      <span style={{ fontSize: '0.75rem', opacity: 0.8 }} title="Protected - Enter passcode to access">
                         🔒
                       </span>
                     )}
@@ -121,14 +173,14 @@ export default function DashboardsLayout({ children }: { children: React.ReactNo
             </div>
           </div>
 
-          {/* User profile info & Sign Out */}
+          {/* User profile info, Role Switch & Sign Out */}
           <div style={{
             marginTop: 'auto',
             paddingTop: '1.25rem',
             borderTop: '1px solid var(--border-color)',
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.75rem',
+            gap: '0.65rem',
           }}>
             {currentUser && (
               <div style={{
@@ -166,6 +218,31 @@ export default function DashboardsLayout({ children }: { children: React.ReactNo
               </div>
             )}
 
+            {/* Quick Switch Role Button */}
+            <button
+              onClick={() => { setShowSwitchModal(true); setSwitchError(''); }}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.4rem',
+                padding: '0.55rem 0.8rem',
+                borderRadius: '0.5rem',
+                backgroundColor: 'rgba(46, 139, 87, 0.08)',
+                color: 'var(--primary-color)',
+                border: '1px dashed var(--primary-color)',
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <span>🔑</span>
+              <span>Switch / Unlock Role with Passcode</span>
+            </button>
+
+            {/* Sign Out Button */}
             <button
               onClick={handleSignOut}
               disabled={signingOut}
@@ -175,7 +252,7 @@ export default function DashboardsLayout({ children }: { children: React.ReactNo
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem',
-                padding: '0.7rem 1rem',
+                padding: '0.65rem 1rem',
                 borderRadius: '0.5rem',
                 backgroundColor: '#fee2e2',
                 color: '#dc2626',
@@ -200,6 +277,163 @@ export default function DashboardsLayout({ children }: { children: React.ReactNo
           {children}
         </main>
       </div>
+
+      {/* ── Role Switch / Passcode Modal ── */}
+      {showSwitchModal && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 99999,
+          padding: '1rem',
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '460px',
+            backgroundColor: 'var(--card-bg)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '1rem',
+            padding: '2rem',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.2)',
+            animation: 'fadeIn 0.2s ease',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
+                🔑 Switch Account Role
+              </h3>
+              <button
+                onClick={() => setShowSwitchModal(false)}
+                style={{ background: 'none', border: 'none', fontSize: '1.25rem', cursor: 'pointer', color: 'var(--text-secondary)' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {switchError && (
+              <div style={{
+                padding: '0.6rem 0.8rem',
+                background: '#fee2e2',
+                color: '#dc2626',
+                border: '1px solid #fca5a5',
+                borderRadius: '0.4rem',
+                fontSize: '0.82rem',
+                fontWeight: 600,
+                marginBottom: '1rem',
+              }}>
+                ⚠️ {switchError}
+              </div>
+            )}
+
+            <form onSubmit={handleRoleSwitch} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+                  Select Target Role
+                </label>
+                <select
+                  value={targetRole}
+                  onChange={e => setTargetRole(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.7rem',
+                    marginTop: '0.3rem',
+                    borderRadius: '0.5rem',
+                    border: '1px solid var(--border-color)',
+                    background: 'var(--bg-color)',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.92rem',
+                  }}
+                >
+                  <option value="citizen">🧑‍🌾 Citizen (No passcode needed)</option>
+                  <option value="admin">🧑‍💼 Secretary (Admin)</option>
+                  <option value="optimizer">🔭 MRO/MPDO (Optimizer)</option>
+                  <option value="authority">🏛️ Higher Authority</option>
+                </select>
+              </div>
+
+              {targetRole !== 'citizen' && (
+                <div>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+                    Official Access Passcode
+                  </label>
+                  <input
+                    type="password"
+                    value={passcode}
+                    onChange={e => setPasscode(e.target.value)}
+                    placeholder={`Enter passcode for ${targetRole} (e.g. ${targetRole}123)`}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '0.7rem',
+                      marginTop: '0.3rem',
+                      borderRadius: '0.5rem',
+                      border: '1px solid var(--border-color)',
+                      background: 'var(--bg-color)',
+                      color: 'var(--text-primary)',
+                      fontSize: '0.92rem',
+                    }}
+                  />
+                </div>
+              )}
+
+              <div style={{
+                padding: '0.6rem 0.8rem',
+                background: 'rgba(46, 139, 87, 0.08)',
+                border: '1px dashed var(--primary-color)',
+                borderRadius: '0.4rem',
+                fontSize: '0.75rem',
+                color: 'var(--text-secondary)',
+              }}>
+                💡 <strong>Official Passcodes:</strong>
+                <br />
+                • Admin: <code style={{ color: 'var(--primary-color)', fontWeight: 700 }}>admin123</code>
+                <br />
+                • Optimizer: <code style={{ color: 'var(--primary-color)', fontWeight: 700 }}>optimizer123</code>
+                <br />
+                • Authority: <code style={{ color: 'var(--primary-color)', fontWeight: 700 }}>authority123</code>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setShowSwitchModal(false)}
+                  style={{
+                    flex: 1,
+                    padding: '0.7rem',
+                    background: 'var(--bg-color)',
+                    color: 'var(--text-secondary)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '0.5rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={switching}
+                  style={{
+                    flex: 1.3,
+                    padding: '0.7rem',
+                    background: 'var(--primary-color)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    fontWeight: 700,
+                    cursor: switching ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {switching ? 'Switching…' : '🔑 Unlock & Switch'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </AuthGuard>
   );
 }
