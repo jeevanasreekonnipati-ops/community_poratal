@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import styles from './citizen.module.css';
 import { useResources, submitResource } from '@/lib/useResources';
+import RepresentativesPanel from '@/components/RepresentativesPanel';
+import GovtSupportPanel from '@/components/GovtSupportPanel';
 
 const InteractiveMap = dynamic(() => import('@/components/Map'), {
   ssr: false,
@@ -72,7 +74,7 @@ export default function CitizenDashboard() {
   const handleSurveySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPin) {
-      setSubmitError('Please use "Use My Current Location" or allow location access first.');
+      setSubmitError('Please use "Use My Current Location" or click on the map to place a pin.');
       return;
     }
     setSubmitting(true);
@@ -106,7 +108,7 @@ export default function CitizenDashboard() {
       <header className={styles.header}>
         <h1 className={styles.title}>🌍 Citizen Dashboard</h1>
         <p className={styles.subtitle}>
-          Report local resources in real time — your data appears live on the map below.
+          Report local resources in real time, view your elected officials, and discover government support schemes.
         </p>
         {dataLoading && <div className={styles.liveTag}>⏳ Connecting to live database…</div>}
         {!dataLoading && !dataError && (
@@ -116,101 +118,122 @@ export default function CitizenDashboard() {
       </header>
 
       <div className={styles.contentGrid}>
-        {/* ---- MAP ---- */}
-        <section className={`glass-panel ${styles.mapSection}`}>
-          <h2>
-            Live Resource Map
-            {approvedLocations.length > 0 && (
-              <span className={styles.markerCount}>{approvedLocations.length} markers</span>
-            )}
-          </h2>
-          <div className={styles.legend}>
-            {Object.entries(TYPE_LABELS).map(([key, label]) => (
-              <span key={key} className={styles.legendItem} data-type={key}>
-                {label}
-              </span>
-            ))}
-          </div>
-          <div className={styles.mapContainer}>
-            <InteractiveMap
-              locations={approvedLocations}
-              userPosition={userPosition}
-              flyTo={flyTo}
-              selectedPin={selectedPin}
-            />
-          </div>
-        </section>
-
-        {/* ---- SURVEY FORM ---- */}
-        <section className={`glass-panel ${styles.surveySection}`}>
-          <h2>📝 Submit a Resource Survey</h2>
-
-          {successMsg && <div className={styles.successBanner}>{successMsg}</div>}
-          {submitError && <div className={styles.errorBanner}>{submitError}</div>}
-
-          <form className={styles.form} onSubmit={handleSurveySubmit}>
-            <div className={styles.formGroup}>
-              <label htmlFor="resourceType">Resource Type *</label>
-              <select
-                id="resourceType"
-                value={resourceType}
-                onChange={(e) => setResourceType(e.target.value)}
-                required
-              >
-                <option value="" disabled>Select type…</option>
-                {Object.entries(TYPE_LABELS).map(([key, label]) => (
-                  <option key={key} value={key}>{label}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className={styles.formGroup}>
-              <label>Your Location *</label>
-              <button
-                type="button"
-                className={styles.locationBtn}
-                onClick={handleGetLocation}
-                disabled={gpsLoading}
-              >
-                {gpsLoading ? '📡 Detecting…' : '📍 Use My Current Location (GPS)'}
-              </button>
-              {gpsError && <p className={styles.fieldError}>{gpsError}</p>}
-              {selectedPin && (
-                <p className={styles.coordInfo}>
-                  ✅ {selectedPin[0].toFixed(5)}, {selectedPin[1].toFixed(5)}
-                </p>
+        {/* ---- MAP & OFFICIALS SECTION ---- */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <section className={`glass-panel ${styles.mapSection}`}>
+            <h2>
+              Live Resource Map
+              {approvedLocations.length > 0 && (
+                <span className={styles.markerCount}>{approvedLocations.length} markers</span>
               )}
+            </h2>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+              💡 Click anywhere on the map to set a location pin or use GPS.
+            </p>
+            <div className={styles.legend}>
+              {Object.entries(TYPE_LABELS).map(([key, label]) => (
+                <span key={key} className={styles.legendItem} data-type={key}>
+                  {label}
+                </span>
+              ))}
             </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="locationName">Location Name *</label>
-              <input
-                id="locationName"
-                type="text"
-                value={locationName}
-                onChange={(e) => setLocationName(e.target.value)}
-                placeholder="e.g. Gandhi Primary School"
-                required
+            <div className={styles.mapContainer}>
+              <InteractiveMap
+                locations={approvedLocations}
+                userPosition={userPosition}
+                flyTo={flyTo}
+                selectedPin={selectedPin}
+                onMapClick={(lat, lng) => {
+                  setSelectedPin([lat, lng]);
+                  setFlyTo([lat, lng]);
+                }}
               />
             </div>
+          </section>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="description">Feedback / Condition *</label>
-              <textarea
-                id="description"
-                rows={4}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe the resource condition, needs, or issues…"
-                required
-              />
-            </div>
+          {/* ---- ELECTED OFFICIALS (PM, CM, MP, MLA) ---- */}
+          <RepresentativesPanel userPosition={userPosition} />
+        </div>
 
-            <button type="submit" className={styles.submitBtn} disabled={submitting}>
-              {submitting ? 'Submitting…' : '🚀 Submit Survey'}
-            </button>
-          </form>
-        </section>
+        {/* ---- SURVEY FORM & GOVT SCHEMES SECTION ---- */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <section className={`glass-panel ${styles.surveySection}`}>
+            <h2>📝 Submit a Resource Survey</h2>
+
+            {successMsg && <div className={styles.successBanner}>{successMsg}</div>}
+            {submitError && <div className={styles.errorBanner}>{submitError}</div>}
+
+            <form className={styles.form} onSubmit={handleSurveySubmit}>
+              <div className={styles.formGroup}>
+                <label htmlFor="resourceType">Resource Type *</label>
+                <select
+                  id="resourceType"
+                  value={resourceType}
+                  onChange={(e) => setResourceType(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>Select type…</option>
+                  {Object.entries(TYPE_LABELS).map(([key, label]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Location Coordinates *</label>
+                <button
+                  type="button"
+                  className={styles.locationBtn}
+                  onClick={handleGetLocation}
+                  disabled={gpsLoading}
+                >
+                  {gpsLoading ? '📡 Detecting…' : '📍 Use My Current Location (GPS)'}
+                </button>
+                {gpsError && <p className={styles.fieldError}>{gpsError}</p>}
+                {selectedPin ? (
+                  <p className={styles.coordInfo}>
+                    ✅ Selected Pin: {selectedPin[0].toFixed(5)}, {selectedPin[1].toFixed(5)}
+                  </p>
+                ) : (
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
+                    Tip: Click directly on the map or tap GPS button above.
+                  </p>
+                )}
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="locationName">Location Name *</label>
+                <input
+                  id="locationName"
+                  type="text"
+                  value={locationName}
+                  onChange={(e) => setLocationName(e.target.value)}
+                  placeholder="e.g. Gandhi Primary School"
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="description">Feedback / Condition *</label>
+                <textarea
+                  id="description"
+                  rows={4}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Describe the resource condition, needs, or issues…"
+                  required
+                />
+              </div>
+
+              <button type="submit" className={styles.submitBtn} disabled={submitting}>
+                {submitting ? 'Submitting…' : '🚀 Submit Survey'}
+              </button>
+            </form>
+          </section>
+
+          {/* ---- GOVT SCHEMES & SUPPORT LIST ---- */}
+          <GovtSupportPanel compact={true} />
+        </div>
       </div>
     </main>
   );
