@@ -5,20 +5,35 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
+import { getUserProfile, UserProfile } from '@/lib/userProfile';
+
+const ROLE_LABELS: Record<string, string> = {
+  citizen: 'Citizen',
+  admin: 'Admin',
+  optimizer: 'Optimizer',
+  authority: 'Authority',
+};
 
 export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+      if (user) {
+        const profile = await getUserProfile(user.uid);
+        setUserProfile(profile);
+      } else {
+        setUserProfile(null);
+      }
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [pathname]);
 
   const handleSignOut = async () => {
     try {
@@ -30,11 +45,11 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Citizen', path: '/dashboards/citizen' },
-    { name: 'Admin', path: '/dashboards/admin' },
-    { name: 'Optimizer', path: '/dashboards/optimizer' },
-    { name: 'Authority', path: '/dashboards/authority' },
+    { name: 'Home', path: '/', role: 'all' },
+    { name: 'Citizen', path: '/dashboards/citizen', role: 'citizen' },
+    { name: 'Admin', path: '/dashboards/admin', role: 'admin' },
+    { name: 'Optimizer', path: '/dashboards/optimizer', role: 'optimizer' },
+    { name: 'Authority', path: '/dashboards/authority', role: 'authority' },
   ];
 
   return (
@@ -62,30 +77,50 @@ export default function Navbar() {
       <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
         {navLinks.map((link) => {
           const isActive = pathname === link.path;
+          const isPermitted = !userProfile || link.role === 'all' || userProfile.role === link.role || userProfile.role === 'authority';
+
           return (
             <Link
               key={link.path}
               href={link.path}
               style={{
                 textDecoration: 'none',
-                color: isActive ? 'var(--primary-color)' : 'var(--text-secondary)',
+                color: isActive ? 'var(--primary-color)' : !isPermitted ? '#9ca3af' : 'var(--text-secondary)',
                 fontWeight: isActive ? 700 : 500,
                 fontSize: '0.92rem',
                 transition: 'color 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem',
               }}
             >
-              {link.name}
+              <span>{link.name}</span>
+              {!isPermitted && <span style={{ fontSize: '0.7rem' }}>🔒</span>}
             </Link>
           );
         })}
 
-        {/* Auth CTA */}
+        {/* Auth status & actions */}
         {!loading && (
           currentUser ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginLeft: '0.5rem' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                👤 {currentUser.displayName || currentUser.email?.split('@')[0]}
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: '0.5rem' }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                background: 'rgba(46, 139, 87, 0.1)',
+                padding: '0.3rem 0.75rem',
+                borderRadius: '999px',
+                border: '1px solid rgba(46, 139, 87, 0.25)',
+              }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--primary-color)' }}>
+                  {userProfile?.role ? `🧑‍💼 ${ROLE_LABELS[userProfile.role] || userProfile.role}` : '👤 User'}
+                </span>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                  ({userProfile?.name || currentUser.displayName || currentUser.email?.split('@')[0]})
+                </span>
+              </div>
+
               <button
                 onClick={handleSignOut}
                 style={{
