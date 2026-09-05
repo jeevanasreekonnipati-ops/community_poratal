@@ -81,19 +81,20 @@
 }
 
 .toggleTab.active {
-  background: #2563eb;
+  background: var(--primary-color);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.4);
+  box-shadow: 0 2px 8px rgba(46, 139, 87, 0.4);
 }
 
 .errorBanner {
   background: rgba(239,68,68,0.15);
   border: 1px solid rgba(239,68,68,0.3);
-  color: #fca5a5;
+  color: #ef4444;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .form {
@@ -125,8 +126,8 @@
 .formGroup input,
 .formGroup select {
   padding: 0.65rem 0.875rem;
-  background: rgba(150, 150, 150, 0.06);
-  border: 1px solid rgba(150, 150, 150, 0.2);
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   color: var(--text-primary);
   font-size: 0.95rem;
@@ -136,8 +137,8 @@
 
 .formGroup input:focus,
 .formGroup select:focus {
-  border-color: #2563eb;
-  background: rgba(37,99,235,0.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.15);
 }
 
 .formGroup select option {
@@ -166,20 +167,20 @@
 }
 
 .roleBtn:hover {
-  border-color: #2563eb;
-  color: #2563eb;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .roleSelected {
-  border-color: #2563eb !important;
-  background: rgba(37,99,235,0.2) !important;
+  border-color: var(--primary-color) !important;
+  background: rgba(46, 139, 87, 0.15) !important;
   color: var(--text-primary) !important;
 }
 
 .submitBtn {
   margin-top: 0.5rem;
   padding: 0.875rem;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #2e8b57, #10b981);
   color: #fff;
   border: none;
   border-radius: 0.625rem;
@@ -187,12 +188,12 @@
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 15px rgba(37,99,235,0.4);
+  box-shadow: 0 4px 15px rgba(46, 139, 87, 0.35);
 }
 
 .submitBtn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(37,99,235,0.5);
+  box-shadow: 0 6px 20px rgba(46, 139, 87, 0.45);
 }
 
 .submitBtn:disabled {
