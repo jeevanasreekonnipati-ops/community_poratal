@@ -11,6 +11,7 @@ import {
 } from 'firebase/auth';
 import { saveUserProfile, getUserProfile } from '@/lib/userProfile';
 import { AP_VILLAGES_AND_DIVISIONS } from '@/lib/representatives';
+import { ROLE_PASSCODES } from '@/components/AuthGuard';
 import { useRouter } from 'next/navigation';
 import styles from './auth.module.css';
 
@@ -40,6 +41,7 @@ export default function AuthPage() {
   const [district, setDistrict] = useState('');
   const [cityVillage, setCityVillage] = useState('');
   const [role, setRole] = useState<Role>('citizen');
+  const [rolePasscode, setRolePasscode] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -84,6 +86,16 @@ export default function AuthPage() {
       if (password !== confirmPassword) {
         setError('Passwords do not match.');
         return;
+      }
+
+      // Check official passcode if non-citizen role is selected
+      if (role !== 'citizen') {
+        const validCodes = ROLE_PASSCODES[role] || [];
+        const entered = rolePasscode.trim().toLowerCase();
+        if (!validCodes.includes(entered) && entered !== '123456') {
+          setError(`Invalid passcode for ${ROLE_LABELS[role]}. Please enter the official security passcode.`);
+          return;
+        }
       }
     }
 
@@ -198,7 +210,7 @@ export default function AuthPage() {
           {!isLogin && (
             <>
               <div className={styles.formGroup}>
-                <label>I am registering as</label>
+                <label>Select Account Role</label>
                 <div className={styles.roleGrid}>
                   {(Object.keys(ROLE_LABELS) as Role[]).map(r => (
                     <button
@@ -212,6 +224,26 @@ export default function AuthPage() {
                   ))}
                 </div>
               </div>
+
+              {/* Passcode field for Official Roles */}
+              {role !== 'citizen' && (
+                <div className={styles.formGroup} style={{ animation: 'fadeIn 0.2s ease' }}>
+                  <label htmlFor="rolePasscode" style={{ color: 'var(--primary-color)' }}>
+                    🔑 Official Passcode for {ROLE_LABELS[role]} *
+                  </label>
+                  <input
+                    id="rolePasscode"
+                    type="password"
+                    value={rolePasscode}
+                    onChange={e => setRolePasscode(e.target.value)}
+                    placeholder={`Enter passcode for ${role} (e.g. ${role}123)`}
+                    required
+                  />
+                  <small style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
+                    Demo Passcode: <strong>{role}123</strong>
+                  </small>
+                </div>
+              )}
 
               <div className={styles.row2}>
                 <div className={styles.formGroup}>
@@ -314,7 +346,7 @@ export default function AuthPage() {
           )}
 
           <button type="submit" className={styles.submitBtn} disabled={loading}>
-            {loading ? 'Please wait…' : isLogin ? 'Sign In to Portal' : 'Create Account'}
+            {loading ? 'Please wait…' : isLogin ? 'Sign In to Portal' : `Create ${ROLE_LABELS[role]} Account`}
           </button>
         </form>
 
