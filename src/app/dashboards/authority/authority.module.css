@@ -1,0 +1,105 @@
+.container { min-height: 100vh; background: linear-gradient(160deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%); color: #f1f5f9; font-family: 'Inter', sans-serif; }
+.loadingScreen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: #a5b4fc; background: #1e1b4b; }
+.spinner { width: 3rem; height: 3rem; border: 3px solid rgba(255,255,255,0.1); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2rem; background: rgba(30,27,75,0.95); border-bottom: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 1rem; }
+.headerLeft { display: flex; align-items: center; gap: 1rem; font-size: 2.5rem; }
+.headerTitle { font-size: 1.3rem; font-weight: 800; color: #e0e7ff; margin: 0; }
+.headerSub { font-size: 0.875rem; color: #818cf8; margin: 0; }
+.headerRight { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.statePerfBadge { padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 800; }
+.userName { font-size: 0.9rem; color: #c7d2fe; font-weight: 600; }
+.logoutBtn { padding: 0.5rem 1.25rem; background: rgba(2ef,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); border-radius: 0.5rem; color: #fca5a5; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.logoutBtn:hover { background: rgba(239,68,68,0.3); }
+
+/* Stats Row */
+.statRow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.25rem; padding: 1.5rem 2rem; }
+.statCard { background: rgba(49,46,129,0.5); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1.5rem; text-align: center; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+.statNum { font-size: 2.5rem; font-weight: 900; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+.statLabel { font-size: 0.8rem; color: #a5b4fc; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.statPending .statNum { color: #fcd34d; }
+.statResolved .statNum { color: #34d399; }
+
+/* Navigation */
+.tabNav { display: flex; gap: 0.5rem; padding: 0 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); overflow-x: auto; }
+.tabBtn { padding: 0.875rem 1.5rem; border: none; border-bottom: 3px solid transparent; background: transparent; color: #818cf8; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.tabBtn:hover { color: #c7d2fe; }
+.tabActive { color: #818cf8 !important; border-bottom-color: #6366f1 !important; }
+
+/* Panels */
+.content { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+.panel { background: rgba(49,46,129,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; padding: 2rem; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.panelTitle { font-size: 1.5rem; font-weight: 900; color: #e0e7ff; margin-bottom: 0.5rem; }
+.panelSub { font-size: 0.95rem; color: #a5b4fc; margin-bottom: 1.5rem; }
+.empty { color: #818cf8; font-style: italic; font-size: 1rem; padding: 2rem; text-align: center; background: rgba(0,0,0,0.2); border-radius: 0.75rem; }
+
+/* Overview Grid */
+.overviewGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+
+/* Critical Flags */
+.flagList { display: flex; flex-direction: column; gap: 1rem; }
+.flagCard { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 0.75rem; padding: 1.25rem; }
+.flagHead { display: flex; justify-content: space-between; margin-bottom: 0.5rem; align-items: center; }
+.flagDist { font-size: 1.1rem; font-weight: 800; color: #fecaca; }
+.flagRate { font-size: 0.9rem; font-weight: 700; color: #fca5a5; background: rgba(239,68,68,0.2); padding: 0.2rem 0.6rem; border-radius: 0.4rem; }
+.flagBody { font-size: 0.85rem; color: #f87171; }
+
+/* Scheme Gaps */
+.gapList { display: flex; flex-direction: column; gap: 1rem; }
+.gapItem { display: flex; flex-direction: column; gap: 0.4rem; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 0.75rem; }
+.gapTop { display: flex; justify-content: space-between; font-size: 0.95rem; }
+.gapTop strong { color: #c7d2fe; }
+.gapCount { color: #818cf8; font-weight: 700; }
+.gapBar { height: 8px; background: rgba(255,255,255,0.05); border-radius: 9999px; overflow: hidden; }
+.gapFill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); border-radius: 9999px; }
+
+/* District Table */
+.districtTable { display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 1rem; overflow: hidden; }
+.tableHead { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr; padding: 1.25rem 1.5rem; font-size: 0.8rem; font-weight: 800; color: #a5b4fc; text-transform: uppercase; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.tableRow { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.5fr; padding: 1.25rem 1.5rem; font-size: 0.95rem; color: #e0e7ff; border-bottom: 1px solid rgba(255,255,255,0.03); align-items: center; transition: background 0.15s; }
+.tableRow:hover { background: rgba(255,255,255,0.05); }
+.dName { font-weight: 800; font-size: 1.05rem; }
+.perfLabel { font-size: 0.8rem; font-weight: 800; padding: 0.3rem 0.6rem; border-radius: 0.4rem; text-align: center; }
+
+/* Policy Grid */
+.policyGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+.policyCard { background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+.policyHead { display: flex; flex-direction: column; gap: 0.25rem; }
+.policyLevel { font-size: 0.75rem; font-weight: 800; color: #818cf8; text-transform: uppercase; }
+.policyName { font-size: 1.15rem; font-weight: 900; color: #e0e7ff; }
+.policyStats { display: flex; gap: 1rem; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 0.75rem; }
+.pStat { display: flex; flex-direction: column; gap: 0.2rem; }
+.pStat span { font-size: 1.25rem; font-weight: 800; color: #fca5a5; }
+.pStat label { font-size: 0.7rem; color: #a5b4fc; text-transform: uppercase; font-weight: 700; }
+.policyElig { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; }
+
+/* MRO Reports */
+.optimizerReports { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 1.5rem; }
+.oReportCard { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1.5rem; }
+.oReportHead { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.oDistrict { font-size: 1.2rem; font-weight: 900; color: #c7d2fe; display: block; margin-bottom: 0.25rem; }
+.oMro { font-size: 0.85rem; color: #a5b4fc; }
+.oMonth { font-size: 0.85rem; font-weight: 700; color: #6366f1; background: rgba(99,102,241,0.15); padding: 0.3rem 0.8rem; border-radius: 9999px; }
+.oStats { display: flex; gap: 1.25rem; font-size: 0.9rem; font-weight: 700; color: #e0e7ff; margin-bottom: 1.25rem; }
+.oNote, .oFlags { background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 0.75rem; margin-bottom: 0.75rem; }
+.oNote strong, .oFlags strong { display: block; font-size: 0.8rem; color: #818cf8; text-transform: uppercase; margin-bottom: 0.5rem; }
+.oNote p { font-size: 0.9rem; color: #cbd5e1; margin: 0; line-height: 1.5; }
+.oFlags strong { color: #fca5a5; }
+.oFlags p { font-size: 0.9rem; color: #fecaca; margin: 0; line-height: 1.5; }
+
+/* Map Tab */
+.mapWrap { height: 600px; border-radius: 1.25rem; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); margin-top: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+@media (max-width: 1200px) {
+  .overviewGrid { grid-template-columns: 1fr; }
+  .statRow { grid-template-columns: repeat(3, 1fr); }
+  .tableHead, .tableRow { font-size: 0.85rem; padding: 1rem; }
+}
+@media (max-width: 768px) {
+  .statRow { grid-template-columns: repeat(2, 1fr); }
+  .tableHead { display: none; }
+  .tableRow { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.25rem; border: 1px solid rgba(255,255,255,0.05); border-radius: 0.75rem; margin-bottom: 0.75rem; }
+  .header { padding: 1rem; }
+}
