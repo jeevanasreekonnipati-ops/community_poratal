@@ -1,150 +1,122 @@
-# 🏛️ Sachivalayam Community Portal
+# 🏛️ Sachivalayam & Community Resource Portal (CRP)
 
-A full-stack **4-tier civic engagement platform** built with **Next.js 14**, **Firebase Firestore**, and **React-Leaflet** — designed for Andhra Pradesh citizens to report local resource issues and track government response in real time.
-
----
-
-## 🌐 Live Features
-
-### 👤 Citizen Dashboard
-- **📍 GPS-based Location Detection** — detects your exact coordinates
-- **🗺️ Interactive Live Map** — view all community-reported resources on an OpenStreetMap map with colour-coded markers
-- **📝 Submit Resource Surveys** — report issues: Schools, Hospitals, Transport, Sanitation, Parks
-- **🏛️ Your Elected Officials Panel** — automatically shows your PM, CM, MP & MLA based on your GPS location (reverse geocoded via Nominatim)
-- **💼 Government Support Schemes** — searchable list of 8+ active central government schemes (PM Awas Yojana, Jal Jeevan Mission, Ayushman Bharat, etc.)
-
-### 🛡️ Admin (Secretary) Dashboard
-- **⏳ Live Pending Approvals** — review citizen-submitted surveys in real time
-- **✅ One-Click Approve / Reject** — updates Firestore instantly
-- **👥 Manage User Roles** — view all registered users and change their role (citizen / admin / optimizer / authority)
-- **📄 Generate PDF Report** — download a full colour-coded report of all surveys
-- **📊 Export CSV** — export all survey data as a spreadsheet
-- **📋 View System Logs** — see every approve/reject action with timestamp
-
-### 🔭 Optimizer (MRO) Dashboard
-- Monthly trends, village-level analytics, resource type breakdown
-- Pattern detection and insights for efficient resource allocation
-
-### 🏛️ Authority Dashboard
-- Scheme monitoring across Central / State / District levels
-- Escalation tracking and high-level summary statistics
+An intelligent, multi-tier civic management platform connecting **Citizens**, **Village Secretaries (Admins)**, **MRO / Optimizers**, and **State Higher Authorities** with real-time mapping, governance tracking, and grievance redressal.
 
 ---
 
-## 🛠️ Tech Stack
+## 🌟 Key Features
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js 14 (App Router), React, TypeScript |
-| **Styling** | CSS Modules + Custom CSS Variables (Dynamic Theming) |
-| **Database** | Firebase Firestore (real-time) |
-| **Auth** | Firebase Authentication (Google + Email) |
-| **Maps** | React-Leaflet + OpenStreetMap + Nominatim reverse geocoding |
-| **PDF** | jsPDF + jspdf-autotable |
-| **Deployment** | Vercel (recommended) |
+### 1. 🌍 Citizen Dashboard
+- **📍 Live Geospatial Map:** Interactive Leaflet / OpenStreetMap interface displaying all approved community amenities (Schools, Hospitals, Water, Sanitation, Transport, Parks).
+- **📝 Real-Time Resource Surveying:** Report infrastructure needs with auto-detected GPS coordinates or pin-on-map selection.
+- **🏛️ Elected Officials Mapping:** Dynamic lookup of representatives (Prime Minister, Chief Minister, Member of Parliament [MP], Member of Legislative Assembly [MLA]) auto-detected from user's current GPS location via reverse-geocoding.
+- **📜 Government Support Schemes:** Searchable, categorized catalogue of major central & state welfare schemes (PM Awas Yojana, Jal Jeevan Mission, PM Surya Ghar, Ayushman Bharat, etc.) with eligibility criteria and direct application links.
+
+### 2. 🛡️ Secretary (Admin) Dashboard
+- **⏳ Real-Time Moderation:** Instant live stream of incoming citizen surveys from Firebase Firestore with one-click **Approve** / **Reject** workflows.
+- **👥 User Role Management:** Live administrative panel to promote/assign roles (`citizen`, `admin`, `optimizer`, `authority`) to registered users.
+- **📄 Report Generation (PDF):** One-click generation and download of formatted governance status reports using `jsPDF` and `jspdf-autotable`.
+- **📊 CSV Export:** Direct export of verified location and infrastructure datasets for offline analysis and auditing.
+- **📋 Real-Time Audit Logs:** Complete traceability with timestamped system logs for every administrative decision.
+
+### 3. 🔭 Optimizer (MRO) Dashboard
+- **📊 Village-Level Analytics:** Aggregated statistics of reported vs. resolved infrastructure needs across mandals and districts.
+- **⚡ Resource Balancing:** Identification of high-stress zones and automated resource allocation recommendations.
+
+### 4. 🏛️ Higher Authority Dashboard
+- **📈 State Supervision:** Macro-level monitoring of statewide schemes, budget allocations, and performance metrics across departments.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Frontend & Routing:** [Next.js 16 (Turbopack)](https://nextjs.org/) + [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Backend & Database:** [Firebase Firestore](https://firebase.google.com/) (Real-time NoSQL Data) + [Firebase Authentication](https://firebase.google.com/products/auth)
+- **Mapping & Geolocation:** [React-Leaflet](https://react-leaflet.js.org/) + [OpenStreetMap](https://www.openstreetmap.org/) + [Nominatim Reverse Geocoding API](https://nominatim.org/)
+- **Reporting & Exporting:** [jsPDF](https://github.com/parallax/jsPDF) + [jsPDF-AutoTable](https://github.com/simonbengtsson/jsPDF-AutoTable)
+- **UI / UX:** Clean GeeksForGeeks-inspired light interface, responsive navigation sidebar, floating India Map watermark, and custom CSS variables.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18.x or higher)
+- npm or yarn
+- A Firebase project with Firestore and Auth enabled
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/jeevanasreekonnipati-ops/community_poratal.git
+   cd community_poratal
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+
+3. **Configure Environment Variables:**
+   Create a `.env.local` file in the project root:
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+   ```
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open in browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
 ---
 
 ## 📁 Project Structure
 
 ```
-src/
-├── app/
-│   ├── page.tsx                    # Homepage
-│   ├── auth/                       # Login / Register page
-│   └── dashboards/
-│       ├── layout.tsx              # Sidebar layout (GFG style)
-│       ├── citizen/                # Citizen Dashboard
-│       ├── admin/                  # Admin / Secretary Dashboard
-│       ├── optimizer/              # MRO / Optimizer Dashboard
-│       └── authority/              # Higher Authority Dashboard
-├── components/
-│   ├── Map.tsx                     # Interactive Leaflet map
-│   ├── RepresentativesPanel.tsx    # Shows PM/CM/MP/MLA by GPS
-│   ├── GovtSupportPanel.tsx        # Government schemes list
-│   └── ThemeControls.tsx           # Color theme switcher + India Map watermark
-└── lib/
-    ├── firebase.ts                 # Firebase config
-    ├── useResources.ts             # Real-time Firestore hook
-    └── representatives.ts          # AP MP/MLA/CM database
+├── src/
+│   ├── app/
+│   │   ├── auth/                 # Sign In / Registration with Firebase Auth
+│   │   ├── dashboards/
+│   │   │   ├── layout.tsx        # Persistent GFG-style Sidebar Layout
+│   │   │   ├── admin/            # Moderation, Roles, PDF/CSV Exports, Logs
+│   │   │   ├── authority/        # State-level governance & scheme overview
+│   │   │   ├── citizen/          # Survey submission, Live Map, Officials & Schemes
+│   │   │   └── optimizer/        # Resource distribution & village analytics
+│   │   ├── globals.css           # Design tokens, theme variables, reset
+│   │   ├── layout.tsx            # Root Navbar, Watermark & Theme controls
+│   │   └── page.tsx              # Landing Page with pastel feature cards
+│   ├── components/
+│   │   ├── GovtSupportPanel.tsx  # Central & State welfare schemes explorer
+│   │   ├── Map.tsx               # Leaflet map container with custom pins & GPS
+│   │   ├── RepresentativesPanel.tsx # Geolocation-based MP/MLA/CM/PM lookup
+│   │   └── ThemeControls.tsx     # Color switcher & constant India Map watermark
+│   └── lib/
+│       ├── firebase.ts           # Firebase App, Auth & Firestore initialization
+│       ├── representatives.ts    # AP Lok Sabha & Assembly constituency mappings
+│       └── useResources.ts       # Real-time Firestore hooks for resource CRUD
+├── public/                       # Static assets & icons
+├── package.json
+└── README.md
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🔒 Security & Privacy
 
-### 1. Clone the repo
-```bash
-git clone https://github.com/jeevanasreekonnipati-ops/community_poratal.git
-cd community_poratal
-```
-
-### 2. Install dependencies
-```bash
-npm install
-```
-
-### 3. Set up Firebase
-Create a `.env.local` file in the root directory:
-```env
-NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-```
-
-### 4. Run the development server
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+- Client coordinates are processed strictly via standard client-side browser geolocation and OpenStreetMap Nominatim for public constituency lookup.
+- Firebase credentials are encapsulated via environment configurations.
 
 ---
 
-## 🎨 UI Design
+## 📜 License
 
-- Inspired by **GeeksForGeeks** layout: left sidebar navigation + main content area
-- **Pure white background** with **GFG Green** (`#2e8b57`) accent color
-- **Pastel feature cards** (peach, yellow, teal, green) matching the reference design
-- **Dynamic theme switcher** (🎨 button, bottom-right) — change accent color across the entire app
-- **India Map watermark** — always visible, adapts to theme color
-
----
-
-## 🏗️ 4-Tier System Architecture
-
-```
-Citizen → submits report
-    ↓
-Admin (Secretary) → approves / rejects
-    ↓
-Optimizer (MRO) → monitors trends & patterns
-    ↓
-Higher Authority → views state-level summary & schemes
-```
-
----
-
-## 📊 Firestore Collections
-
-| Collection | Purpose |
-|---|---|
-| `resources` | Citizen-submitted survey data |
-| `users` | User profiles with roles |
-| `system_logs` | Admin action logs (approve/reject) |
-
----
-
-## 👨‍💻 Author
-
-**Jeevana Sreekonnipati**  
-[GitHub](https://github.com/jeevanasreekonnipati-ops)
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+This project is developed for civic governance and community empowerment.
