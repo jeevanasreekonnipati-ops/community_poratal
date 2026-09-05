@@ -65,7 +65,11 @@ export default function AuthorityDashboard() {
   }, [submissions]);
 
   const mapLocations = submissions.filter(s => s.lat && s.lng).map(s => ({
-    id: s.id!, type: s.status, lat: s.lat!, lng: s.lng!,
+    id: s.id!,
+    type: s.status,
+    lat: s.lat!,
+    lng: s.lng!,
+    locationName: `${s.village}, ${s.district}`,
     description: `${s.village}, ${s.district} (${s.status})`
   }));
 
