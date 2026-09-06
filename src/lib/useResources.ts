@@ -13,6 +13,9 @@ export type ResourceEntry = {
   description: string;
   status: 'pending' | 'approved' | 'rejected';
   createdAt: Date | null;
+  citizenId?: string;
+  citizenEmail?: string;
+  citizenName?: string;
 };
 
 // Initial verified demo markers across Andhra Pradesh
