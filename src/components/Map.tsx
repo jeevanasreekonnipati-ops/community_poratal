@@ -16,11 +16,12 @@ L.Icon.Default.mergeOptions({
 
 // ── Icon colours per resource type ──────────────────────────────────────────
 const TYPE_COLORS: Record<string, string> = {
-  school:     '#2563eb',
-  hospital:   '#ef4444',
-  transport:  '#f59e0b',
-  sanitation: '#10b981',
-  park:       '#8b5cf6',
+  school:      '#2563eb',
+  hospital:    '#ef4444',
+  transport:   '#f59e0b',
+  sanitation:  '#10b981',
+  park:        '#8b5cf6',
+  gov_support: '#059669',
 };
 
 function makeIcon(type: string) {

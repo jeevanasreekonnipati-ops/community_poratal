@@ -9,7 +9,7 @@ import {
 } from 'firebase/firestore';
 
 const TYPE_EMOJI: Record<string, string> = {
-  school: '🏫', hospital: '🏥', transport: '🚌', sanitation: '🚰', park: '🌳',
+  school: '🏫', hospital: '🏥', transport: '🚌', sanitation: '🚰', park: '🌳', gov_support: '🏛️',
 };
 
 // ─── Types ────────────────────────────────────────────────────────────────────

@@ -21,11 +21,12 @@ const InteractiveMap = dynamic(() => import('@/components/Map'), {
 });
 
 const TYPE_LABELS: Record<string, string> = {
-  school:    '🏫 School / Education',
-  hospital:  '🏥 Hospital / Clinic',
-  transport: '🚌 Public Transport',
-  sanitation:'🚰 Sanitation / Water',
-  park:      '🌳 Public Park',
+  school:       '🏫 School / Education',
+  hospital:     '🏥 Hospital / Clinic',
+  transport:    '🚌 Public Transport',
+  sanitation:   '🚰 Sanitation / Water',
+  park:         '🌳 Public Park',
+  gov_support:  '🏛️ Government Support',
 };
 
 // Helper: Calculate days elapsed / counting
