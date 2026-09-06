@@ -161,15 +161,15 @@ export default function CitizenDashboard() {
   // Filter public map locations
   const approvedLocations = resources.filter(r => r.status === 'approved' || r.status === 'pending');
 
-  // Filter citizen's personal issue submissions
+  // Filter citizen's personal issue submissions (Strictly private per account)
   const currentCitizenId = currentUser?.uid || userProfile?.uid;
   const currentCitizenEmail = currentUser?.email || userProfile?.email;
 
   const mySubmissions = resources.filter(r => {
+    if (!currentCitizenId && !currentCitizenEmail) return false;
     if (currentCitizenId && r.citizenId === currentCitizenId) return true;
-    if (currentCitizenEmail && r.citizenEmail === currentCitizenEmail) return true;
-    // Fallback: show local demo surveys if user has no submitted issues yet
-    return true;
+    if (currentCitizenEmail && r.citizenEmail?.toLowerCase() === currentCitizenEmail.toLowerCase()) return true;
+    return false;
   });
 
   const myApprovedCount = mySubmissions.filter(s => s.status === 'approved').length;
