@@ -172,6 +172,7 @@ export default function AuthPage() {
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
       const cred = await signInWithPopup(auth, provider);
       const user = cred.user;
 
@@ -180,7 +181,7 @@ export default function AuthPage() {
         // First time Google user - initialize profile
         profile = {
           uid: user.uid,
-          name: user.displayName || 'Google User',
+          name: user.displayName || user.email?.split('@')[0] || 'Citizen',
           age: '25',
           mobile: user.phoneNumber || '9876543210',
           role: 'citizen',
@@ -193,7 +194,18 @@ export default function AuthPage() {
       }
       router.push(ROLE_ROUTES[profile.role] || '/dashboards/citizen');
     } catch (err: any) {
-      setError(err.message || 'Google Sign-In was cancelled or failed.');
+      console.error('Google Sign-In Error:', err);
+      if (err.code === 'auth/popup-blocked') {
+        setError('Popup was blocked by your browser. Please allow popups for this site or use Email sign in.');
+      } else if (err.code === 'auth/operation-not-allowed') {
+        setError('Google Sign-In is not enabled yet in Firebase Console. Please enable it in Authentication -> Sign-in method.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('This domain is not authorized in Firebase Console -> Authentication -> Settings -> Authorized domains.');
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        setError('Google Sign-In popup was closed before completing.');
+      } else {
+        setError(err.message || 'Google Sign-In failed. Try Email Sign In / Registration.');
+      }
     } finally {
       setLoading(false);
     }
