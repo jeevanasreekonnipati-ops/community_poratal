@@ -4,9 +4,11 @@ import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { getUserProfile, getSubmissionsByDistrict, saveMonthlyReport, type UserProfile, type Submission, type MonthlyReport } from '@/lib/userProfile';
+import { getUserProfile, getSubmissionsByDistrict, saveMonthlyReport, getAllSubmissions, getMonthlyReports, calcPerformanceScore, type UserProfile, type Submission, type MonthlyReport } from '@/lib/userProfile';
 import { calculatePerformanceScore, getPerformanceTierEmoji, getPerformanceTierColor, type PerformanceScore } from '@/lib/performanceScoring';
 import { getCompleteRepresentativesList } from '@/lib/representativesData';
+import { CENTRAL_REPRESENTATIVES, AP_REPRESENTATIVES } from '@/lib/representatives';
+import { GOVERNMENT_SCHEMES } from '@/lib/schemes';
 import { useRouter } from 'next/navigation';
 import styles from './optimizer.module.css';
 
@@ -76,7 +78,11 @@ export default function OptimizerDashboard() {
   const topGaps = Object.entries(schemeGaps).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
   const mapLocations = submissions.filter(s => s.lat && s.lng).map(s => ({
-    id: s.id!, type: s.status, lat: s.lat!, lng: s.lng!,
+    id: s.id!,
+    type: s.status,
+    lat: s.lat!,
+    lng: s.lng!,
+    locationName: s.village || 'Village Location',
     description: `${s.citizenName} — ${s.village} (${s.status})`
   }));
 

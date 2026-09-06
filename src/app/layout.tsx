@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Community Resource Portal",
-  description: "Map, track, and optimize local resources for sustainable development (SDG 11).",
-};
-
 import Navbar from "@/components/Navbar";
 import ThemeControls from "@/components/ThemeControls";
+
+export const metadata: Metadata = {
+  title: "Sachivalayam & Community Resource Portal",
+  description: "Map, track, and optimize local community resources and governance (SDG 11).",
+};
 
 export default function RootLayout({
   children,
@@ -19,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body className={inter.className}>
+      <body>
         <Navbar />
         {children}
         <ThemeControls />

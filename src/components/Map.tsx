@@ -105,6 +105,7 @@ type MapProps = {
   onMapClick?: (lat: number, lng: number) => void;
   selectedPin?: [number, number] | null;
   height?: string;
+  center?: [number, number] | null;
 };
 
 // ── Main Map Component ────────────────────────────────────────────────────────
@@ -115,8 +116,9 @@ export default function InteractiveMap({
   onMapClick,
   selectedPin,
   height = '500px',
+  center,
 }: MapProps) {
-  const defaultCenter: [number, number] = userPosition ?? [15.9129, 79.7400]; // AP centre
+  const defaultCenter: [number, number] = center ?? userPosition ?? [15.9129, 79.7400]; // AP centre
 
   return (
     <MapContainer
