@@ -9,7 +9,7 @@ import { calculatePerformanceScore, getPerformanceTierEmoji, getPerformanceTierC
 import { getCompleteRepresentativesList } from '@/lib/representativesData';
 import { CENTRAL_REPRESENTATIVES, AP_REPRESENTATIVES } from '@/lib/representatives';
 import { GOVERNMENT_SCHEMES } from '@/lib/schemes';
-import { getFundAllocations, FundAllocation } from '@/lib/funds';
+import { getFundAllocations, allocateDevelopmentFund, FundAllocation } from '@/lib/funds';
 import { useRouter } from 'next/navigation';
 import styles from './optimizer.module.css';
 
@@ -25,6 +25,17 @@ export default function OptimizerDashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'villages' | 'submissions' | 'funds' | 'monthly' | 'map'>('overview');
   const [villageFilter, setVillageFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [fundCategoryFilter, setFundCategoryFilter] = useState('all');
+  const [fundStatusFilter, setFundStatusFilter] = useState('all');
+  const [showNewGrantForm, setShowNewGrantForm] = useState(false);
+  const [reqTitle, setReqTitle] = useState('');
+  const [reqVillage, setReqVillage] = useState('Vijayawada Rural');
+  const [reqDistrict, setReqDistrict] = useState('NTR / Krishna');
+  const [reqCategory, setReqCategory] = useState<'water' | 'sanitation' | 'education' | 'healthcare' | 'roads' | 'support'>('water');
+  const [reqAmount, setReqAmount] = useState('500000');
+  const [reqRemarks, setReqRemarks] = useState('');
+  const [submittingGrant, setSubmittingGrant] = useState(false);
+  const [grantSuccessMsg, setGrantSuccessMsg] = useState('');
   const [monthlyNote, setMonthlyNote] = useState('');
   const [sendingReport, setSendingReport] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -132,6 +143,47 @@ export default function OptimizerDashboard() {
     locationName: s.village || 'Village Location',
     description: `${s.citizenName} — ${s.village} (${s.status}): ${s.specificProblem || ''}`
   }));
+
+  const handleProposeGrant = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reqTitle.trim()) return;
+    setSubmittingGrant(true);
+    try {
+      await allocateDevelopmentFund({
+        projectTitle: reqTitle.trim(),
+        village: reqVillage.trim(),
+        district: reqDistrict,
+        category: reqCategory,
+        amountAllocated: Number(reqAmount) || 500000,
+        allocatedBy: profile?.name ? `${profile.name} (MRO / MPDO Recommendation)` : 'MRO / MPDO Office',
+        status: 'sanctioned',
+        remarks: reqRemarks.trim() || 'Recommended by Mandal Revenue Officer (MRO/MPDO) based on village escalation metrics.',
+      });
+      setGrantSuccessMsg(`✅ Development Grant of ₹${(Number(reqAmount) || 500000).toLocaleString('en-IN')} proposed and registered!`);
+      setReqTitle('');
+      setReqRemarks('');
+      setShowNewGrantForm(false);
+      setTimeout(() => setGrantSuccessMsg(''), 5000);
+      const updated = await getFundAllocations();
+      setFundAllocations(updated);
+    } catch (err: any) {
+      alert(`Failed to propose grant: ${err.message}`);
+    } finally {
+      setSubmittingGrant(false);
+    }
+  };
+
+  const filteredFunds = useMemo(() => {
+    return fundAllocations.filter(f => {
+      const catMatch = fundCategoryFilter === 'all' || f.category === fundCategoryFilter;
+      const statusMatch = fundStatusFilter === 'all' || f.status === fundStatusFilter;
+      return catMatch && statusMatch;
+    });
+  }, [fundAllocations, fundCategoryFilter, fundStatusFilter]);
+
+  const totalFundAmount = useMemo(() => {
+    return fundAllocations.reduce((sum, f) => sum + (f.amountAllocated || 0), 0);
+  }, [fundAllocations]);
 
   const handleSendToAuthority = async () => {
     if (!profile) return;
@@ -374,6 +426,300 @@ export default function OptimizerDashboard() {
                   )}
                 </div>
               ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── GRANTS & FUNDS ── */}
+        {activeTab === 'funds' && (
+          <section className={styles.panel}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '0.75rem' }}>
+              <div>
+                <h2 className={styles.panelTitle}>💰 Mandal & Village Development Grants</h2>
+                <p className={styles.panelSub} style={{ margin: 0 }}>Monitor sanctioned infrastructure allocations and recommend new accelerated development grants.</p>
+              </div>
+              <button
+                onClick={() => setShowNewGrantForm(!showNewGrantForm)}
+                style={{
+                  padding: '0.6rem 1.2rem',
+                  backgroundColor: '#10b981',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  fontWeight: 700,
+                  fontSize: '0.875rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 4px 12px rgba(16,185,129,0.3)'
+                }}
+              >
+                {showNewGrantForm ? '✕ Close Form' : '➕ Propose New Grant'}
+              </button>
+            </div>
+
+            {/* Fund Summary Stats */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '1rem',
+              padding: '1.25rem',
+              backgroundColor: 'rgba(15, 23, 42, 0.6)',
+              borderRadius: '0.875rem',
+              border: '1px solid rgba(255, 255, 255, 0.07)',
+              margin: '1rem 0 1.5rem 0'
+            }}>
+              <div>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Total Projects</span>
+                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#f8fafc' }}>{fundAllocations.length} Active</div>
+              </div>
+              <div>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Total Value Sanctioned</span>
+                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#6ee7b7' }}>₹{totalFundAmount.toLocaleString('en-IN')}</div>
+              </div>
+              <div>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Completed Projects</span>
+                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#38bdf8' }}>
+                  {fundAllocations.filter(f => f.status === 'completed').length}
+                </div>
+              </div>
+              <div>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>In Progress / Sanctioned</span>
+                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fcd34d' }}>
+                  {fundAllocations.filter(f => f.status !== 'completed').length}
+                </div>
+              </div>
+            </div>
+
+            {grantSuccessMsg && (
+              <div style={{
+                padding: '0.85rem 1.25rem',
+                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                border: '1px solid rgba(16, 185, 129, 0.4)',
+                color: '#6ee7b7',
+                borderRadius: '0.5rem',
+                marginBottom: '1.25rem',
+                fontSize: '0.9rem',
+                fontWeight: 600
+              }}>
+                {grantSuccessMsg}
+              </div>
+            )}
+
+            {/* Propose Grant Form */}
+            {showNewGrantForm && (
+              <form onSubmit={handleProposeGrant} style={{
+                padding: '1.5rem',
+                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                borderRadius: '0.875rem',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                marginBottom: '1.75rem'
+              }}>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#60a5fa', fontWeight: 700 }}>
+                  📝 Propose Special Infrastructure Grant (Mandal Recommendation)
+                </h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.875rem' }}>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.3rem', fontWeight: 600 }}>Project Title *</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Village Desilting & Flood Embankment"
+                      value={reqTitle}
+                      onChange={e => setReqTitle(e.target.value)}
+                      required
+                      style={{ width: '100%', padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid rgba(255, 255, 255, 0.15)', backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.3rem', fontWeight: 600 }}>Target Village *</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Gollapudi / Penamaluru"
+                      value={reqVillage}
+                      onChange={e => setReqVillage(e.target.value)}
+                      required
+                      style={{ width: '100%', padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid rgba(255, 255, 255, 0.15)', backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.3rem', fontWeight: 600 }}>Category</label>
+                    <select
+                      value={reqCategory}
+                      onChange={e => setReqCategory(e.target.value as any)}
+                      style={{ width: '100%', padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid rgba(255, 255, 255, 0.15)', backgroundColor: '#1e293b', color: '#fff' }}
+                    >
+                      <option value="water">💧 Water & Drinking</option>
+                      <option value="sanitation">🧹 Sanitation & Waste</option>
+                      <option value="healthcare">🏥 Healthcare & Clinics</option>
+                      <option value="education">🎓 Education & Anganwadis</option>
+                      <option value="roads">🛣️ Roads & CC Pavements</option>
+                      <option value="support">⚡ Energy & Livelihood</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.3rem', fontWeight: 600 }}>Recommended Amount (₹ INR) *</label>
+                    <input
+                      type="number"
+                      step="25000"
+                      value={reqAmount}
+                      onChange={e => setReqAmount(e.target.value)}
+                      required
+                      style={{ width: '100%', padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid rgba(255, 255, 255, 0.15)', backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff' }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.3rem', fontWeight: 600 }}>Mandal Justification / Ground Assessment</label>
+                  <textarea
+                    rows={2}
+                    placeholder="Urgent requirement identified during village inspection to prevent waterlogging and disease outbreak..."
+                    value={reqRemarks}
+                    onChange={e => setReqRemarks(e.target.value)}
+                    style={{ width: '100%', padding: '0.6rem', borderRadius: '0.5rem', border: '1px solid rgba(255, 255, 255, 0.15)', backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff' }}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submittingGrant}
+                  style={{
+                    alignSelf: 'flex-start',
+                    padding: '0.7rem 1.5rem',
+                    backgroundColor: '#2563eb',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(37,99,235,0.3)'
+                  }}
+                >
+                  {submittingGrant ? 'Submitting...' : '🚀 Submit Grant Recommendation'}
+                </button>
+              </form>
+            )}
+
+            {/* Filter Bar */}
+            <div className={styles.filterBar}>
+              <select value={fundCategoryFilter} onChange={e => setFundCategoryFilter(e.target.value)}>
+                <option value="all">All Categories</option>
+                <option value="water">💧 Water</option>
+                <option value="sanitation">🧹 Sanitation</option>
+                <option value="healthcare">🏥 Healthcare</option>
+                <option value="education">🎓 Education</option>
+                <option value="roads">🛣️ Roads</option>
+                <option value="support">⚡ Energy & Support</option>
+              </select>
+              <select value={fundStatusFilter} onChange={e => setFundStatusFilter(e.target.value)}>
+                <option value="all">All Statuses</option>
+                <option value="sanctioned">🟡 Sanctioned</option>
+                <option value="in-progress">🔵 In Progress</option>
+                <option value="completed">✅ Completed</option>
+              </select>
+              <span className={styles.filterCount}>{filteredFunds.length} Allocations</span>
+            </div>
+
+            {/* Cards Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
+              {filteredFunds.map(f => {
+                const categoryIcon = f.category === 'water' ? '💧' : f.category === 'sanitation' ? '🧹' : f.category === 'healthcare' ? '🏥' : f.category === 'education' ? '🎓' : f.category === 'roads' ? '🛣️' : '⚡';
+                const statusColor = f.status === 'completed' ? '#10b981' : f.status === 'in-progress' ? '#3b82f6' : '#f59e0b';
+                const statusBg = f.status === 'completed' ? 'rgba(16,185,129,0.15)' : f.status === 'in-progress' ? 'rgba(59,130,246,0.15)' : 'rgba(245,158,11,0.15)';
+                const statusLabel = f.status === 'completed' ? '✅ Completed' : f.status === 'in-progress' ? '🔵 In Progress' : '🟡 Sanctioned';
+
+                return (
+                  <div key={f.id} style={{
+                    padding: '1.25rem',
+                    borderRadius: '0.875rem',
+                    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: '0.875rem',
+                    transition: 'all 0.2s',
+                    position: 'relative'
+                  }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                        <span style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: '9999px',
+                          backgroundColor: 'rgba(255,255,255,0.06)',
+                          color: '#cbd5e1',
+                          textTransform: 'uppercase'
+                        }}>
+                          {categoryIcon} {f.category}
+                        </span>
+                        <span style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: '9999px',
+                          backgroundColor: statusBg,
+                          color: statusColor,
+                          border: `1px solid ${statusColor}44`
+                        }}>
+                          {statusLabel}
+                        </span>
+                      </div>
+
+                      <h4 style={{ margin: '0 0 0.35rem 0', fontSize: '1.05rem', color: '#f8fafc', fontWeight: 800 }}>
+                        {f.projectTitle}
+                      </h4>
+                      <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '0.75rem' }}>
+                        📍 {f.village} · {f.district}
+                      </div>
+
+                      <div style={{
+                        padding: '0.75rem',
+                        borderRadius: '0.5rem',
+                        backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                        border: '1px solid rgba(255, 255, 255, 0.05)',
+                        marginBottom: '0.75rem'
+                      }}>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>
+                          Sanctioned Amount
+                        </div>
+                        <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#6ee7b7' }}>
+                          ₹{f.amountAllocated.toLocaleString('en-IN')}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem' }}>
+                          🏛️ Authority: <strong style={{ color: '#cbd5e1' }}>{f.allocatedBy}</strong>
+                        </div>
+                      </div>
+
+                      {f.remarks && (
+                        <p style={{ margin: 0, fontSize: '0.825rem', color: '#cbd5e1', lineHeight: '1.4' }}>
+                          ℹ️ {f.remarks}
+                        </p>
+                      )}
+                    </div>
+
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      fontSize: '0.75rem',
+                      color: '#64748b',
+                      borderTop: '1px solid rgba(255,255,255,0.05)',
+                      paddingTop: '0.6rem'
+                    }}>
+                      <span>ID: #{f.id}</span>
+                      <span>📅 {new Date(f.sanctionedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}
