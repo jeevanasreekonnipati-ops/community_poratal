@@ -9,6 +9,7 @@ import { calculatePerformanceScore, getPerformanceTierEmoji, getPerformanceTierC
 import { getCompleteRepresentativesList } from '@/lib/representativesData';
 import { CENTRAL_REPRESENTATIVES, AP_REPRESENTATIVES } from '@/lib/representatives';
 import { GOVERNMENT_SCHEMES } from '@/lib/schemes';
+import { getFundAllocations, FundAllocation } from '@/lib/funds';
 import { useRouter } from 'next/navigation';
 import styles from './optimizer.module.css';
 
@@ -20,7 +21,8 @@ export default function OptimizerDashboard() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [adminReports, setAdminReports] = useState<MonthlyReport[]>([]);
   const [sentReports, setSentReports] = useState<MonthlyReport[]>([]);
-  const [activeTab, setActiveTab] = useState<'overview' | 'villages' | 'submissions' | 'monthly' | 'map'>('overview');
+  const [fundAllocations, setFundAllocations] = useState<FundAllocation[]>([]);
+  const [activeTab, setActiveTab] = useState<'overview' | 'villages' | 'submissions' | 'funds' | 'monthly' | 'map'>('overview');
   const [villageFilter, setVillageFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [monthlyNote, setMonthlyNote] = useState('');
@@ -39,6 +41,8 @@ export default function OptimizerDashboard() {
       setAdminReports(aReports);
       const sent = await getMonthlyReports({ role: 'optimizer' });
       setSentReports(sent);
+      const funds = await getFundAllocations();
+      setFundAllocations(funds);
       setLoading(false);
     });
     return () => unsub();
@@ -146,6 +150,7 @@ export default function OptimizerDashboard() {
           { key: 'overview', label: '📊 Overview' },
           { key: 'villages', label: '🏘️ Village Performance' },
           { key: 'submissions', label: `📋 All Reports (${total})` },
+          { key: 'funds', label: `💰 Grants & Funds (${fundAllocations.length})` },
           { key: 'monthly', label: '📨 Send to Authority' },
           { key: 'map', label: '🗺️ Map View' },
         ].map(tab => (
@@ -174,8 +179,8 @@ export default function OptimizerDashboard() {
                     return (
                       <div key={id} className={styles.gapItem}>
                         <div className={styles.gapTop}>
-                          <strong className={styles.gapName}>{scheme?.name || id}</strong>
-                          <span className={styles.gapCount}>{count} ({pct}%)</span>
+                          <span className={styles.gapName}>{scheme?.name || id}</span>
+                          <span className={styles.gapCount}>{count} unserved ({pct}%)</span>
                         </div>
                         <div className={styles.gapBar}><div className={styles.gapFill} style={{ width: `${pct}%` }} /></div>
                       </div>

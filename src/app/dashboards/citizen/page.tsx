@@ -10,6 +10,9 @@ import { getUserProfile, UserProfile } from '@/lib/userProfile';
 
 import RepresentativesPanel from '@/components/RepresentativesPanel';
 import GovtSupportPanel from '@/components/GovtSupportPanel';
+import NoticeBoardBanner from '@/components/NoticeBoardBanner';
+import AIAssistantModal from '@/components/AIAssistantModal';
+import EmergencyDirectoryModal from '@/components/EmergencyDirectoryModal';
 
 const InteractiveMap = dynamic(() => import('@/components/Map'), {
   ssr: false,
@@ -43,10 +46,10 @@ function getDaysElapsed(date: Date | null): string {
   return `${diffDays} days ago`;
 }
 
-// Helper: Format readable date & time
-function formatDateTime(date: Date | null): string {
-  if (!date) return 'N/A';
-  return new Date(date).toLocaleString('en-IN', {
+// Helper: Format friendly timestamp
+function formatSubmissionDate(date: Date | null): string {
+  if (!date) return 'Just now';
+  return new Date(date).toLocaleDateString('en-IN', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -59,6 +62,10 @@ export default function CitizenDashboard() {
   // ---- User & Session state ----
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
+  // ---- Advanced Modals state ----
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
+  const [showEmergencySOS, setShowEmergencySOS] = useState(false);
 
   // ---- Form state ----
   const [resourceType, setResourceType]   = useState('');
@@ -205,17 +212,87 @@ export default function CitizenDashboard() {
 
   return (
     <main className={styles.container}>
+      {/* ── LIVE VILLAGE NOTICE BOARD TICKER ── */}
+      <NoticeBoardBanner />
+
       <header className={styles.header}>
-        <h1 className={styles.title}>🌍 Citizen Dashboard</h1>
-        <p className={styles.subtitle}>
-          Report local issues in real time & track your submission status directly with village administration.
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <h1 className={styles.title}>🌍 Citizen Dashboard</h1>
+            <p className={styles.subtitle}>
+              Report local issues in real time & track your submission status directly with village administration.
+            </p>
+          </div>
+
+          {/* Quick Action Tools */}
+          <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setShowAIAssistant(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.6rem 1.1rem',
+                borderRadius: '8px',
+                backgroundColor: '#10b981',
+                color: '#ffffff',
+                border: 'none',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(16, 185, 129, 0.25)',
+              }}
+            >
+              <span>🤖</span>
+              <span>AI Scheme & Grievance Assistant</span>
+            </button>
+
+            <button
+              onClick={() => setShowEmergencySOS(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.6rem 1.1rem',
+                borderRadius: '8px',
+                backgroundColor: '#ef4444',
+                color: '#ffffff',
+                border: 'none',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.25)',
+              }}
+            >
+              <span>🚨</span>
+              <span>Emergency Helplines (SOS)</span>
+            </button>
+          </div>
+        </div>
+
         {dataLoading && <div className={styles.liveTag}>⏳ Connecting to live database…</div>}
         {!dataLoading && !dataError && (
           <div className={styles.liveTag}>🟢 Live — {resources.length} community resources tracked</div>
         )}
         {dataError && <div className={styles.errorTag}>{dataError}</div>}
       </header>
+
+      {/* ── AI ASSISTANT MODAL ── */}
+      <AIAssistantModal
+        isOpen={showAIAssistant}
+        onClose={() => setShowAIAssistant(false)}
+        onAutoFillGrievance={(draft) => {
+          setLocationName(draft.locationName);
+          setResourceType(draft.type);
+          setDescription(draft.description);
+        }}
+      />
+
+      {/* ── EMERGENCY SOS DIRECTORY MODAL ── */}
+      <EmergencyDirectoryModal
+        isOpen={showEmergencySOS}
+        onClose={() => setShowEmergencySOS(false)}
+      />
 
       {/* ── APPROVAL NOTIFICATION BANNER ── */}
       {approvedNotifications.length > 0 && (
@@ -404,7 +481,7 @@ export default function CitizenDashboard() {
                   </div>
 
                   <div className={styles.issueMeta}>
-                    <span>📅 {formatDateTime(issue.createdAt)}</span>
+                    <span>📅 {formatSubmissionDate(issue.createdAt)}</span>
                     <span className={styles.daysAgoBadge}>⏱️ {getDaysElapsed(issue.createdAt)}</span>
                   </div>
 

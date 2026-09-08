@@ -9,6 +9,7 @@ import {
   type UserProfile, type Submission, type MonthlyReport
 } from '@/lib/userProfile';
 import { GOVERNMENT_SCHEMES } from '@/lib/schemes';
+import { getFundAllocations, allocateDevelopmentFund, FundAllocation } from '@/lib/funds';
 import { useRouter } from 'next/navigation';
 import styles from './authority.module.css';
 
@@ -19,8 +20,24 @@ export default function AuthorityDashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [optimizerReports, setOptimizerReports] = useState<MonthlyReport[]>([]);
-  const [activeTab, setActiveTab] = useState<'overview' | 'districts' | 'reports' | 'schemes' | 'map'>('overview');
+  const [funds, setFunds] = useState<FundAllocation[]>([]);
+  const [activeTab, setActiveTab] = useState<'overview' | 'districts' | 'schemes' | 'grants' | 'reports' | 'map'>('overview');
   const [loading, setLoading] = useState(true);
+
+  // New grant sanction form state
+  const [grantProject, setGrantProject] = useState('');
+  const [grantVillage, setGrantVillage] = useState('');
+  const [grantDistrict, setGrantDistrict] = useState('Guntur');
+  const [grantCategory, setGrantCategory] = useState<'water' | 'sanitation' | 'education' | 'healthcare' | 'roads' | 'support'>('water');
+  const [grantAmount, setGrantAmount] = useState('500000');
+  const [grantRemarks, setGrantRemarks] = useState('');
+  const [sanctioning, setSanctioning] = useState(false);
+  const [grantSuccess, setGrantSuccess] = useState('');
+
+  const loadFunds = async () => {
+    const list = await getFundAllocations();
+    setFunds(list);
+  };
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -33,6 +50,7 @@ export default function AuthorityDashboard() {
       // Fetch only reports sent to authority (from optimizers)
       const reports = await getMonthlyReports({ role: 'optimizer' });
       setOptimizerReports(reports.filter(r => r.sentToAuthority));
+      await loadFunds();
       setLoading(false);
     });
     return () => unsub();
@@ -73,6 +91,40 @@ export default function AuthorityDashboard() {
     description: `${s.village}, ${s.district} (${s.status})`
   }));
 
+  const totalSanctioned = funds.reduce((acc, curr) => acc + (curr.amountAllocated || 0), 0);
+  const stateBudgetPool = 5000000;
+  const remainingBudget = Math.max(0, stateBudgetPool - totalSanctioned);
+
+  const handleSanctionGrant = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!grantProject.trim() || !grantVillage.trim()) return;
+    setSanctioning(true);
+    setGrantSuccess('');
+
+    try {
+      await allocateDevelopmentFund({
+        projectTitle: grantProject.trim(),
+        village: grantVillage.trim(),
+        district: grantDistrict.trim(),
+        category: grantCategory,
+        amountAllocated: Number(grantAmount) || 500000,
+        allocatedBy: profile?.name ? `${profile.name} (Higher Authority)` : 'State Authority Office',
+        status: 'sanctioned',
+        remarks: grantRemarks.trim() || 'Sanctioned under Special Accelerated Village Grant.',
+      });
+
+      await loadFunds();
+      setGrantSuccess('✅ Development Grant officially SANCTIONED and ledger updated!');
+      setGrantProject('');
+      setGrantVillage('');
+      setGrantRemarks('');
+    } catch (err: any) {
+      console.warn('Grant sanction error:', err);
+    } finally {
+      setSanctioning(false);
+    }
+  };
+
   if (loading) return <div className={styles.loadingScreen}><div className={styles.spinner} /><p>Loading Authority Portal…</p></div>;
 
   return (
@@ -82,7 +134,7 @@ export default function AuthorityDashboard() {
           <span>🏛️</span>
           <div>
             <h1 className={styles.headerTitle}>Higher Authority Oversight Dashboard</h1>
-            <p className={styles.headerSub}>State / Central Level Monitoring</p>
+            <p className={styles.headerSub}>State / Central Level Monitoring & Development Grant Allocations</p>
           </div>
         </div>
         <div className={styles.headerRight}>
@@ -107,6 +159,7 @@ export default function AuthorityDashboard() {
           { key: 'overview', label: '📈 Executive Summary' },
           { key: 'districts', label: '🗺️ District Performance' },
           { key: 'schemes', label: '📋 Policy & Scheme Gaps' },
+          { key: 'grants', label: `💰 Grants & Fund Sanctions (${funds.length})` },
           { key: 'reports', label: '📨 MRO Reports (Direct)' },
           { key: 'map', label: '📍 State Heatmap' },
         ].map(tab => (
@@ -220,6 +273,155 @@ export default function AuthorityDashboard() {
                   </div>
                 );
               })}
+            </div>
+          </section>
+        )}
+
+        {/* ── DEVELOPMENT GRANTS & BUDGET LEDGER ── */}
+        {activeTab === 'grants' && (
+          <section className={styles.panel}>
+            <h2 className={styles.panelTitle}>💰 Special Development Grant Allocator & State Ledger</h2>
+            <p className={styles.panelSub}>Sanction accelerated project funds for critical village infrastructure deficits.</p>
+
+            {/* State Budget Pool Status Bar */}
+            <div style={{
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '1rem', padding: '1.25rem', backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.1)', margin: '1rem 0'
+            }}>
+              <div>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Total Discretionary Fund</span>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>₹{stateBudgetPool.toLocaleString('en-IN')}</div>
+              </div>
+              <div>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Total Sanctioned</span>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#6ee7b7' }}>₹{totalSanctioned.toLocaleString('en-IN')}</div>
+              </div>
+              <div>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Remaining Available Pool</span>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#38bdf8' }}>₹{remainingBudget.toLocaleString('en-IN')}</div>
+              </div>
+            </div>
+
+            {grantSuccess && (
+              <div style={{ padding: '0.75rem 1rem', backgroundColor: '#10b98122', border: '1px solid #10b981', color: '#6ee7b7', borderRadius: '8px', marginBottom: '1rem' }}>
+                {grantSuccess}
+              </div>
+            )}
+
+            {/* Grant Allocation Form */}
+            <form onSubmit={handleSanctionGrant} style={{
+              padding: '1.25rem', backgroundColor: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.1)',
+              display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1.5rem'
+            }}>
+              <h3 style={{ margin: 0, fontSize: '1.05rem', color: '#6ee7b7' }}>➕ Sanction New Special Grant</h3>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>Project Title *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Solar RO Drinking Water Plant Installation"
+                    value={grantProject}
+                    onChange={e => setGrantProject(e.target.value)}
+                    required
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.2)', backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>Target Village / Ward *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Guntur Rural / Mangalagiri Ward 4"
+                    value={grantVillage}
+                    onChange={e => setGrantVillage(e.target.value)}
+                    required
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.2)', backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>District</label>
+                  <select
+                    value={grantDistrict}
+                    onChange={e => setGrantDistrict(e.target.value)}
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.2)', backgroundColor: '#1e293b', color: '#fff' }}
+                  >
+                    <option value="Guntur">Guntur</option>
+                    <option value="NTR / Krishna">NTR / Krishna</option>
+                    <option value="Visakhapatnam">Visakhapatnam</option>
+                    <option value="Tirupati">Tirupati</option>
+                    <option value="Kurnool">Kurnool</option>
+                    <option value="Anantapur">Anantapur</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>Grant Amount (₹ INR) *</label>
+                  <input
+                    type="number"
+                    step="50000"
+                    value={grantAmount}
+                    onChange={e => setGrantAmount(e.target.value)}
+                    required
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.2)', backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff' }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', display: 'block', marginBottom: '0.2rem' }}>Official Sanction Remarks & Justification</label>
+                <textarea
+                  rows={2}
+                  placeholder="Approved under Special Accelerated Village Grant. Covers RO purification and local distribution..."
+                  value={grantRemarks}
+                  onChange={e => setGrantRemarks(e.target.value)}
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.2)', backgroundColor: 'rgba(0,0,0,0.3)', color: '#fff' }}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={sanctioning}
+                style={{
+                  alignSelf: 'flex-start',
+                  padding: '0.6rem 1.4rem',
+                  backgroundColor: '#10b981',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer'
+                }}
+              >
+                {sanctioning ? 'Sanctioning...' : '🏛️ Authorize & Sanction Development Grant'}
+              </button>
+            </form>
+
+            {/* List of Sanctioned Grants */}
+            <h3 style={{ margin: '0 0 0.75rem 0', fontSize: '1rem', color: '#f8fafc' }}>📜 Active Sanctioned Grants Ledger</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+              {funds.map(f => (
+                <div key={f.id} style={{
+                  padding: '1rem', borderRadius: '10px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  display: 'flex', flexDirection: 'column', gap: '0.4rem'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '4px', backgroundColor: '#10b98122', color: '#6ee7b7' }}>
+                      {f.category.toUpperCase()}
+                    </span>
+                    <strong style={{ fontSize: '1.1rem', color: '#6ee7b7' }}>₹{f.amountAllocated.toLocaleString('en-IN')}</strong>
+                  </div>
+                  <strong style={{ color: '#fff', fontSize: '0.95rem' }}>{f.projectTitle}</strong>
+                  <div style={{ fontSize: '0.82rem', color: '#94a3b8' }}>📍 {f.village}, {f.district}</div>
+                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#cbd5e1' }}>{f.remarks}</p>
+                </div>
+              ))}
             </div>
           </section>
         )}
