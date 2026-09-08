@@ -47,6 +47,11 @@ export default function DashboardsLayout({ children }: { children: React.ReactNo
   const handleSignOut = async () => {
     setSigningOut(true);
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('userProfile');
+        localStorage.removeItem('active_user_role');
+        sessionStorage.clear();
+      }
       await signOut(auth);
       router.replace('/auth');
     } catch (err) {

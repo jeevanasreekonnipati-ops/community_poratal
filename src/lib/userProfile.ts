@@ -65,8 +65,8 @@ export type MonthlyReport = {
 
 export async function saveUserProfile(profile: Omit<UserProfile, 'createdAt'>) {
   // Always save locally first for instant, guaranteed availability
-  localStorage.setItem('userProfile', JSON.stringify(profile));
   localStorage.setItem(`userProfile_${profile.uid}`, JSON.stringify(profile));
+  localStorage.setItem('userProfile', JSON.stringify(profile));
   
   try {
     if (db) {
@@ -81,18 +81,20 @@ export async function saveUserProfile(profile: Omit<UserProfile, 'createdAt'>) {
 }
 
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
-  // Check local cache first
-  const cached = localStorage.getItem(`userProfile_${uid}`) || localStorage.getItem('userProfile');
-  if (cached) {
+  if (!uid) return null;
+
+  // 1. Check exact user cached profile first
+  const exactCached = localStorage.getItem(`userProfile_${uid}`);
+  if (exactCached) {
     try {
-      const parsed = JSON.parse(cached) as UserProfile;
-      if (parsed.uid === uid || !uid) return parsed;
+      const parsed = JSON.parse(exactCached) as UserProfile;
+      if (parsed.uid === uid) return parsed;
     } catch {}
   }
 
-  // Fetch from Firestore
+  // 2. Fetch fresh record from Firestore
   try {
-    if (db && uid) {
+    if (db) {
       const snap = await getDoc(doc(db, 'users', uid));
       if (snap.exists()) {
         const data = snap.data() as UserProfile;
@@ -102,17 +104,27 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
       }
     }
   } catch (err) {
-    console.warn('Firestore getDoc failed, returning cached profile:', err);
+    console.warn('Firestore getDoc failed, falling back to local storage:', err);
   }
 
-  if (cached) {
-    try { return JSON.parse(cached); } catch {}
+  // 3. Check general cache only if UID matches
+  const globalCached = localStorage.getItem('userProfile');
+  if (globalCached) {
+    try {
+      const parsed = JSON.parse(globalCached) as UserProfile;
+      if (parsed.uid === uid) return parsed;
+    } catch {}
   }
+
   return null;
 }
 
-export function clearProfileCache() {
+export function clearProfileCache(uid?: string) {
+  if (uid) {
+    localStorage.removeItem(`userProfile_${uid}`);
+  }
   localStorage.removeItem('userProfile');
+  localStorage.removeItem('active_user_role');
 }
 
 // ─── Submission Helpers ────────────────────────────────────

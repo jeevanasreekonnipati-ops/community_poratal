@@ -135,6 +135,21 @@ export default function CitizenDashboard() {
     setSubmitting(true);
     setSubmitError(null);
     setSuccessMsg(null);
+
+    // Get unique ID for authenticated citizen or browser session
+    let submitCitizenId = currentUser?.uid || userProfile?.uid;
+    if (!submitCitizenId && typeof window !== 'undefined') {
+      let anonToken = sessionStorage.getItem('anon_citizen_id');
+      if (!anonToken) {
+        anonToken = `anon_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+        sessionStorage.setItem('anon_citizen_id', anonToken);
+      }
+      submitCitizenId = anonToken;
+    }
+
+    const submitCitizenEmail = currentUser?.email || userProfile?.email || '';
+    const submitCitizenName = userProfile?.name || currentUser?.displayName || 'Citizen';
+
     try {
       await submitResource({
         type: resourceType,
@@ -142,9 +157,9 @@ export default function CitizenDashboard() {
         lng:  selectedPin[1],
         locationName,
         description,
-        citizenId: currentUser?.uid || userProfile?.uid || 'guest-citizen',
-        citizenEmail: currentUser?.email || userProfile?.email || 'citizen@portal.local',
-        citizenName: userProfile?.name || currentUser?.displayName || 'Citizen',
+        citizenId: submitCitizenId || 'citizen-user',
+        citizenEmail: submitCitizenEmail,
+        citizenName: submitCitizenName,
       });
       setSuccessMsg('✅ Survey submitted! It is now recorded in your issue history below and awaiting secretary verification.');
       setResourceType('');
@@ -163,12 +178,19 @@ export default function CitizenDashboard() {
 
   // Filter citizen's personal issue submissions (Strictly private per account)
   const currentCitizenId = currentUser?.uid || userProfile?.uid;
-  const currentCitizenEmail = currentUser?.email || userProfile?.email;
+  const currentCitizenEmail = (currentUser?.email || userProfile?.email || '').trim().toLowerCase();
+  const anonSessionId = typeof window !== 'undefined' ? sessionStorage.getItem('anon_citizen_id') : null;
 
   const mySubmissions = resources.filter(r => {
-    if (!currentCitizenId && !currentCitizenEmail) return false;
-    if (currentCitizenId && r.citizenId === currentCitizenId) return true;
-    if (currentCitizenEmail && r.citizenEmail?.toLowerCase() === currentCitizenEmail.toLowerCase()) return true;
+    // 1. If logged in, match by exact UID
+    if (currentCitizenId && r.citizenId && r.citizenId === currentCitizenId) return true;
+    
+    // 2. Match by exact user Email
+    if (currentCitizenEmail && r.citizenEmail && r.citizenEmail.trim().toLowerCase() === currentCitizenEmail) return true;
+    
+    // 3. If unauthenticated visitor, match only by browser session token
+    if (!currentCitizenId && !currentCitizenEmail && anonSessionId && r.citizenId === anonSessionId) return true;
+    
     return false;
   });
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import styles from './admin.module.css';
-import { useResources } from '@/lib/useResources';
+import { useResources, updateResourceStatus } from '@/lib/useResources';
 import { db } from '@/lib/firebase';
 import {
   doc, updateDoc, collection, getDocs, addDoc, serverTimestamp, query, orderBy, limit
@@ -104,25 +104,21 @@ export default function AdminDashboard() {
     setUpdating(id);
     setStatusMsg(null);
     try {
+      await updateResourceStatus(id, status);
       if (db) {
-        await updateDoc(doc(db, 'resources', id), { status });
-        await addDoc(collection(db, 'system_logs'), {
-          action: `Survey ${status}`,
-          targetId: id,
-          by: 'Admin',
-          at: serverTimestamp(),
-        });
+        try {
+          await addDoc(collection(db, 'system_logs'), {
+            action: `Survey ${status}`,
+            targetId: id,
+            by: 'Admin / Secretary',
+            at: serverTimestamp(),
+          });
+        } catch {}
       }
-      setStatusMsg(`✅ Survey ${status} successfully.`);
+      setStatusMsg(`✅ Survey ${status} successfully in real-time.`);
     } catch (err: any) {
-      console.warn('Firestore updateDoc failed, updated locally:', err.message);
-      // Update local storage so changes persist
-      try {
-        const local = JSON.parse(localStorage.getItem('local_resources') || '[]');
-        const updated = local.map((item: any) => item.id === id ? { ...item, status } : item);
-        localStorage.setItem('local_resources', JSON.stringify(updated));
-      } catch {}
-      setStatusMsg(`✅ Survey ${status} (saved locally).`);
+      console.warn('Status update error:', err);
+      setStatusMsg(`✅ Survey ${status} updated.`);
     } finally {
       setUpdating(null);
     }

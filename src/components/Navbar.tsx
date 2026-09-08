@@ -37,6 +37,11 @@ export default function Navbar() {
 
   const handleSignOut = async () => {
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('userProfile');
+        localStorage.removeItem('active_user_role');
+        sessionStorage.clear();
+      }
       await signOut(auth);
       router.push('/auth');
     } catch (err) {
