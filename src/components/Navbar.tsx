@@ -55,6 +55,7 @@ export default function Navbar() {
     { name: 'Admin', path: '/dashboards/admin', role: 'admin' },
     { name: 'Optimizer', path: '/dashboards/optimizer', role: 'optimizer' },
     { name: 'Authority', path: '/dashboards/authority', role: 'authority' },
+    { name: '📐 2x2 Banner', path: '/banner', role: 'all' },
   ];
 
   return (
