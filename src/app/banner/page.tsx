@@ -27,14 +27,14 @@ export default function BannerPage() {
 
       const html2canvas = (window as any).html2canvas;
       const canvas = await html2canvas(printRef.current, {
-        scale: 2,
+        scale: 2, // 2x high resolution rendering (2400x2400 px)
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
       });
 
       const link = document.createElement('a');
-      link.download = 'Sachivalayam_Platform_2x2_Banner_AITS.png';
+      link.download = 'Sachivalayam_Platform_2x2_Academic_Poster_AITS.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err: any) {
@@ -46,26 +46,30 @@ export default function BannerPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#090d16', padding: '24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {/* Floating Control Bar */}
       <div style={{
         position: 'sticky',
-        top: '10px',
+        top: '12px',
         zIndex: 9999,
-        backgroundColor: '#1e293b',
-        border: '1px solid #334155',
-        borderRadius: '12px',
+        backgroundColor: 'rgba(30, 41, 59, 0.95)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255, 255, 255, 0.15)',
+        borderRadius: '14px',
         padding: '10px 24px',
         display: 'flex',
         alignItems: 'center',
         gap: '14px',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+        boxShadow: '0 12px 30px rgba(0,0,0,0.6)',
         marginBottom: '20px',
         flexWrap: 'wrap',
       }}>
-        <span style={{ color: '#f8fafc', fontWeight: 700, fontSize: '0.95rem' }}>
-          📐 2ft × 2ft Academic Banner (AITS CSE)
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '1.2rem' }}>🎓</span>
+          <span style={{ color: '#f8fafc', fontWeight: 800, fontSize: '0.95rem', letterSpacing: '0.3px' }}>
+            2ft × 2ft Academic Presentation Banner · AITS Tirupati
+          </span>
+        </div>
         
         {/* Download PNG Button */}
         <button
@@ -73,21 +77,21 @@ export default function BannerPage() {
           disabled={downloading}
           style={{
             padding: '8px 18px',
-            backgroundColor: '#2563eb',
+            background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
             color: '#ffffff',
             border: 'none',
             borderRadius: '8px',
             fontWeight: 700,
             cursor: 'pointer',
-            fontSize: '0.9rem',
+            fontSize: '0.88rem',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            boxShadow: '0 4px 12px rgba(37,99,235,0.4)',
+            boxShadow: '0 4px 14px rgba(37,99,235,0.4)',
             transition: 'all 0.2s',
           }}
         >
-          {downloading ? '⏳ Generating PNG…' : '📥 Download High-Res PNG (2×2)'}
+          {downloading ? '⏳ Rendering 2400×2400 PNG…' : '📥 Download High-Res PNG (2×2)'}
         </button>
 
         {/* Print / Save PDF Button */}
@@ -95,17 +99,17 @@ export default function BannerPage() {
           onClick={handlePrint}
           style={{
             padding: '8px 18px',
-            backgroundColor: '#16a34a',
+            background: 'linear-gradient(135deg, #10b981, #059669)',
             color: '#ffffff',
             border: 'none',
             borderRadius: '8px',
             fontWeight: 700,
             cursor: 'pointer',
-            fontSize: '0.9rem',
+            fontSize: '0.88rem',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            boxShadow: '0 4px 12px rgba(22,163,74,0.4)',
+            boxShadow: '0 4px 14px rgba(16,185,129,0.4)',
             transition: 'all 0.2s',
           }}
         >
@@ -119,13 +123,14 @@ export default function BannerPage() {
             fontSize: '0.85rem',
             textDecoration: 'none',
             marginLeft: '6px',
+            fontWeight: 600,
           }}
         >
-          ← Back to Dashboard
+          ← Back to App
         </a>
       </div>
 
-      {/* 2x2 Square Poster Canvas (1200px x 1200px scalable) */}
+      {/* 2x2 Square Poster Canvas (1200px x 1200px, 4-Quadrant Grid matching reference) */}
       <div
         ref={printRef}
         className="poster-canvas"
@@ -134,714 +139,582 @@ export default function BannerPage() {
           height: '1200px',
           backgroundColor: '#ffffff',
           color: '#0f172a',
-          fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-          boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+          fontFamily: "'Segoe UI', Roboto, -apple-system, Helvetica, Arial, sans-serif",
+          boxShadow: '0 25px 60px rgba(0,0,0,0.7)',
           borderRadius: '4px',
-          padding: '18px 22px',
+          padding: '12px 16px',
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
           position: 'relative',
+          background: '#ffffff',
         }}
       >
-        {/* ==================== EXACT REFERENCE HEADER ==================== */}
+        {/* ==================== 1. TOP HEADER BANNER (EXACT REFERENCE) ==================== */}
         <header style={{
+          backgroundColor: '#064e3b',
+          color: '#ffffff',
+          borderRadius: '6px',
+          padding: '10px 16px',
           display: 'flex',
           alignItems: 'center',
-          borderBottom: '3px solid #14532d',
-          paddingBottom: '10px',
-          marginBottom: '10px',
-          position: 'relative',
+          justifyContent: 'space-between',
+          gap: '14px',
+          boxShadow: '0 4px 12px rgba(6,78,59,0.3)',
         }}>
-          {/* Authentic AITS Circular Logo */}
+          {/* Left AITS Crest */}
           <div style={{
-            position: 'absolute',
-            left: '10px',
-            top: '50%',
-            transform: 'translateY(-50%)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            gap: '12px',
+            flex: 1
           }}>
             <img
               src="/banner_images/aits_logo_hd.png"
-              alt="Annamacharya Educational Trust Logo"
+              alt="AITS Crest"
               style={{
-                width: '85px',
-                height: '85px',
+                width: '74px',
+                height: '74px',
                 borderRadius: '50%',
+                backgroundColor: '#ffffff',
+                padding: '2px',
                 objectFit: 'contain',
+                flexShrink: 0
               }}
             />
+            <div>
+              <h1 style={{
+                margin: 0,
+                fontSize: '1.28rem',
+                fontWeight: 900,
+                letterSpacing: '0.5px',
+                color: '#ffffff',
+                textTransform: 'uppercase',
+                lineHeight: '1.2'
+              }}>
+                ANNAMACHARYA INSTITUTE OF TECHNOLOGY AND SCIENCES
+              </h1>
+              <div style={{ fontSize: '0.8rem', color: '#a7f3d0', fontWeight: 700, marginTop: '2px' }}>
+                Tirupati, 517520 | (Autonomous)
+              </div>
+              <div style={{ fontSize: '0.68rem', color: '#d1fae5', opacity: 0.9 }}>
+                Approved by AICTE, New Delhi | Affiliated to JNTUA, Anantapuramu | NAAC &apos;A&apos; Grade | NBA Accredited
+              </div>
+            </div>
           </div>
 
-          {/* Centered Typography Matching Reference */}
-          <div style={{ width: '100%', textAlign: 'center', padding: '0 95px' }}>
-            <h1 style={{
-              margin: '0 0 3px 0',
-              fontSize: '1.45rem',
-              fontWeight: 800,
-              color: '#000000',
-              letterSpacing: '-0.3px',
-              fontFamily: "'Segoe UI', Arial, sans-serif"
-            }}>
-              Sachivalayam Platform (The Government Service Optimization Eye)
-            </h1>
-            <div style={{
-              fontSize: '0.98rem',
-              fontStyle: 'italic',
-              fontWeight: 600,
-              color: '#000000',
-              marginBottom: '2px',
-              fontFamily: "'Segoe UI', Arial, sans-serif"
-            }}>
-              Department of Computer Science and Engineering
+          {/* Right Project Brand Title */}
+          <div style={{
+            textAlign: 'right',
+            flexShrink: 0,
+            borderLeft: '2px solid rgba(255,255,255,0.2)',
+            paddingLeft: '14px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
+              <span style={{ fontSize: '1.4rem' }}>👁️</span>
+              <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#34d399', letterSpacing: '0.5px' }}>
+                SACHIVALAYAM
+              </div>
             </div>
-            <div style={{
-              fontSize: '1.15rem',
-              fontWeight: 900,
-              color: '#000000',
-              letterSpacing: '0.2px',
-              textTransform: 'uppercase',
-              marginBottom: '2px',
-              fontFamily: "'Segoe UI', Arial, sans-serif"
-            }}>
-              ANNAMACHARYA INSTITUTE OF TECHNOLOGY AND SCIENCES
+            <div style={{ fontSize: '0.72rem', color: '#ffffff', fontWeight: 700 }}>
+              The Government Service Optimization Eye
             </div>
-            <div style={{
-              fontSize: '0.78rem',
-              color: '#000000',
-              fontWeight: 600,
-              fontFamily: "'Segoe UI', Arial, sans-serif"
-            }}>
-              Tirupati, 517520, India
+            <div style={{ fontSize: '0.62rem', color: '#6ee7b7', fontStyle: 'italic' }}>
+              One Platform. Every Service. Connected.
             </div>
           </div>
         </header>
 
-        {/* ==================== 3-COLUMN MAIN BODY ==================== */}
+        {/* ==================== 4-QUADRANT MAIN CONTENT GRID (2x2) ==================== */}
         <main style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1.15fr 0.95fr',
-          gap: '12px',
+          gridTemplateColumns: '1fr 1fr',
+          gridTemplateRows: '1fr 1fr',
+          gap: '10px',
           flex: 1,
-          alignItems: 'stretch'
+          marginTop: '8px',
+          marginBottom: '6px',
         }}>
 
-          {/* ══════════ COLUMN 1: INTRODUCTION, OBJECTIVES & UI SNAP 1 ══════════ */}
-          <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {/* Box 1: Objectives & Problem Statement */}
+          {/* ════════════════ QUADRANT 1: 💡 1. Introduction & Problem ════════════════ */}
+          <div style={{
+            border: '2px solid #064e3b',
+            borderRadius: '6px',
+            backgroundColor: '#ffffff',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            {/* Header Pill */}
             <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '8px 10px',
-              backgroundColor: '#ffffff',
+              backgroundColor: '#064e3b',
+              color: '#ffffff',
+              padding: '4px 10px',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              letterSpacing: '0.4px',
               display: 'flex',
-              flexDirection: 'column'
+              alignItems: 'center',
+              gap: '6px'
             }}>
-              <div style={{
-                backgroundColor: '#14532d',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.78rem',
-                padding: '3px 0',
-                borderRadius: '4px',
-                marginBottom: '6px',
-                letterSpacing: '0.5px'
-              }}>
-                Introduction & Problem Statement
-              </div>
-
-              <div style={{
-                backgroundColor: '#dcfce7',
-                border: '1px solid #86efac',
-                padding: '2px 6px',
-                borderRadius: '4px',
-                fontWeight: 800,
-                fontSize: '0.7rem',
-                color: '#14532d',
-                marginBottom: '4px',
-                textAlign: 'center'
-              }}>
-                Challenges in Grassroots Governance
-              </div>
-
-              <ul style={{ margin: '0 0 6px 0', paddingLeft: '14px', fontSize: '0.67rem', color: '#334155', lineHeight: '1.3' }}>
-                <li><strong>Grievance Backlogs:</strong> Lack of strict resolution timelines and escalation mechanisms.</li>
-                <li><strong>Scheme Awareness Gaps:</strong> Rural citizens missing eligible benefits due to complex criteria.</li>
-                <li><strong>Administrative Blind Spots:</strong> Mandal & State officers lack live ground telemetry.</li>
-              </ul>
-
-              <div style={{
-                backgroundColor: '#fef3c7',
-                border: '1px solid #fde68a',
-                padding: '2px 6px',
-                borderRadius: '4px',
-                fontWeight: 800,
-                fontSize: '0.7rem',
-                color: '#92400e',
-                marginBottom: '4px'
-              }}>
-                Proposed Platform Objectives
-              </div>
-
-              <p style={{ margin: '0', fontSize: '0.66rem', color: '#334155', lineHeight: '1.25' }}>
-                Provide an end-to-end <strong>4-Tier real-time digital architecture</strong> connecting Citizens, Village Secretaries, Mandal MROs (Optimizer Eye), and State Authorities with 48h SLA accountability and ₹1.00 Cr emergency funds.
-              </p>
+              <span>💡</span> 1. Introduction & Problem
             </div>
 
-            {/* Box 2: UI SNAPSHOT - Citizen & Landing Interface */}
-            <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '6px 8px',
-              backgroundColor: '#f8fafc',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <div style={{
-                backgroundColor: '#15803d',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.72rem',
-                padding: '2px 0',
-                borderRadius: '3px',
-                marginBottom: '5px'
-              }}>
-                📸 Tier 1 Web UI: Citizen Portal & Welfare Finder
-              </div>
-
-              <div style={{
-                border: '1px solid #cbd5e1',
-                borderRadius: '4px',
-                overflow: 'hidden',
-                position: 'relative',
-                maxHeight: '135px',
-                backgroundColor: '#000',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}>
-                <img
-                  src="/banner_images/media_1788700572488.png"
-                  alt="Citizen Landing Portal"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-
-              {/* Callout highlights */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '4px',
-                marginTop: '5px',
-                fontSize: '0.62rem'
-              }}>
-                <div style={{ background: '#ecfdf5', padding: '3px 4px', borderRadius: '3px', border: '1px solid #a7f3d0' }}>
-                  <strong style={{ color: '#166534' }}>🤖 AI Scheme Finder:</strong> 12+ AP Welfare schemes
+            {/* Content Body: 2 Sub-Columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 1.2fr', gap: '8px', padding: '8px', flex: 1 }}>
+              {/* Left Sub-Column */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {/* About the Project */}
+                <div style={{ backgroundColor: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: '5px', padding: '6px 8px' }}>
+                  <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#064e3b', marginBottom: '2px' }}>About the Project</div>
+                  <p style={{ margin: 0, fontSize: '0.59rem', color: '#1f2937', lineHeight: '1.3' }}>
+                    <strong>Sachivalayam Platform</strong> is a centralized digital governance ecosystem that connects citizens, village secretaries, mandal MROs, and state authorities by simplifying grievance tracking, welfare delivery, 48-hour SLA timers, and infrastructure grants in one place.
+                  </p>
                 </div>
-                <div style={{ background: '#eff6ff', padding: '3px 4px', borderRadius: '3px', border: '1px solid #bfdbfe' }}>
-                  <strong style={{ color: '#1e40af' }}>🚨 1-Tap SOS:</strong> 112, 108, 104, 1902 Helplines
+
+                {/* The Problem */}
+                <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '5px', padding: '6px 8px', flex: 1 }}>
+                  <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#991b1b', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span>⚠️</span> The Problem
+                  </div>
+                  <ul style={{ margin: 0, paddingLeft: '13px', fontSize: '0.58rem', color: '#374151', lineHeight: '1.25' }}>
+                    <li>Grievance information is scattered with zero live status visibility.</li>
+                    <li>Manual processing causes severe administrative backlogs.</li>
+                    <li>Rural citizens struggle to discover matching welfare schemes.</li>
+                    <li>Mandal & State officers lack live ground telemetry to flag lagging villages.</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Right Sub-Column: Laptop Mockup & Solution */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {/* Device Screen Mockup */}
+                <div style={{
+                  border: '1.5px solid #064e3b',
+                  borderRadius: '5px',
+                  overflow: 'hidden',
+                  backgroundColor: '#000',
+                  boxShadow: '0 3px 8px rgba(0,0,0,0.15)',
+                  position: 'relative'
+                }}>
+                  <div style={{ background: '#1e293b', padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#ef4444' }} />
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#f59e0b' }} />
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#10b981' }} />
+                    <span style={{ fontSize: '0.45rem', color: '#94a3b8', marginLeft: '2px' }}>Sachivalayam Platform · Live Web App</span>
+                  </div>
+                  <img
+                    src="/banner_images/media_1788700572488.png"
+                    alt="Sachivalayam Web Portal"
+                    style={{ width: '100%', height: '95px', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+
+                {/* Our Solution */}
+                <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac', borderRadius: '5px', padding: '5px 7px' }}>
+                  <div style={{ fontSize: '0.66rem', fontWeight: 800, color: '#166534', marginBottom: '2px' }}>🌱 Our Solution</div>
+                  <p style={{ margin: 0, fontSize: '0.57rem', color: '#1f2937', lineHeight: '1.25' }}>
+                    Brings the complete civic resolution lifecycle into one platform — from AI grievance formalization to 48-hour SLA closure and ₹1.00 Cr emergency fund sanctions.
+                  </p>
+                </div>
+
+                {/* Horizontal Lifecycle Ribbon */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  backgroundColor: '#f8fafc',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '4px',
+                  padding: '3px 6px',
+                  fontSize: '0.52rem',
+                  fontWeight: 700,
+                  color: '#064e3b'
+                }}>
+                  <span>🔍 Discover</span>
+                  <span>➔</span>
+                  <span>📝 Register</span>
+                  <span>➔</span>
+                  <span>⏱️ 48h SLA</span>
+                  <span>➔</span>
+                  <span>📊 Monitor</span>
+                  <span>➔</span>
+                  <span>✅ Resolve</span>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Box 3: Technology Stack */}
+          {/* ════════════════ QUADRANT 2: ⚙️ 2. Key Features ════════════════ */}
+          <div style={{
+            border: '2px solid #064e3b',
+            borderRadius: '6px',
+            backgroundColor: '#ffffff',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            {/* Header Pill */}
             <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '6px 8px',
-              backgroundColor: '#ffffff'
-            }}>
-              <div style={{
-                backgroundColor: '#14532d',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.75rem',
-                padding: '2px 0',
-                borderRadius: '3px',
-                marginBottom: '5px'
-              }}>
-                Technology Stack
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.62rem' }}>
-                <div style={{ border: '1px solid #e2e8f0', padding: '3px 5px', borderRadius: '3px', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ color: '#15803d' }}>⚡ Frontend:</strong> Next.js 16 (Turbopack), React 19
-                </div>
-                <div style={{ border: '1px solid #e2e8f0', padding: '3px 5px', borderRadius: '3px', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ color: '#15803d' }}>🔥 Backend:</strong> Firebase Cloud Firestore & Auth
-                </div>
-                <div style={{ border: '1px solid #e2e8f0', padding: '3px 5px', borderRadius: '3px', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ color: '#15803d' }}>🗺️ GIS Mapping:</strong> Leaflet + OpenStreetMap
-                </div>
-                <div style={{ border: '1px solid #e2e8f0', padding: '3px 5px', borderRadius: '3px', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ color: '#15803d' }}>🔒 Security:</strong> UUID Token Isolated Sessions
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* ══════════ COLUMN 2: COMPLETE APP WORKFLOW & SYSTEM FLOWCHART ══════════ */}
-          <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {/* Box 1: End-to-End App Workflow */}
-            <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '8px 10px',
-              backgroundColor: '#ffffff',
+              backgroundColor: '#064e3b',
+              color: '#ffffff',
+              padding: '4px 10px',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              letterSpacing: '0.4px',
               display: 'flex',
-              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span>⚙️</span> 2. Key Features
+            </div>
+
+            {/* 3x3 Feature Grid Cards */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '6px',
+              padding: '8px',
               flex: 1
             }}>
-              <div style={{
-                backgroundColor: '#14532d',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.82rem',
-                padding: '4px 0',
-                borderRadius: '4px',
-                marginBottom: '6px',
-                letterSpacing: '0.5px'
-              }}>
-                🔄 End-to-End Application Workflow (4-Tier Flow)
+              {/* Feature 1 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>🤖</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>AI Scheme Navigator</strong>
+                </div>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Explore 12+ central & state welfare schemes with instant eligibility filters.
+                </div>
               </div>
 
-              {/* Step-by-Step Interactive Workflow */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                
-                {/* Step 1 */}
-                <div style={{
-                  backgroundColor: '#f0fdf4',
-                  border: '1.5px solid #86efac',
-                  borderRadius: '5px',
-                  padding: '5px 8px',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '6px'
-                }}>
-                  <div style={{
-                    backgroundColor: '#15803d',
-                    color: '#fff',
-                    borderRadius: '50%',
-                    width: '18px',
-                    height: '18px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.65rem',
-                    fontWeight: 900,
-                    flexShrink: 0,
-                    marginTop: '2px'
-                  }}>1</div>
-                  <div style={{ fontSize: '0.64rem', color: '#0f172a' }}>
-                    <strong style={{ color: '#14532d' }}>Citizen Intake & AI Formulation:</strong><br />
-                    Citizen logs in → AI Scheme Navigator filters eligible schemes → AI Grievance Assistant formalizes complaint into official petition with GPS Geotag.
-                  </div>
+              {/* Feature 2 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>⏱️</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>48-Hour SLA Timer</strong>
                 </div>
-
-                {/* Arrow */}
-                <div style={{ textAlign: 'center', fontSize: '0.62rem', color: '#16a34a', fontWeight: 900, margin: '-3px 0' }}>
-                  ↓ <em>[Real-Time Cloud Firestore Sync & SLA Clock Initialization]</em>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Live countdown clocks with automatic urgency scoring (Critical/High/Normal).
                 </div>
-
-                {/* Step 2 */}
-                <div style={{
-                  backgroundColor: '#fdf4ff',
-                  border: '1.5px solid #d8b4fe',
-                  borderRadius: '5px',
-                  padding: '5px 8px',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '6px'
-                }}>
-                  <div style={{
-                    backgroundColor: '#9333ea',
-                    color: '#fff',
-                    borderRadius: '50%',
-                    width: '18px',
-                    height: '18px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.65rem',
-                    fontWeight: 900,
-                    flexShrink: 0,
-                    marginTop: '2px'
-                  }}>2</div>
-                  <div style={{ fontSize: '0.64rem', color: '#0f172a' }}>
-                    <strong style={{ color: '#7e22ce' }}>Secretary (Admin) SLA Tracking & Resolution:</strong><br />
-                    Secretary opens inbox → <strong>48-Hour SLA Countdown Clock</strong> begins → Urgency score auto-calculated → Secretary resolves issue & dispatches 1-Click SMS/WhatsApp.
-                  </div>
-                </div>
-
-                {/* Arrow */}
-                <div style={{ textAlign: 'center', fontSize: '0.62rem', color: '#16a34a', fontWeight: 900, margin: '-3px 0' }}>
-                  ↓ <em>[Mandal Aggregation & Automated Escalation Radar]</em>
-                </div>
-
-                {/* Step 3 */}
-                <div style={{
-                  backgroundColor: '#eff6ff',
-                  border: '1.5px solid #93c5fd',
-                  borderRadius: '5px',
-                  padding: '5px 8px',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '6px'
-                }}>
-                  <div style={{
-                    backgroundColor: '#2563eb',
-                    color: '#fff',
-                    borderRadius: '50%',
-                    width: '18px',
-                    height: '18px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.65rem',
-                    fontWeight: 900,
-                    flexShrink: 0,
-                    marginTop: '2px'
-                  }}>3</div>
-                  <div style={{ fontSize: '0.64rem', color: '#0f172a' }}>
-                    <strong style={{ color: '#1d4ed8' }}>Optimizer Eye (MRO/MPDO) Telemetry & Radar:</strong><br />
-                    MRO tracks all mandal villages → Low-performing villages (&lt;50%) are <strong>🔴 Flagged</strong> → Transmits monthly report & proposes Special Infrastructure Grants.
-                  </div>
-                </div>
-
-                {/* Arrow */}
-                <div style={{ textAlign: 'center', fontSize: '0.62rem', color: '#16a34a', fontWeight: 900, margin: '-3px 0' }}>
-                  ↓ <em>[Discretionary Grant Ledger Sanctioning]</em>
-                </div>
-
-                {/* Step 4 */}
-                <div style={{
-                  backgroundColor: '#fefce8',
-                  border: '1.5px solid #fde047',
-                  borderRadius: '5px',
-                  padding: '5px 8px',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '6px'
-                }}>
-                  <div style={{
-                    backgroundColor: '#ca8a04',
-                    color: '#fff',
-                    borderRadius: '50%',
-                    width: '18px',
-                    height: '18px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.65rem',
-                    fontWeight: 900,
-                    flexShrink: 0,
-                    marginTop: '2px'
-                  }}>4</div>
-                  <div style={{ fontSize: '0.64rem', color: '#0f172a' }}>
-                    <strong style={{ color: '#854d0e' }}>State Higher Authority & Grant Sanctioning:</strong><br />
-                    Authority reviews statewide policy gaps → Authorizes emergency grants from <strong>₹1.00 Cr State Pool</strong> → Instant ledger deduction & ground release.
-                  </div>
-                </div>
-
               </div>
 
-              {/* Mathematical Urgency Scoring Model */}
+              {/* Feature 3 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>📝</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>AI Grievance Assistant</strong>
+                </div>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Converts voice & informal text into structured government petitions with GPS tags.
+                </div>
+              </div>
+
+              {/* Feature 4 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>📢</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>Village Notice Board</strong>
+                </div>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Real-time marquee ticker for medical camps, water supply schedules & alerts.
+                </div>
+              </div>
+
+              {/* Feature 5 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>🚨</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>1-Tap SOS Directory</strong>
+                </div>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Direct emergency dialer for 112, 108, 104, 1902, 181, and 14400.
+                </div>
+              </div>
+
+              {/* Feature 6 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>💬</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>Citizen SMS Dispatch</strong>
+                </div>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Instant official resolution notifications sent via SMS and WhatsApp.
+                </div>
+              </div>
+
+              {/* Feature 7 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>🔭</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>Optimizer Eye Radar</strong>
+                </div>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Live mandal performance radar tracking 7+ villages with low performance alerts.
+                </div>
+              </div>
+
+              {/* Feature 8 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>💰</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>State Budget Ledger</strong>
+                </div>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Live ₹1.00 Crore discretionary pool for emergency infrastructure grants.
+                </div>
+              </div>
+
+              {/* Feature 9 */}
+              <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '5px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.85rem' }}>🗺️</span>
+                  <strong style={{ fontSize: '0.62rem', color: '#064e3b' }}>GIS Geospatial Map</strong>
+                </div>
+                <div style={{ fontSize: '0.54rem', color: '#4b5563', lineHeight: '1.2' }}>
+                  Leaflet map pinpointing sanitation, water, and infrastructure distress locations.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ════════════════ QUADRANT 3: 🏛️ 3. Administrative Hierarchy & Mandal Radar ════════════════ */}
+          <div style={{
+            border: '2px solid #064e3b',
+            borderRadius: '6px',
+            backgroundColor: '#ffffff',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            {/* Header Pill */}
+            <div style={{
+              backgroundColor: '#064e3b',
+              color: '#ffffff',
+              padding: '4px 10px',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              letterSpacing: '0.4px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span>🏛️</span> 3. Administrative Hierarchy & Mandal Radar
+            </div>
+
+            {/* Content Body: 2 Sub-Columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '8px', flex: 1 }}>
+              {/* Left Sub-Column: 4 Governance Roles */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#064e3b', marginBottom: '2px' }}>
+                  Governance Roles (4 Tiers)
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '3px 6px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '4px' }}>
+                  <div style={{ fontSize: '0.6rem' }}><strong>01. Citizen</strong> (Grassroots Level)</div>
+                  <span style={{ fontSize: '0.5rem', background: '#16a34a', color: '#fff', padding: '1px 4px', borderRadius: '3px', fontWeight: 700 }}>Active</span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '3px 6px', backgroundColor: '#fdf4ff', border: '1px solid #e9d5ff', borderRadius: '4px' }}>
+                  <div style={{ fontSize: '0.6rem' }}><strong>02. Secretary</strong> (Admin / Sachivalayam)</div>
+                  <span style={{ fontSize: '0.5rem', background: '#9333ea', color: '#fff', padding: '1px 4px', borderRadius: '3px', fontWeight: 700 }}>48h SLA</span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '3px 6px', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '4px' }}>
+                  <div style={{ fontSize: '0.6rem' }}><strong>03. Optimizer Eye</strong> (MRO / MPDO)</div>
+                  <span style={{ fontSize: '0.5rem', background: '#2563eb', color: '#fff', padding: '1px 4px', borderRadius: '3px', fontWeight: 700 }}>Radar</span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '3px 6px', backgroundColor: '#fefce8', border: '1px solid #fef08a', borderRadius: '4px' }}>
+                  <div style={{ fontSize: '0.6rem' }}><strong>04. State Authority</strong> (CM / District)</div>
+                  <span style={{ fontSize: '0.5rem', background: '#ca8a04', color: '#fff', padding: '1px 4px', borderRadius: '3px', fontWeight: 700 }}>₹1 Cr Pool</span>
+                </div>
+
+                <div style={{ fontSize: '0.55rem', color: '#64748b', fontStyle: 'italic', marginTop: '2px' }}>
+                  Monitored Services: Water Supply, Healthcare, Roads, Education, Sanitation, Energy.
+                </div>
+              </div>
+
+              {/* Right Sub-Column: Live Village Telemetry Table */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#064e3b', marginBottom: '2px' }}>
+                  Mandal Radar - Village Performance
+                </div>
+
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.56rem', textAlign: 'center' }}>
+                  <thead>
+                    <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#334155' }}>
+                      <th style={{ padding: '2px', textAlign: 'left' }}>Village</th>
+                      <th style={{ padding: '2px' }}>Total</th>
+                      <th style={{ padding: '2px' }}>Resolved</th>
+                      <th style={{ padding: '2px' }}>Rate</th>
+                      <th style={{ padding: '2px' }}>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f0fdf4' }}>
+                      <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Gollapudi</td>
+                      <td>7</td>
+                      <td>6</td>
+                      <td>85.7%</td>
+                      <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Excellent</span></td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
+                      <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Penamaluru</td>
+                      <td>4</td>
+                      <td>3</td>
+                      <td>75.0%</td>
+                      <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Good</span></td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
+                      <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Kankipadu</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td>66.7%</td>
+                      <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Normal</span></td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
+                      <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Poranki</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td>50.0%</td>
+                      <td><span style={{ color: '#854d0e', fontWeight: 700 }}>🟡 Average</span></td>
+                    </tr>
+                    <tr style={{ background: '#fef2f2' }}>
+                      <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Nunna</td>
+                      <td>3</td>
+                      <td>1</td>
+                      <td>33.3%</td>
+                      <td><span style={{ color: '#dc2626', fontWeight: 700 }}>🔴 Flagged</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                {/* State Budget Pool Mini-Bar */}
+                <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac', borderRadius: '4px', padding: '3px 6px', display: 'flex', justifyContent: 'space-between', fontSize: '0.55rem' }}>
+                  <span>State Pool: <strong>₹1.00 Cr</strong></span>
+                  <span>Sanctioned: <strong style={{ color: '#15803d' }}>₹49.20 L</strong></span>
+                  <span>Balance: <strong style={{ color: '#0284c7' }}>₹50.80 L</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ════════════════ QUADRANT 4: 🚀 4. How It Works & Benefits ════════════════ */}
+          <div style={{
+            border: '2px solid #064e3b',
+            borderRadius: '6px',
+            backgroundColor: '#ffffff',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            {/* Header Pill */}
+            <div style={{
+              backgroundColor: '#064e3b',
+              color: '#ffffff',
+              padding: '4px 10px',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              letterSpacing: '0.4px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span>🚀</span> 4. How It Works & Benefits
+            </div>
+
+            {/* Content Body */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', padding: '8px', flex: 1 }}>
+              {/* Complete Event Lifecycle Ribbon */}
               <div style={{
-                backgroundColor: '#f1f5f9',
-                border: '1px solid #cbd5e1',
+                backgroundColor: '#ecfdf5',
+                border: '1px solid #a7f3d0',
+                borderRadius: '5px',
                 padding: '4px 6px',
-                borderRadius: '4px',
-                marginTop: '6px',
-                textAlign: 'center',
-                fontFamily: 'monospace',
-                fontSize: '0.63rem'
               }}>
-                <strong>P_score = [ 0.65·(N_resolved / N_total) + 0.35·(1 - T_breach / N_total) ] × 100</strong>
-              </div>
-            </div>
-
-            {/* Box 2: UI SNAPSHOT - Optimizer Eye Telemetry Dashboard */}
-            <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '6px 8px',
-              backgroundColor: '#0f172a',
-              color: '#fff',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <div style={{
-                backgroundColor: '#1d4ed8',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.72rem',
-                padding: '2px 0',
-                borderRadius: '3px',
-                marginBottom: '5px'
-              }}>
-                📸 Tier 3 Web UI: Optimizer Eye (MRO/MPDO) Dashboard
-              </div>
-
-              <div style={{
-                border: '1px solid #334155',
-                borderRadius: '4px',
-                overflow: 'hidden',
-                position: 'relative',
-                maxHeight: '115px',
-                backgroundColor: '#000',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}>
-                <img
-                  src="/banner_images/media_1788830721749.png"
-                  alt="Optimizer Eye Real-time Dashboard"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-
-              {/* KPI Badges from real telemetry */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '3px',
-                marginTop: '4px',
-                textAlign: 'center',
-                fontSize: '0.58rem'
-              }}>
-                <div style={{ background: 'rgba(255,255,255,0.1)', padding: '2px', borderRadius: '3px' }}>
-                  <span style={{ color: '#94a3b8' }}>Villages</span><br />
-                  <strong style={{ color: '#fff', fontSize: '0.68rem' }}>7 Monitored</strong>
+                <div style={{ fontSize: '0.62rem', fontWeight: 800, color: '#064e3b', marginBottom: '3px' }}>Complete Civic Issue Lifecycle</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.52rem', fontWeight: 700, color: '#15803d' }}>
+                  <div style={{ textAlign: 'center' }}><span>🔍</span><br />Discover</div>
+                  <span>➔</span>
+                  <div style={{ textAlign: 'center' }}><span>📝</span><br />Register</div>
+                  <span>➔</span>
+                  <div style={{ textAlign: 'center' }}><span>⏱️</span><br />48h SLA</div>
+                  <span>➔</span>
+                  <div style={{ textAlign: 'center' }}><span>🧑‍💼</span><br />Verify</div>
+                  <span>➔</span>
+                  <div style={{ textAlign: 'center' }}><span>🔭</span><br />Escalate</div>
+                  <span>➔</span>
+                  <div style={{ textAlign: 'center' }}><span>✅</span><br />Resolve</div>
                 </div>
-                <div style={{ background: 'rgba(255,255,255,0.1)', padding: '2px', borderRadius: '3px' }}>
-                  <span style={{ color: '#94a3b8' }}>Resolution</span><br />
-                  <strong style={{ color: '#6ee7b7', fontSize: '0.68rem' }}>57% Active</strong>
+              </div>
+
+              {/* 2-Columns: Role-Based Access & Tech Stack */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: '6px' }}>
+                {/* Role-Based Access */}
+                <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '4px 6px' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 800, color: '#064e3b', marginBottom: '2px' }}>Role-Based Access</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px', fontSize: '0.52rem' }}>
+                    <div style={{ background: '#ecfdf5', padding: '2px 4px', borderRadius: '3px' }}>
+                      <strong style={{ color: '#166534' }}>👨‍🌾 Citizen</strong><br />AI Petition & Schemes
+                    </div>
+                    <div style={{ background: '#fdf4ff', padding: '2px 4px', borderRadius: '3px' }}>
+                      <strong style={{ color: '#7e22ce' }}>🧑‍💼 Secretary</strong><br />48h SLA & SMS
+                    </div>
+                    <div style={{ background: '#eff6ff', padding: '2px 4px', borderRadius: '3px' }}>
+                      <strong style={{ color: '#1d4ed8' }}>🔭 Optimizer</strong><br />Mandal Radar Flags
+                    </div>
+                    <div style={{ background: '#fefce8', padding: '2px 4px', borderRadius: '3px' }}>
+                      <strong style={{ color: '#854d0e' }}>🏛️ Authority</strong><br />₹1 Cr Grant Ledger
+                    </div>
+                  </div>
                 </div>
-                <div style={{ background: 'rgba(255,255,255,0.1)', padding: '2px', borderRadius: '3px' }}>
-                  <span style={{ color: '#94a3b8' }}>Flagged</span><br />
-                  <strong style={{ color: '#fca5a5', fontSize: '0.68rem' }}>3 Villages</strong>
+
+                {/* Tech Stack Box */}
+                <div style={{ backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '5px', padding: '4px 6px' }}>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 800, color: '#064e3b', marginBottom: '2px' }}>Technology Stack</div>
+                  <div style={{ fontSize: '0.51rem', color: '#374151', lineHeight: '1.25' }}>
+                    • Next.js 16 (Turbopack) & React 19<br />
+                    • Firebase Cloud Firestore & Auth<br />
+                    • Leaflet GIS Engine & OpenStreetMap<br />
+                    • UUID Isolated Security Sessions
+                  </div>
+                </div>
+              </div>
+
+              {/* Why Sachivalayam Platform? Checklist */}
+              <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac', borderRadius: '5px', padding: '4px 6px', flex: 1 }}>
+                <div style={{ fontSize: '0.62rem', fontWeight: 800, color: '#166534', marginBottom: '2px' }}>Why Sachivalayam Platform?</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 6px', fontSize: '0.54rem', color: '#1f2937' }}>
+                  <div>✔️ Eliminates manual paperwork & delays</div>
+                  <div>✔️ Strict 48-Hour SLA resolution guarantee</div>
+                  <div>✔️ 100% transparent ₹1.00 Crore budget ledger</div>
+                  <div>✔️ Instant citizen SMS & WhatsApp updates</div>
+                  <div>✔️ AI-driven welfare scheme eligibility</div>
+                  <div>✔️ Zero data leakage with UUID isolation</div>
                 </div>
               </div>
             </div>
-          </section>
-
-          {/* ══════════ COLUMN 3: RESULTS, ADMIN MODERATION & BUDGET LEDGER ══════════ */}
-          <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {/* Box 1: Village Performance Table */}
-            <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '6px 8px',
-              backgroundColor: '#ffffff',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <div style={{
-                backgroundColor: '#14532d',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.75rem',
-                padding: '2px 0',
-                borderRadius: '3px',
-                marginBottom: '5px'
-              }}>
-                Village Performance & Telemetry Results
-              </div>
-
-              <table style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                fontSize: '0.6rem',
-                textAlign: 'center',
-                marginBottom: '4px'
-              }}>
-                <thead>
-                  <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#334155' }}>
-                    <th style={{ padding: '2px', textAlign: 'left' }}>Village</th>
-                    <th style={{ padding: '2px' }}>Total</th>
-                    <th style={{ padding: '2px' }}>Resolved</th>
-                    <th style={{ padding: '2px' }}>Rate</th>
-                    <th style={{ padding: '2px' }}>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f0fdf4' }}>
-                    <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Gollapudi</td>
-                    <td>7</td>
-                    <td>6</td>
-                    <td>85.7%</td>
-                    <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Excellent</span></td>
-                  </tr>
-                  <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Penamaluru</td>
-                    <td>4</td>
-                    <td>3</td>
-                    <td>75.0%</td>
-                    <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Good</span></td>
-                  </tr>
-                  <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Kankipadu</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>66.7%</td>
-                    <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Normal</span></td>
-                  </tr>
-                  <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Poranki</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>50.0%</td>
-                    <td><span style={{ color: '#854d0e', fontWeight: 700 }}>🟡 Average</span></td>
-                  </tr>
-                  <tr style={{ background: '#fef2f2' }}>
-                    <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Nunna</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>33.3%</td>
-                    <td><span style={{ color: '#dc2626', fontWeight: 700 }}>🔴 Flagged</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            {/* Box 2: UI SNAPSHOT - Admin Secretary Dashboard */}
-            <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '6px 8px',
-              backgroundColor: '#fdf4ff',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <div style={{
-                backgroundColor: '#9333ea',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.72rem',
-                padding: '2px 0',
-                borderRadius: '3px',
-                marginBottom: '5px'
-              }}>
-                📸 Tier 2 Web UI: Secretary Admin Portal
-              </div>
-
-              <div style={{
-                border: '1px solid #e9d5ff',
-                borderRadius: '4px',
-                overflow: 'hidden',
-                position: 'relative',
-                maxHeight: '115px',
-                backgroundColor: '#fff',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}>
-                <img
-                  src="/banner_images/media_1788586398513.png"
-                  alt="Admin Secretary Portal"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-
-              <div style={{ fontSize: '0.62rem', color: '#6b21a8', marginTop: '4px', textAlign: 'center', fontWeight: 600 }}>
-                ⏱️ 48-Hour SLA Countdown · Auto SMS/WhatsApp Resolution Dispatcher
-              </div>
-            </div>
-
-            {/* Box 3: Discretionary Grant Pool */}
-            <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '6px 8px',
-              backgroundColor: '#ffffff'
-            }}>
-              <div style={{
-                backgroundColor: '#14532d',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.74rem',
-                padding: '2px 0',
-                borderRadius: '3px',
-                marginBottom: '5px'
-              }}>
-                Tier 4: State Discretionary Fund Ledger (₹1.00 Cr)
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '3px', textAlign: 'center', fontSize: '0.6rem' }}>
-                <div style={{ backgroundColor: '#f8fafc', border: '1px solid #cbd5e1', padding: '3px', borderRadius: '3px' }}>
-                  <span style={{ color: '#64748b' }}>Pool</span><br />
-                  <strong style={{ color: '#0f172a', fontSize: '0.72rem' }}>₹1,00,00,000</strong>
-                </div>
-                <div style={{ backgroundColor: '#ecfdf5', border: '1px solid #86efac', padding: '3px', borderRadius: '3px' }}>
-                  <span style={{ color: '#166534' }}>Sanctioned</span><br />
-                  <strong style={{ color: '#15803d', fontSize: '0.72rem' }}>₹49,20,000</strong>
-                </div>
-                <div style={{ backgroundColor: '#f0f9ff', border: '1px solid #7dd3fc', padding: '3px', borderRadius: '3px' }}>
-                  <span style={{ color: '#0369a1' }}>Balance</span><br />
-                  <strong style={{ color: '#0284c7', fontSize: '0.72rem' }}>₹50,80,000</strong>
-                </div>
-              </div>
-            </div>
-
-            {/* Box 4: Conclusions & References */}
-            <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '6px 8px',
-              backgroundColor: '#ffffff',
-              fontSize: '0.62rem'
-            }}>
-              <div style={{
-                backgroundColor: '#14532d',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.72rem',
-                padding: '2px 0',
-                borderRadius: '3px',
-                marginBottom: '4px'
-              }}>
-                Conclusions & Impact
-              </div>
-
-              <ul style={{ margin: '0 0 4px 0', paddingLeft: '14px', color: '#334155', lineHeight: '1.25' }}>
-                <li><strong>Zero Backlogs:</strong> 64% faster turnaround via automated 48h SLA clocks.</li>
-                <li><strong>Targeted Funding:</strong> ₹49.20 Lakhs disbursed across 8 emergency infrastructure projects.</li>
-              </ul>
-
-              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '3px', color: '#64748b', fontStyle: 'italic', fontSize: '0.58rem' }}>
-                Department of CSE · AITS Tirupati, Andhra Pradesh
-              </div>
-            </div>
-          </section>
+          </div>
 
         </main>
 
-        {/* ==================== FOOTER ==================== */}
+        {/* ==================== BOTTOM FOOTER STRIP (EXACT REFERENCE) ==================== */}
         <footer style={{
-          borderTop: '2px solid #e2e8f0',
-          paddingTop: '5px',
-          marginTop: '5px',
+          backgroundColor: '#064e3b',
+          color: '#ffffff',
+          borderRadius: '4px',
+          padding: '6px 14px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           fontSize: '0.68rem',
-          color: '#64748b'
+          fontWeight: 700,
         }}>
-          <span>Project: <strong>Sachivalayam Platform (The Government Service Optimization Eye)</strong></span>
-          <span>Banner Size: <strong>2ft × 2ft (Square 1:1 Aspect Ratio)</strong></span>
-          <span>Department: <strong>Computer Science and Engineering (AITS Tirupati)</strong></span>
+          <span>Sachivalayam Platform — The Government Service Optimization Eye</span>
+          <span style={{ color: '#a7f3d0' }}>Department of Computer Science and Engineering · AITS Tirupati</span>
+          <span>Size: 2ft × 2ft (Square Poster)</span>
         </footer>
       </div>
 
@@ -859,7 +732,7 @@ export default function BannerPage() {
             max-height: 100% !important;
             box-shadow: none !important;
             border-radius: 0 !important;
-            padding: 12px !important;
+            padding: 10px !important;
           }
           button, a, div[style*="position: sticky"] {
             display: none !important;
