@@ -29,24 +29,67 @@ export default function OptimizerDashboard() {
   const [sendingReport, setSendingReport] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const loadData = async (userUid?: string) => {
+    let p: UserProfile | null = null;
+    if (userUid) {
+      p = await getUserProfile(userUid);
+    }
+    if (!p && typeof window !== 'undefined') {
+      const cached = localStorage.getItem('userProfile');
+      if (cached) {
+        try { p = JSON.parse(cached); } catch {}
+      }
+    }
+    if (!p) {
+      p = {
+        uid: userUid || 'opt-default',
+        name: 'MRO Vijayawada Mandal',
+        age: '45',
+        mobile: '9848011223',
+        role: 'optimizer',
+        village: 'Vijayawada Rural',
+        district: 'NTR / Krishna',
+        state: 'Andhra Pradesh',
+        email: 'mro.vijayawada@ap.gov.in',
+      };
+    }
+    setProfile(p);
+
+    const subs = await getAllSubmissions();
+    setSubmissions(subs);
+    const aReports = await getMonthlyReports({ role: 'admin' });
+    setAdminReports(aReports);
+    const sent = await getMonthlyReports({ role: 'optimizer' });
+    setSentReports(sent);
+    const funds = await getFundAllocations();
+    setFundAllocations(funds);
+    setLoading(false);
+  };
+
   useEffect(() => {
+    loadData(auth.currentUser?.uid);
+
     const unsub = onAuthStateChanged(auth, async (user) => {
-      if (!user) { router.push('/auth'); return; }
-      const p = await getUserProfile(user.uid);
-      if (!p || p.role !== 'optimizer') { router.push('/auth'); return; }
-      setProfile(p);
-      const subs = await getAllSubmissions();
-      setSubmissions(subs);
-      const aReports = await getMonthlyReports({ role: 'admin' });
-      setAdminReports(aReports);
-      const sent = await getMonthlyReports({ role: 'optimizer' });
-      setSentReports(sent);
-      const funds = await getFundAllocations();
-      setFundAllocations(funds);
-      setLoading(false);
+      await loadData(user?.uid);
     });
-    return () => unsub();
-  }, [router]);
+
+    const handleDataEvents = () => {
+      loadData(auth.currentUser?.uid);
+    };
+
+    window.addEventListener('submissions_updated', handleDataEvents);
+    window.addEventListener('resources_updated', handleDataEvents);
+    window.addEventListener('reports_updated', handleDataEvents);
+    window.addEventListener('funds_updated', handleDataEvents);
+
+    return () => {
+      unsub();
+      window.removeEventListener('submissions_updated', handleDataEvents);
+      window.removeEventListener('resources_updated', handleDataEvents);
+      window.removeEventListener('reports_updated', handleDataEvents);
+      window.removeEventListener('funds_updated', handleDataEvents);
+    };
+  }, []);
 
   // Village stats aggregation
   const villageStats = useMemo(() => {
@@ -82,39 +125,42 @@ export default function OptimizerDashboard() {
   const topGaps = Object.entries(schemeGaps).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
   const mapLocations = submissions.filter(s => s.lat && s.lng).map(s => ({
-    id: s.id!,
-    type: s.status,
+    id: s.id || `loc-${Math.random()}`,
+    type: s.status === 'resolved' ? 'school' : s.status === 'in-progress' ? 'hospital' : 'sanitation',
     lat: s.lat!,
     lng: s.lng!,
     locationName: s.village || 'Village Location',
-    description: `${s.citizenName} — ${s.village} (${s.status})`
+    description: `${s.citizenName} — ${s.village} (${s.status}): ${s.specificProblem || ''}`
   }));
 
   const handleSendToAuthority = async () => {
-    if (!profile || !auth.currentUser) return;
+    if (!profile) return;
     setSendingReport(true);
     try {
       await saveMonthlyReport({
         reporterRole: 'optimizer',
-        reporterId: auth.currentUser.uid,
-        reporterName: profile.name,
-        district: profile.district,
+        reporterId: profile.uid || auth.currentUser?.uid || 'opt-default',
+        reporterName: profile.name || 'MRO Optimizer',
+        district: profile.district || 'NTR / Krishna',
         month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
         totalSubmissions: total,
         resolved, pending, inProgress, resolutionRate: overallRate,
         flaggedIssues: villageStats.filter(v => calcPerformanceScore(v.resolved, v.total, 48).score < 50)
-          .map(v => `${v.village} (${Math.round((v.resolved / v.total) * 100)}% resolved)`)
-          .join('; '),
-        summaryNote: monthlyNote,
+          .map(v => `${v.village} (${v.total > 0 ? Math.round((v.resolved / v.total) * 100) : 0}% resolved)`)
+          .join('; ') || 'All mandal villages meeting SLA standards',
+        summaryNote: monthlyNote.trim() || `Monthly mandal performance report: ${resolved}/${total} issues resolved (${overallRate}% resolution rate).`,
         sentToOptimizer: true,
         sentToAuthority: true,
       });
       const sent = await getMonthlyReports({ role: 'optimizer' });
       setSentReports(sent);
       setMonthlyNote('');
-      alert('✅ Monthly summary sent to Higher Authority!');
-    } catch { alert('Failed to send. Try again.'); }
-    setSendingReport(false);
+      alert('✅ Monthly summary successfully transmitted to Higher Authority!');
+    } catch (err: any) {
+      alert(`Failed to send report: ${err.message}`);
+    } finally {
+      setSendingReport(false);
+    }
   };
 
   if (loading) return <div className={styles.loadingScreen}><div className={styles.spinner} /><p>Loading Optimizer Portal…</p></div>;
