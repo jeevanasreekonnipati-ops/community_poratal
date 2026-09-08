@@ -63,18 +63,18 @@
       background: #ffffff;
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
       border-radius: 4px;
-      padding: 20px 24px;
+      padding: 18px 22px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    /* Header matching reference */
+    /* Header */
     header {
       display: flex;
       align-items: center;
       border-bottom: 3px solid #14532d;
-      padding-bottom: 12px;
+      padding-bottom: 10px;
       margin-bottom: 10px;
       position: relative;
     }
@@ -83,29 +83,29 @@
       left: 10px;
       top: 50%;
       transform: translateY(-50%);
-      width: 88px;
-      height: 88px;
+      width: 85px;
+      height: 85px;
       border-radius: 50%;
       object-fit: contain;
     }
     .header-text {
       width: 100%;
       text-align: center;
-      padding: 0 100px;
+      padding: 0 95px;
     }
     .main-title {
       font-size: 1.45rem;
       font-weight: 800;
       color: #000000;
       letter-spacing: -0.3px;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .dept-name {
       font-size: 0.98rem;
       font-style: italic;
       font-weight: 600;
       color: #000000;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
     .inst-name {
       font-size: 1.15rem;
@@ -124,7 +124,7 @@
     /* 3-Column Layout */
     .grid-3col {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1.15fr 0.95fr;
       gap: 12px;
       flex: 1;
       align-items: stretch;
@@ -203,25 +203,25 @@
       <!-- Column 1 -->
       <section class="col">
         <div class="panel-box">
-          <div class="panel-header">Introduction & Objectives</div>
-          <div class="badge-sub">Project Goals</div>
+          <div class="panel-header">Introduction & Problem Statement</div>
+          <div class="badge-sub">Challenges in Grassroots Governance</div>
           <ul style="margin: 0 0 6px 0; padding-left: 14px; font-size: 0.67rem; color: #334155; line-height: 1.3;">
-            <li><strong>Grassroots Delivery:</strong> Direct link between rural citizens and local Village/Ward Secretariats.</li>
-            <li><strong>Strict SLA Enforcement:</strong> Automated 48-hour countdown clocks with priority scoring.</li>
-            <li><strong>AI Welfare Assistant:</strong> Converts informal citizen voice/text into structured government petitions.</li>
+            <li><strong>Grievance Backlogs:</strong> Lack of strict resolution timelines and escalation mechanisms.</li>
+            <li><strong>Scheme Awareness Gaps:</strong> Rural citizens missing eligible benefits due to complex criteria.</li>
+            <li><strong>Administrative Blind Spots:</strong> Mandal & State officers lack live ground telemetry.</li>
           </ul>
 
           <div style="background: #fef3c7; border: 1px solid #fde68a; padding: 2px 6px; border-radius: 4px; font-weight: 800; font-size: 0.7rem; color: #92400e; margin-bottom: 4px;">
-            Why Optimization Eye?
+            Proposed Platform Objectives
           </div>
           <p style="margin: 0; font-size: 0.66rem; color: #334155; line-height: 1.25;">
-            Eliminates administrative blind spots by providing MRO/MPDO officers with live grievance telemetry, scheme gap heatmaps, and low-performing village alerts.
+            Provide an end-to-end <strong>4-Tier real-time digital architecture</strong> connecting Citizens, Village Secretaries, Mandal MROs (Optimizer Eye), and State Authorities with 48h SLA accountability and ₹1.00 Cr emergency funds.
           </p>
         </div>
 
         <div class="panel-box" style="background: #f8fafc;">
-          <div class="panel-header" style="background: #15803d;">📸 Web UI Snap: Citizen Portal & Landing Page</div>
-          <div style="border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; max-height: 140px; display: flex; justify-content: center; align-items: center; background: #000;">
+          <div class="panel-header" style="background: #15803d;">📸 Tier 1 Web UI: Citizen Portal & Welfare Finder</div>
+          <div style="border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; max-height: 135px; display: flex; justify-content: center; align-items: center; background: #000;">
             <img src="/banner_images/media_1788700572488.png" alt="Citizen Landing Portal" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 5px; font-size: 0.62rem;">
@@ -247,74 +247,89 @@
               <strong style="color: #15803d;">🗺️ GIS Maps:</strong> Leaflet + OpenStreetMap
             </div>
             <div style="border: 1px solid #e2e8f0; padding: 3px 5px; border-radius: 3px; background: #f8fafc;">
-              <strong style="color: #15803d;">🔒 Auth:</strong> UUID Isolated Sessions
+              <strong style="color: #15803d;">🔒 Security:</strong> UUID Isolated Sessions
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Column 2 -->
+      <!-- Column 2: End-to-End Workflow -->
       <section class="col">
-        <div class="panel-box">
-          <div class="panel-header">Multi-Role Governance Workflow</div>
-          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.64rem;">
-            <div style="display: flex; align-items: center; gap: 5px; background: #ecfdf5; padding: 3px 6px; border-radius: 3px; border: 1px solid #a7f3d0;">
-              <span style="font-size: 0.85rem;">👨‍🌾</span>
-              <div><strong>1. Citizen Tier:</strong> AI Petition Formalization, Geotagging & Status Tracker</div>
+        <div class="panel-box" style="flex: 1;">
+          <div class="panel-header" style="font-size: 0.82rem; padding: 4px 0;">🔄 End-to-End Application Workflow (4-Tier Flow)</div>
+          
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <!-- Step 1 -->
+            <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 5px; padding: 5px 8px; display: flex; align-items: flex-start; gap: 6px;">
+              <div style="background: #15803d; color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 900; flex-shrink: 0; margin-top: 2px;">1</div>
+              <div style="font-size: 0.64rem; color: #0f172a;">
+                <strong style="color: #14532d;">Citizen Intake & AI Formulation:</strong><br />
+                Citizen logs in → AI Scheme Navigator filters eligible schemes → AI Grievance Assistant formalizes complaint into official petition with GPS Geotag.
+              </div>
             </div>
-            <div style="text-align: center; font-size: 0.6rem; color: #16a34a; font-weight: 900; margin: -2px 0;">↓</div>
-            <div style="display: flex; align-items: center; gap: 5px; background: #f0fdf4; padding: 3px 6px; border-radius: 3px; border: 1px solid #bbf7d0;">
-              <span style="font-size: 0.85rem;">🧑‍💼</span>
-              <div><strong>2. Secretary Tier:</strong> 48h SLA Countdown & Official SMS Resolution Dispatcher</div>
+
+            <div style="text-align: center; font-size: 0.62rem; color: #16a34a; font-weight: 900; margin: -3px 0;">
+              ↓ <em>[Real-Time Cloud Firestore Sync & SLA Clock Initialization]</em>
             </div>
-            <div style="text-align: center; font-size: 0.6rem; color: #16a34a; font-weight: 900; margin: -2px 0;">↓</div>
-            <div style="display: flex; align-items: center; gap: 5px; background: #eff6ff; padding: 3px 6px; border-radius: 3px; border: 1px solid #bfdbfe;">
-              <span style="font-size: 0.85rem;">🔭</span>
-              <div><strong>3. Optimizer Eye (MRO):</strong> Real-Time Mandal Radar & Village Flagging</div>
+
+            <!-- Step 2 -->
+            <div style="background: #fdf4ff; border: 1.5px solid #d8b4fe; border-radius: 5px; padding: 5px 8px; display: flex; align-items: flex-start; gap: 6px;">
+              <div style="background: #9333ea; color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 900; flex-shrink: 0; margin-top: 2px;">2</div>
+              <div style="font-size: 0.64rem; color: #0f172a;">
+                <strong style="color: #7e22ce;">Secretary (Admin) SLA Tracking & Resolution:</strong><br />
+                Secretary opens inbox → <strong>48-Hour SLA Countdown Clock</strong> begins → Urgency score auto-calculated → Secretary resolves issue & dispatches 1-Click SMS/WhatsApp.
+              </div>
             </div>
-            <div style="text-align: center; font-size: 0.6rem; color: #16a34a; font-weight: 900; margin: -2px 0;">↓</div>
-            <div style="display: flex; align-items: center; gap: 5px; background: #faf5ff; padding: 3px 6px; border-radius: 3px; border: 1px solid #e9d5ff;">
-              <span style="font-size: 0.85rem;">🏛️</span>
-              <div><strong>4. Higher Authority (State/CM):</strong> ₹1.00 Crore Discretionary Budget Ledger</div>
+
+            <div style="text-align: center; font-size: 0.62rem; color: #16a34a; font-weight: 900; margin: -3px 0;">
+              ↓ <em>[Mandal Aggregation & Automated Escalation Radar]</em>
             </div>
+
+            <!-- Step 3 -->
+            <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 5px; padding: 5px 8px; display: flex; align-items: flex-start; gap: 6px;">
+              <div style="background: #2563eb; color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 900; flex-shrink: 0; margin-top: 2px;">3</div>
+              <div style="font-size: 0.64rem; color: #0f172a;">
+                <strong style="color: #1d4ed8;">Optimizer Eye (MRO/MPDO) Telemetry & Radar:</strong><br />
+                MRO tracks all mandal villages → Low-performing villages (&lt;50%) are <strong>🔴 Flagged</strong> → Transmits monthly report & proposes Special Infrastructure Grants.
+              </div>
+            </div>
+
+            <div style="text-align: center; font-size: 0.62rem; color: #16a34a; font-weight: 900; margin: -3px 0;">
+              ↓ <em>[Discretionary Grant Ledger Sanctioning]</em>
+            </div>
+
+            <!-- Step 4 -->
+            <div style="background: #fefce8; border: 1.5px solid #fde047; border-radius: 5px; padding: 5px 8px; display: flex; align-items: flex-start; gap: 6px;">
+              <div style="background: #ca8a04; color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 900; flex-shrink: 0; margin-top: 2px;">4</div>
+              <div style="font-size: 0.64rem; color: #0f172a;">
+                <strong style="color: #854d0e;">State Higher Authority & Grant Sanctioning:</strong><br />
+                Authority reviews statewide policy gaps → Authorizes emergency grants from <strong>₹1.00 Cr State Pool</strong> → Instant ledger deduction & ground release.
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 6px; border-radius: 4px; margin-top: 6px; text-align: center; font-family: monospace; fontSize: 0.63rem;">
+            <strong>P_score = [ 0.65·(N_resolved / N_total) + 0.35·(1 - T_breach / N_total) ] × 100</strong>
           </div>
         </div>
 
         <div class="panel-box" style="background: #0f172a; color: #fff;">
-          <div class="panel-header" style="background: #1d4ed8;">📸 Web UI Snap: Optimizer Eye (MRO/MPDO) Dashboard</div>
-          <div style="border: 1px solid #334155; border-radius: 4px; overflow: hidden; max-height: 135px; display: flex; justify-content: center; align-items: center; background: #000;">
+          <div class="panel-header" style="background: #1d4ed8;">📸 Tier 3 Web UI: Optimizer Eye (MRO/MPDO) Dashboard</div>
+          <div style="border: 1px solid #334155; border-radius: 4px; overflow: hidden; max-height: 115px; display: flex; justify-content: center; align-items: center; background: #000;">
             <img src="/banner_images/media_1788830721749.png" alt="Optimizer Eye Real-time Dashboard" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 5px; text-align: center; font-size: 0.58rem;">
-            <div style="background: rgba(255,255,255,0.1); padding: 2px; borderRadius: 3px;">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 4px; text-align: center; font-size: 0.58rem;">
+            <div style="background: rgba(255,255,255,0.1); padding: 2px; border-radius: 3px;">
               <span style="color: #94a3b8;">Villages</span><br />
-              <strong style="color: #fff; font-size: 0.7rem;">7 Monitored</strong>
+              <strong style="color: #fff; font-size: 0.68rem;">7 Monitored</strong>
             </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 2px; borderRadius: 3px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 2px; border-radius: 3px;">
               <span style="color: #94a3b8;">Resolution</span><br />
-              <strong style="color: #6ee7b7; font-size: 0.7rem;">57% Active</strong>
+              <strong style="color: #6ee7b7; font-size: 0.68rem;">57% Active</strong>
             </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 2px; borderRadius: 3px;">
+            <div style="background: rgba(255,255,255,0.1); padding: 2px; border-radius: 3px;">
               <span style="color: #94a3b8;">Flagged</span><br />
-              <strong style="color: #fca5a5; font-size: 0.7rem;">3 Villages</strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel-box">
-          <div class="panel-header">Discretionary Development Grant Ledger (₹1.00 Cr)</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; text-align: center; font-size: 0.62rem;">
-            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px; border-radius: 3px;">
-              <span style="color: #64748b;">Total Pool</span><br />
-              <strong style="color: #0f172a; font-size: 0.75rem;">₹1,00,00,000</strong>
-            </div>
-            <div style="background: #ecfdf5; border: 1px solid #86efac; padding: 3px; border-radius: 3px;">
-              <span style="color: #166534;">Sanctioned (8)</span><br />
-              <strong style="color: #15803d; font-size: 0.75rem;">₹49,20,000</strong>
-            </div>
-            <div style="background: #f0f9ff; border: 1px solid #7dd3fc; padding: 3px; border-radius: 3px;">
-              <span style="color: #0369a1;">Available</span><br />
-              <strong style="color: #0284c7; font-size: 0.75rem;">₹50,80,000</strong>
+              <strong style="color: #fca5a5; font-size: 0.68rem;">3 Villages</strong>
             </div>
           </div>
         </div>
@@ -340,43 +355,43 @@
                 <td>7</td>
                 <td>6</td>
                 <td>85.7%</td>
-                <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Excellent</span></td>
+                <td><span style="color: #15803d; font-weight: 700;">🟢 Excellent</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
                 <td style="padding: 2px; text-align: left; font-weight: 700;">Penamaluru</td>
                 <td>4</td>
                 <td>3</td>
                 <td>75.0%</td>
-                <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Good</span></td>
+                <td><span style="color: #15803d; font-weight: 700;">🟢 Good</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
                 <td style="padding: 2px; text-align: left; font-weight: 700;">Kankipadu</td>
                 <td>3</td>
                 <td>2</td>
                 <td>66.7%</td>
-                <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Normal</span></td>
+                <td><span style="color: #15803d; font-weight: 700;">🟢 Normal</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
                 <td style="padding: 2px; text-align: left; font-weight: 700;">Poranki</td>
                 <td>2</td>
                 <td>1</td>
                 <td>50.0%</td>
-                <td><span style={{ color: '#854d0e', fontWeight: 700 }}>🟡 Average</span></td>
+                <td><span style="color: #854d0e; font-weight: 700;">🟡 Average</span></td>
               </tr>
               <tr style="background: #fef2f2;">
                 <td style="padding: 2px; text-align: left; font-weight: 700;">Nunna</td>
                 <td>3</td>
                 <td>1</td>
                 <td>33.3%</td>
-                <td><span style={{ color: '#dc2626', fontWeight: 700 }}>🔴 Flagged</span></td>
+                <td><span style="color: #dc2626; font-weight: 700;">🔴 Flagged</span></td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="panel-box" style="background: #fdf4ff;">
-          <div class="panel-header" style="background: #9333ea;">📸 Web UI Snap: Secretary Admin Dashboard</div>
-          <div style="border: 1px solid #e9d5ff; border-radius: 4px; overflow: hidden; max-height: 135px; display: flex; justify-content: center; align-items: center; background: #fff;">
+          <div class="panel-header" style="background: #9333ea;">📸 Tier 2 Web UI: Secretary Admin Portal</div>
+          <div style="border: 1px solid #e9d5ff; border-radius: 4px; overflow: hidden; max-height: 115px; display: flex; justify-content: center; align-items: center; background: #fff;">
             <img src="/banner_images/media_1788586398513.png" alt="Admin Secretary Portal" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
           <div style="font-size: 0.62rem; color: #6b21a8; margin-top: 4px; text-align: center; font-weight: 600;">
@@ -384,22 +399,39 @@
           </div>
         </div>
 
+        <div class="panel-box">
+          <div class="panel-header">Tier 4: State Discretionary Fund Ledger (₹1.00 Cr)</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; text-align: center; font-size: 0.6rem;">
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px; border-radius: 3px;">
+              <span style="color: #64748b;">Pool</span><br />
+              <strong style="color: #0f172a; font-size: 0.72rem;">₹1,00,00,000</strong>
+            </div>
+            <div style="background: #ecfdf5; border: 1px solid #86efac; padding: 3px; border-radius: 3px;">
+              <span style="color: #166534;">Sanctioned</span><br />
+              <strong style="color: #15803d; font-size: 0.72rem;">₹49,20,000</strong>
+            </div>
+            <div style="background: #f0f9ff; border: 1px solid #7dd3fc; padding: 3px; border-radius: 3px;">
+              <span style="color: #0369a1;">Balance</span><br />
+              <strong style="color: #0284c7; font-size: 0.72rem;">₹50,80,000</strong>
+            </div>
+          </div>
+        </div>
+
         <div class="panel-box" style="font-size: 0.62rem;">
-          <div class="panel-header">Conclusions & References</div>
+          <div class="panel-header">Conclusions & Impact</div>
           <ul style="margin: 0 0 4px 0; padding-left: 14px; color: #334155; line-height: 1.25;">
-            <li><strong>Zero Leakage:</strong> Real-time accountability across all 4 civic administrative tiers.</li>
-            <li><strong>64% Faster Resolution:</strong> Enforced by strict 48h SLA timers and priority scoring.</li>
+            <li><strong>Zero Backlogs:</strong> 64% faster turnaround via automated 48h SLA clocks.</li>
+            <li><strong>Targeted Funding:</strong> ₹49.20 Lakhs disbursed across 8 emergency infrastructure projects.</li>
           </ul>
-          <div style="border-top: 1px solid #e2e8f0; padding-top: 3px; color: #64748b; font-style: italic; font-size: 0.58rem;">
-            1. Govt. of AP Grama/Ward Sachivalayam Mission (2026).<br />
-            2. Sincere thanks to CSE Faculty & Administration at AITS Tirupati.
+          <div style="border-top: 1px solid #e2e8f0; paddingTop: 3px; color: #64748b; fontStyle: italic; fontSize: 0.58rem;">
+            Department of CSE · AITS Tirupati, Andhra Pradesh
           </div>
         </div>
       </section>
     </main>
 
     <!-- Footer -->
-    <footer style="border-top: 2px solid #e2e8f0; padding-top: 6px; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: #64748b;">
+    <footer style="border-top: 2px solid #e2e8f0; padding-top: 5px; margin-top: 5px; display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: #64748b;">
       <span>Project: <strong>Sachivalayam Platform (The Government Service Optimization Eye)</strong></span>
       <span>Banner Size: <strong>2ft × 2ft (Square 1:1 Aspect Ratio)</strong></span>
       <span>Department: <strong>Computer Science and Engineering (AITS Tirupati)</strong></span>

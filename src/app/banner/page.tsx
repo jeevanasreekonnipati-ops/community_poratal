@@ -15,7 +15,6 @@ export default function BannerPage() {
     setDownloading(true);
 
     try {
-      // Dynamically load html2canvas if not present
       if (!(window as any).html2canvas) {
         await new Promise<void>((resolve, reject) => {
           const script = document.createElement('script');
@@ -28,7 +27,7 @@ export default function BannerPage() {
 
       const html2canvas = (window as any).html2canvas;
       const canvas = await html2canvas(printRef.current, {
-        scale: 2, // 2x High-DPI resolution for print-ready 2400x2400 image
+        scale: 2,
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
@@ -138,7 +137,7 @@ export default function BannerPage() {
           fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
           boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
           borderRadius: '4px',
-          padding: '20px 24px',
+          padding: '18px 22px',
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
@@ -151,7 +150,7 @@ export default function BannerPage() {
           display: 'flex',
           alignItems: 'center',
           borderBottom: '3px solid #14532d',
-          paddingBottom: '12px',
+          paddingBottom: '10px',
           marginBottom: '10px',
           position: 'relative',
         }}>
@@ -169,8 +168,8 @@ export default function BannerPage() {
               src="/banner_images/aits_logo_hd.png"
               alt="Annamacharya Educational Trust Logo"
               style={{
-                width: '88px',
-                height: '88px',
+                width: '85px',
+                height: '85px',
                 borderRadius: '50%',
                 objectFit: 'contain',
               }}
@@ -178,9 +177,9 @@ export default function BannerPage() {
           </div>
 
           {/* Centered Typography Matching Reference */}
-          <div style={{ width: '100%', textAlign: 'center', padding: '0 100px' }}>
+          <div style={{ width: '100%', textAlign: 'center', padding: '0 95px' }}>
             <h1 style={{
-              margin: '0 0 4px 0',
+              margin: '0 0 3px 0',
               fontSize: '1.45rem',
               fontWeight: 800,
               color: '#000000',
@@ -194,7 +193,7 @@ export default function BannerPage() {
               fontStyle: 'italic',
               fontWeight: 600,
               color: '#000000',
-              marginBottom: '3px',
+              marginBottom: '2px',
               fontFamily: "'Segoe UI', Arial, sans-serif"
             }}>
               Department of Computer Science and Engineering
@@ -224,15 +223,15 @@ export default function BannerPage() {
         {/* ==================== 3-COLUMN MAIN BODY ==================== */}
         <main style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr',
+          gridTemplateColumns: '1fr 1.15fr 0.95fr',
           gap: '12px',
           flex: 1,
           alignItems: 'stretch'
         }}>
 
-          {/* ══════════ COLUMN 1: INTRODUCTION, PROBLEM & UI SNAP 1 ══════════ */}
+          {/* ══════════ COLUMN 1: INTRODUCTION, OBJECTIVES & UI SNAP 1 ══════════ */}
           <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {/* Box 1: Objectives & Features */}
+            {/* Box 1: Objectives & Problem Statement */}
             <div style={{
               border: '2px solid #14532d',
               borderRadius: '6px',
@@ -252,7 +251,7 @@ export default function BannerPage() {
                 marginBottom: '6px',
                 letterSpacing: '0.5px'
               }}>
-                Introduction & Objectives
+                Introduction & Problem Statement
               </div>
 
               <div style={{
@@ -266,13 +265,13 @@ export default function BannerPage() {
                 marginBottom: '4px',
                 textAlign: 'center'
               }}>
-                Project Goals
+                Challenges in Grassroots Governance
               </div>
 
               <ul style={{ margin: '0 0 6px 0', paddingLeft: '14px', fontSize: '0.67rem', color: '#334155', lineHeight: '1.3' }}>
-                <li><strong>Grassroots Delivery:</strong> Direct link between rural citizens and local Village/Ward Secretariats.</li>
-                <li><strong>Strict SLA Enforcement:</strong> Automated 48-hour countdown clocks with priority scoring.</li>
-                <li><strong>AI Welfare Assistant:</strong> Converts informal citizen voice/text into structured government petitions.</li>
+                <li><strong>Grievance Backlogs:</strong> Lack of strict resolution timelines and escalation mechanisms.</li>
+                <li><strong>Scheme Awareness Gaps:</strong> Rural citizens missing eligible benefits due to complex criteria.</li>
+                <li><strong>Administrative Blind Spots:</strong> Mandal & State officers lack live ground telemetry.</li>
               </ul>
 
               <div style={{
@@ -285,11 +284,11 @@ export default function BannerPage() {
                 color: '#92400e',
                 marginBottom: '4px'
               }}>
-                Why Optimization Eye?
+                Proposed Platform Objectives
               </div>
 
               <p style={{ margin: '0', fontSize: '0.66rem', color: '#334155', lineHeight: '1.25' }}>
-                Eliminates administrative blind spots by providing MRO/MPDO officers with live grievance telemetry, scheme gap heatmaps, and low-performing village alerts.
+                Provide an end-to-end <strong>4-Tier real-time digital architecture</strong> connecting Citizens, Village Secretaries, Mandal MROs (Optimizer Eye), and State Authorities with 48h SLA accountability and ₹1.00 Cr emergency funds.
               </p>
             </div>
 
@@ -312,7 +311,7 @@ export default function BannerPage() {
                 borderRadius: '3px',
                 marginBottom: '5px'
               }}>
-                📸 Web UI Snap: Citizen Portal & Landing Page
+                📸 Tier 1 Web UI: Citizen Portal & Welfare Finder
               </div>
 
               <div style={{
@@ -320,7 +319,7 @@ export default function BannerPage() {
                 borderRadius: '4px',
                 overflow: 'hidden',
                 position: 'relative',
-                maxHeight: '140px',
+                maxHeight: '135px',
                 backgroundColor: '#000',
                 display: 'flex',
                 justifyContent: 'center',
@@ -328,7 +327,7 @@ export default function BannerPage() {
               }}>
                 <img
                   src="/banner_images/media_1788700572488.png"
-                  alt="Sachivalayam Platform Web Portal"
+                  alt="Citizen Landing Portal"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
@@ -372,65 +371,199 @@ export default function BannerPage() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.62rem' }}>
                 <div style={{ border: '1px solid #e2e8f0', padding: '3px 5px', borderRadius: '3px', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ color: '#15803d' }}>⚡ Frontend:</strong> Next.js 16, React 19, TS
+                  <strong style={{ color: '#15803d' }}>⚡ Frontend:</strong> Next.js 16 (Turbopack), React 19
                 </div>
                 <div style={{ border: '1px solid #e2e8f0', padding: '3px 5px', borderRadius: '3px', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ color: '#15803d' }}>🔥 Backend:</strong> Firebase Cloud Firestore
+                  <strong style={{ color: '#15803d' }}>🔥 Backend:</strong> Firebase Cloud Firestore & Auth
                 </div>
                 <div style={{ border: '1px solid #e2e8f0', padding: '3px 5px', borderRadius: '3px', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ color: '#15803d' }}>🗺️ GIS Maps:</strong> Leaflet + OpenStreetMap
+                  <strong style={{ color: '#15803d' }}>🗺️ GIS Mapping:</strong> Leaflet + OpenStreetMap
                 </div>
                 <div style={{ border: '1px solid #e2e8f0', padding: '3px 5px', borderRadius: '3px', backgroundColor: '#f8fafc' }}>
-                  <strong style={{ color: '#15803d' }}>🔒 Auth:</strong> UUID Isolated Sessions
+                  <strong style={{ color: '#15803d' }}>🔒 Security:</strong> UUID Token Isolated Sessions
                 </div>
               </div>
             </div>
           </section>
 
-          {/* ══════════ COLUMN 2: ARCHITECTURE FLOW & UI SNAP 2 (OPTIMIZER EYE) ══════════ */}
+          {/* ══════════ COLUMN 2: COMPLETE APP WORKFLOW & SYSTEM FLOWCHART ══════════ */}
           <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {/* Box 1: Multi-Role Workflow */}
+            {/* Box 1: End-to-End App Workflow */}
             <div style={{
               border: '2px solid #14532d',
               borderRadius: '6px',
               padding: '8px 10px',
               backgroundColor: '#ffffff',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              flex: 1
             }}>
               <div style={{
                 backgroundColor: '#14532d',
                 color: '#ffffff',
                 textAlign: 'center',
                 fontWeight: 800,
-                fontSize: '0.78rem',
-                padding: '3px 0',
+                fontSize: '0.82rem',
+                padding: '4px 0',
                 borderRadius: '4px',
-                marginBottom: '6px'
+                marginBottom: '6px',
+                letterSpacing: '0.5px'
               }}>
-                Multi-Role Governance Workflow
+                🔄 End-to-End Application Workflow (4-Tier Flow)
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.64rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', backgroundColor: '#ecfdf5', padding: '3px 6px', borderRadius: '3px', border: '1px solid #a7f3d0' }}>
-                  <span style={{ fontSize: '0.85rem' }}>👨‍🌾</span>
-                  <div><strong>1. Citizen Tier:</strong> AI Petition Formalization, Geotagging & Status Tracker</div>
+              {/* Step-by-Step Interactive Workflow */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                
+                {/* Step 1 */}
+                <div style={{
+                  backgroundColor: '#f0fdf4',
+                  border: '1.5px solid #86efac',
+                  borderRadius: '5px',
+                  padding: '5px 8px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '6px'
+                }}>
+                  <div style={{
+                    backgroundColor: '#15803d',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '18px',
+                    height: '18px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.65rem',
+                    fontWeight: 900,
+                    flexShrink: 0,
+                    marginTop: '2px'
+                  }}>1</div>
+                  <div style={{ fontSize: '0.64rem', color: '#0f172a' }}>
+                    <strong style={{ color: '#14532d' }}>Citizen Intake & AI Formulation:</strong><br />
+                    Citizen logs in → AI Scheme Navigator filters eligible schemes → AI Grievance Assistant formalizes complaint into official petition with GPS Geotag.
+                  </div>
                 </div>
-                <div style={{ textAlign: 'center', fontSize: '0.6rem', color: '#16a34a', fontWeight: 900, margin: '-2px 0' }}>↓</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', backgroundColor: '#f0fdf4', padding: '3px 6px', borderRadius: '3px', border: '1px solid #bbf7d0' }}>
-                  <span style={{ fontSize: '0.85rem' }}>🧑‍💼</span>
-                  <div><strong>2. Secretary Tier:</strong> 48h SLA Countdown & Official SMS Resolution Dispatcher</div>
+
+                {/* Arrow */}
+                <div style={{ textAlign: 'center', fontSize: '0.62rem', color: '#16a34a', fontWeight: 900, margin: '-3px 0' }}>
+                  ↓ <em>[Real-Time Cloud Firestore Sync & SLA Clock Initialization]</em>
                 </div>
-                <div style={{ textAlign: 'center', fontSize: '0.6rem', color: '#16a34a', fontWeight: 900, margin: '-2px 0' }}>↓</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', backgroundColor: '#eff6ff', padding: '3px 6px', borderRadius: '3px', border: '1px solid #bfdbfe' }}>
-                  <span style={{ fontSize: '0.85rem' }}>🔭</span>
-                  <div><strong>3. Optimizer Eye (MRO):</strong> Real-Time Mandal Radar & Village Flagging</div>
+
+                {/* Step 2 */}
+                <div style={{
+                  backgroundColor: '#fdf4ff',
+                  border: '1.5px solid #d8b4fe',
+                  borderRadius: '5px',
+                  padding: '5px 8px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '6px'
+                }}>
+                  <div style={{
+                    backgroundColor: '#9333ea',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '18px',
+                    height: '18px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.65rem',
+                    fontWeight: 900,
+                    flexShrink: 0,
+                    marginTop: '2px'
+                  }}>2</div>
+                  <div style={{ fontSize: '0.64rem', color: '#0f172a' }}>
+                    <strong style={{ color: '#7e22ce' }}>Secretary (Admin) SLA Tracking & Resolution:</strong><br />
+                    Secretary opens inbox → <strong>48-Hour SLA Countdown Clock</strong> begins → Urgency score auto-calculated → Secretary resolves issue & dispatches 1-Click SMS/WhatsApp.
+                  </div>
                 </div>
-                <div style={{ textAlign: 'center', fontSize: '0.6rem', color: '#16a34a', fontWeight: 900, margin: '-2px 0' }}>↓</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', backgroundColor: '#faf5ff', padding: '3px 6px', borderRadius: '3px', border: '1px solid #e9d5ff' }}>
-                  <span style={{ fontSize: '0.85rem' }}>🏛️</span>
-                  <div><strong>4. Higher Authority (State/CM):</strong> ₹1.00 Crore Discretionary Budget Ledger</div>
+
+                {/* Arrow */}
+                <div style={{ textAlign: 'center', fontSize: '0.62rem', color: '#16a34a', fontWeight: 900, margin: '-3px 0' }}>
+                  ↓ <em>[Mandal Aggregation & Automated Escalation Radar]</em>
                 </div>
+
+                {/* Step 3 */}
+                <div style={{
+                  backgroundColor: '#eff6ff',
+                  border: '1.5px solid #93c5fd',
+                  borderRadius: '5px',
+                  padding: '5px 8px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '6px'
+                }}>
+                  <div style={{
+                    backgroundColor: '#2563eb',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '18px',
+                    height: '18px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.65rem',
+                    fontWeight: 900,
+                    flexShrink: 0,
+                    marginTop: '2px'
+                  }}>3</div>
+                  <div style={{ fontSize: '0.64rem', color: '#0f172a' }}>
+                    <strong style={{ color: '#1d4ed8' }}>Optimizer Eye (MRO/MPDO) Telemetry & Radar:</strong><br />
+                    MRO tracks all mandal villages → Low-performing villages (&lt;50%) are <strong>🔴 Flagged</strong> → Transmits monthly report & proposes Special Infrastructure Grants.
+                  </div>
+                </div>
+
+                {/* Arrow */}
+                <div style={{ textAlign: 'center', fontSize: '0.62rem', color: '#16a34a', fontWeight: 900, margin: '-3px 0' }}>
+                  ↓ <em>[Discretionary Grant Ledger Sanctioning]</em>
+                </div>
+
+                {/* Step 4 */}
+                <div style={{
+                  backgroundColor: '#fefce8',
+                  border: '1.5px solid #fde047',
+                  borderRadius: '5px',
+                  padding: '5px 8px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '6px'
+                }}>
+                  <div style={{
+                    backgroundColor: '#ca8a04',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '18px',
+                    height: '18px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.65rem',
+                    fontWeight: 900,
+                    flexShrink: 0,
+                    marginTop: '2px'
+                  }}>4</div>
+                  <div style={{ fontSize: '0.64rem', color: '#0f172a' }}>
+                    <strong style={{ color: '#854d0e' }}>State Higher Authority & Grant Sanctioning:</strong><br />
+                    Authority reviews statewide policy gaps → Authorizes emergency grants from <strong>₹1.00 Cr State Pool</strong> → Instant ledger deduction & ground release.
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Mathematical Urgency Scoring Model */}
+              <div style={{
+                backgroundColor: '#f1f5f9',
+                border: '1px solid #cbd5e1',
+                padding: '4px 6px',
+                borderRadius: '4px',
+                marginTop: '6px',
+                textAlign: 'center',
+                fontFamily: 'monospace',
+                fontSize: '0.63rem'
+              }}>
+                <strong>P_score = [ 0.65·(N_resolved / N_total) + 0.35·(1 - T_breach / N_total) ] × 100</strong>
               </div>
             </div>
 
@@ -454,7 +587,7 @@ export default function BannerPage() {
                 borderRadius: '3px',
                 marginBottom: '5px'
               }}>
-                📸 Web UI Snap: Optimizer Eye (MRO/MPDO) Dashboard
+                📸 Tier 3 Web UI: Optimizer Eye (MRO/MPDO) Dashboard
               </div>
 
               <div style={{
@@ -462,7 +595,7 @@ export default function BannerPage() {
                 borderRadius: '4px',
                 overflow: 'hidden',
                 position: 'relative',
-                maxHeight: '135px',
+                maxHeight: '115px',
                 backgroundColor: '#000',
                 display: 'flex',
                 justifyContent: 'center',
@@ -480,63 +613,27 @@ export default function BannerPage() {
                 display: 'grid',
                 gridTemplateColumns: 'repeat(3, 1fr)',
                 gap: '3px',
-                marginTop: '5px',
+                marginTop: '4px',
                 textAlign: 'center',
                 fontSize: '0.58rem'
               }}>
                 <div style={{ background: 'rgba(255,255,255,0.1)', padding: '2px', borderRadius: '3px' }}>
                   <span style={{ color: '#94a3b8' }}>Villages</span><br />
-                  <strong style={{ color: '#fff', fontSize: '0.7rem' }}>7 Monitored</strong>
+                  <strong style={{ color: '#fff', fontSize: '0.68rem' }}>7 Monitored</strong>
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.1)', padding: '2px', borderRadius: '3px' }}>
                   <span style={{ color: '#94a3b8' }}>Resolution</span><br />
-                  <strong style={{ color: '#6ee7b7', fontSize: '0.7rem' }}>57% Active</strong>
+                  <strong style={{ color: '#6ee7b7', fontSize: '0.68rem' }}>57% Active</strong>
                 </div>
                 <div style={{ background: 'rgba(255,255,255,0.1)', padding: '2px', borderRadius: '3px' }}>
                   <span style={{ color: '#94a3b8' }}>Flagged</span><br />
-                  <strong style={{ color: '#fca5a5', fontSize: '0.7rem' }}>3 Villages</strong>
-                </div>
-              </div>
-            </div>
-
-            {/* Box 3: State Budget Ledger */}
-            <div style={{
-              border: '2px solid #14532d',
-              borderRadius: '6px',
-              padding: '6px 8px',
-              backgroundColor: '#ffffff'
-            }}>
-              <div style={{
-                backgroundColor: '#14532d',
-                color: '#ffffff',
-                textAlign: 'center',
-                fontWeight: 800,
-                fontSize: '0.75rem',
-                padding: '2px 0',
-                borderRadius: '3px',
-                marginBottom: '5px'
-              }}>
-                Discretionary Development Grant Ledger (₹1.00 Cr)
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px', textAlign: 'center', fontSize: '0.62rem' }}>
-                <div style={{ backgroundColor: '#f8fafc', border: '1px solid #cbd5e1', padding: '3px', borderRadius: '3px' }}>
-                  <span style={{ color: '#64748b' }}>Total Pool</span><br />
-                  <strong style={{ color: '#0f172a', fontSize: '0.75rem' }}>₹1,00,00,000</strong>
-                </div>
-                <div style={{ backgroundColor: '#ecfdf5', border: '1px solid #86efac', padding: '3px', borderRadius: '3px' }}>
-                  <span style={{ color: '#166534' }}>Sanctioned (8)</span><br />
-                  <strong style={{ color: '#15803d', fontSize: '0.75rem' }}>₹49,20,000</strong>
-                </div>
-                <div style={{ backgroundColor: '#f0f9ff', border: '1px solid #7dd3fc', padding: '3px', borderRadius: '3px' }}>
-                  <span style={{ color: '#0369a1' }}>Available</span><br />
-                  <strong style={{ color: '#0284c7', fontSize: '0.75rem' }}>₹50,80,000</strong>
+                  <strong style={{ color: '#fca5a5', fontSize: '0.68rem' }}>3 Villages</strong>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* ══════════ COLUMN 3: RESULTS, UI SNAP 3 (ADMIN MODERATION) & CONCLUSION ══════════ */}
+          {/* ══════════ COLUMN 3: RESULTS, ADMIN MODERATION & BUDGET LEDGER ══════════ */}
           <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {/* Box 1: Village Performance Table */}
             <div style={{
@@ -616,7 +713,7 @@ export default function BannerPage() {
               </table>
             </div>
 
-            {/* Box 2: UI SNAPSHOT - Admin / Secretary Dashboard */}
+            {/* Box 2: UI SNAPSHOT - Admin Secretary Dashboard */}
             <div style={{
               border: '2px solid #14532d',
               borderRadius: '6px',
@@ -635,7 +732,7 @@ export default function BannerPage() {
                 borderRadius: '3px',
                 marginBottom: '5px'
               }}>
-                📸 Web UI Snap: Secretary Admin Dashboard
+                📸 Tier 2 Web UI: Secretary Admin Portal
               </div>
 
               <div style={{
@@ -643,7 +740,7 @@ export default function BannerPage() {
                 borderRadius: '4px',
                 overflow: 'hidden',
                 position: 'relative',
-                maxHeight: '135px',
+                maxHeight: '115px',
                 backgroundColor: '#fff',
                 display: 'flex',
                 justifyContent: 'center',
@@ -661,7 +758,43 @@ export default function BannerPage() {
               </div>
             </div>
 
-            {/* Box 3: Conclusions & References */}
+            {/* Box 3: Discretionary Grant Pool */}
+            <div style={{
+              border: '2px solid #14532d',
+              borderRadius: '6px',
+              padding: '6px 8px',
+              backgroundColor: '#ffffff'
+            }}>
+              <div style={{
+                backgroundColor: '#14532d',
+                color: '#ffffff',
+                textAlign: 'center',
+                fontWeight: 800,
+                fontSize: '0.74rem',
+                padding: '2px 0',
+                borderRadius: '3px',
+                marginBottom: '5px'
+              }}>
+                Tier 4: State Discretionary Fund Ledger (₹1.00 Cr)
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '3px', textAlign: 'center', fontSize: '0.6rem' }}>
+                <div style={{ backgroundColor: '#f8fafc', border: '1px solid #cbd5e1', padding: '3px', borderRadius: '3px' }}>
+                  <span style={{ color: '#64748b' }}>Pool</span><br />
+                  <strong style={{ color: '#0f172a', fontSize: '0.72rem' }}>₹1,00,00,000</strong>
+                </div>
+                <div style={{ backgroundColor: '#ecfdf5', border: '1px solid #86efac', padding: '3px', borderRadius: '3px' }}>
+                  <span style={{ color: '#166534' }}>Sanctioned</span><br />
+                  <strong style={{ color: '#15803d', fontSize: '0.72rem' }}>₹49,20,000</strong>
+                </div>
+                <div style={{ backgroundColor: '#f0f9ff', border: '1px solid #7dd3fc', padding: '3px', borderRadius: '3px' }}>
+                  <span style={{ color: '#0369a1' }}>Balance</span><br />
+                  <strong style={{ color: '#0284c7', fontSize: '0.72rem' }}>₹50,80,000</strong>
+                </div>
+              </div>
+            </div>
+
+            {/* Box 4: Conclusions & References */}
             <div style={{
               border: '2px solid #14532d',
               borderRadius: '6px',
@@ -679,17 +812,16 @@ export default function BannerPage() {
                 borderRadius: '3px',
                 marginBottom: '4px'
               }}>
-                Conclusions & References
+                Conclusions & Impact
               </div>
 
               <ul style={{ margin: '0 0 4px 0', paddingLeft: '14px', color: '#334155', lineHeight: '1.25' }}>
-                <li><strong>Zero Leakage:</strong> Real-time accountability across all 4 civic administrative tiers.</li>
-                <li><strong>64% Faster Resolution:</strong> Enforced by strict 48h SLA timers and priority scoring.</li>
+                <li><strong>Zero Backlogs:</strong> 64% faster turnaround via automated 48h SLA clocks.</li>
+                <li><strong>Targeted Funding:</strong> ₹49.20 Lakhs disbursed across 8 emergency infrastructure projects.</li>
               </ul>
 
               <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '3px', color: '#64748b', fontStyle: 'italic', fontSize: '0.58rem' }}>
-                1. Govt. of AP Grama/Ward Sachivalayam Mission (2026).<br />
-                2. Sincere thanks to CSE Faculty & Administration at AITS Tirupati.
+                Department of CSE · AITS Tirupati, Andhra Pradesh
               </div>
             </div>
           </section>
@@ -699,8 +831,8 @@ export default function BannerPage() {
         {/* ==================== FOOTER ==================== */}
         <footer style={{
           borderTop: '2px solid #e2e8f0',
-          paddingTop: '6px',
-          marginTop: '6px',
+          paddingTop: '5px',
+          marginTop: '5px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
