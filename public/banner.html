@@ -54,7 +54,7 @@
       background: #ffffff;
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
       border-radius: 4px;
-      padding: 24px 28px;
+      padding: 20px 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -65,13 +65,13 @@
       display: flex;
       align-items: center;
       border-bottom: 3px solid #14532d;
-      padding-bottom: 14px;
-      margin-bottom: 14px;
-      gap: 20px;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      gap: 16px;
     }
     .emblem-logo {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       border: 3px solid #14532d;
       display: flex;
@@ -85,7 +85,7 @@
     }
     .header-title-box { flex: 1; text-align: center; }
     .main-title {
-      font-size: 1.65rem;
+      font-size: 1.5rem;
       font-weight: 900;
       color: #0f172a;
       letter-spacing: -0.5px;
@@ -93,30 +93,30 @@
       margin-bottom: 4px;
     }
     .main-sub {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-style: italic;
       color: #14532d;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
-    .dept-name { font-size: 0.9rem; font-weight: 700; color: #334155; }
-    .inst-name { font-size: 0.85rem; font-weight: 800; color: #15803d; letter-spacing: 0.5px; }
-    .inst-loc { font-size: 0.75rem; color: #64748b; }
+    .dept-name { font-size: 0.82rem; font-weight: 700; color: #334155; }
+    .inst-name { font-size: 0.8rem; font-weight: 800; color: #15803d; letter-spacing: 0.5px; }
+    .inst-loc { font-size: 0.7rem; color: #64748b; }
 
     /* 3-Column Layout */
     .grid-3col {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
       flex: 1;
       align-items: stretch;
     }
-    .col { display: flex; flex-direction: column; gap: 12px; }
+    .col { display: flex; flex-direction: column; gap: 10px; }
 
     .panel-box {
       border: 2px solid #14532d;
       border-radius: 6px;
-      padding: 10px 12px;
+      padding: 8px 10px;
       background: #ffffff;
       display: flex;
       flex-direction: column;
@@ -124,24 +124,25 @@
     .panel-header {
       background: #14532d;
       color: #ffffff;
-      text-align: center;
+      textAlign: center;
       font-weight: 800;
-      font-size: 0.85rem;
-      padding: 4px 0;
+      font-size: 0.78rem;
+      padding: 3px 0;
       border-radius: 4px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
+      text-align: center;
     }
     .badge-sub {
       background: #dcfce7;
       border: 1px solid #86efac;
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 4px;
       font-weight: 800;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #14532d;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       text-align: center;
     }
 
@@ -154,7 +155,7 @@
         height: 100vw !important;
         box-shadow: none !important;
         border-radius: 0 !important;
-        padding: 15px !important;
+        padding: 12px !important;
       }
     }
   </style>
@@ -162,7 +163,7 @@
 <body>
 
   <div class="control-bar">
-    <span>📐 2ft × 2ft Academic Presentation Banner (Square Poster)</span>
+    <span>📐 2ft × 2ft Academic Presentation Banner (Square Poster with Web UI Snaps)</span>
     <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
   </div>
 
@@ -170,7 +171,7 @@
     <!-- Header -->
     <header>
       <div class="emblem-logo">
-        <span style="font-size: 2rem;">🏛️</span>
+        <span style="font-size: 1.8rem;">🏛️</span>
         <span style="font-size: 0.55rem; font-weight: 900; color: #14532d; line-height: 1.1;">AITS</span>
         <span style="font-size: 0.45rem; color: #166534;">TIRUPATI</span>
       </div>
@@ -183,10 +184,10 @@
         <div class="inst-loc">Tirupati, 517520, Andhra Pradesh, India</div>
       </div>
 
-      <div style="width: 100px; height: 100px; border: 2px solid #cbd5e1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; flex-shrink: 0; padding: 4px; text-align: center;">
-        <span style="font-size: 1.8rem;">👁️</span>
-        <span style="font-size: 0.6rem; font-weight: 800; color: #0f172a;">OPTIMIZER EYE</span>
-        <span style="font-size: 0.5rem; color: #15803d; font-weight: 700;">LIVE SYSTEM</span>
+      <div style="width: 90px; height: 90px; border: 2px solid #cbd5e1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; flex-shrink: 0; padding: 4px; text-align: center;">
+        <span style="font-size: 1.6rem;">👁️</span>
+        <span style="font-size: 0.55rem; font-weight: 800; color: #0f172a;">OPTIMIZER EYE</span>
+        <span style="font-size: 0.48rem; color: #15803d; font-weight: 700;">REAL-TIME GIS</span>
       </div>
     </header>
 
@@ -194,46 +195,52 @@
     <main class="grid-3col">
       <!-- Column 1 -->
       <section class="col">
-        <div class="panel-box" style="flex: 1;">
+        <div class="panel-box">
           <div class="panel-header">Introduction & Objectives</div>
           <div class="badge-sub">Project Goals</div>
-          <ul style="margin: 0 0 8px 0; padding-left: 16px; font-size: 0.72rem; color: #334155; line-height: 1.35;">
-            <li><strong>Grassroots Digital Delivery:</strong> Connect 100% of rural citizens directly with Ward/Village Sachivalayam Secretariats.</li>
-            <li><strong>Strict SLA Enforcement:</strong> Implement automated 48-hour resolution countdown clocks with dynamic urgency scoring.</li>
-            <li><strong>AI-Driven Welfare Navigator:</strong> Auto-formalize unstructured citizen petitions into official government grievances.</li>
+          <ul style="margin: 0 0 6px 0; padding-left: 14px; font-size: 0.67rem; color: #334155; line-height: 1.3;">
+            <li><strong>Grassroots Delivery:</strong> Direct link between rural citizens and local Village/Ward Secretariats.</li>
+            <li><strong>Strict SLA Enforcement:</strong> Automated 48-hour countdown clocks with priority scoring.</li>
+            <li><strong>AI Welfare Assistant:</strong> Converts informal citizen voice/text into structured government petitions.</li>
           </ul>
 
-          <div style="background: #fef3c7; border: 1px solid #fde68a; padding: 3px 8px; border-radius: 4px; font-weight: 800; font-size: 0.75rem; color: #92400e; margin-bottom: 6px;">
-            Why Sachivalayam & Optimization Eye?
+          <div style="background: #fef3c7; border: 1px solid #fde68a; padding: 2px 6px; border-radius: 4px; font-weight: 800; font-size: 0.7rem; color: #92400e; margin-bottom: 4px;">
+            Why Optimization Eye?
           </div>
-          <p style="margin: 0 0 8px 0; font-size: 0.7rem; color: #334155; line-height: 1.3;">
-            Traditional manual public grievance systems suffer from <strong>unmonitored backlogs, lack of escalation tracking</strong>, and poor inter-departmental visibility. The <em>Optimizer Eye</em> provides MRO/MPDO & State Authorities with a live telemetry dashboard to isolate bottlenecks and disburse targeted development grants.
+          <p style="margin: 0; font-size: 0.66rem; color: #334155; line-height: 1.25;">
+            Eliminates administrative blind spots by providing MRO/MPDO officers with live grievance telemetry, scheme gap heatmaps, and low-performing village alerts.
           </p>
+        </div>
 
-          <div style="background: #e0f2fe; border: 1px solid #bae6fd; padding: 3px 8px; border-radius: 4px; font-weight: 800; font-size: 0.75rem; color: #075985; margin-bottom: 6px;">
-            Core Architectural Advantages
+        <div class="panel-box" style="background: #f8fafc;">
+          <div class="panel-header" style="background: #15803d;">📸 Web UI Snap: Citizen Portal & Landing Page</div>
+          <div style="border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; max-height: 140px; display: flex; justify-content: center; align-items: center; background: #000;">
+            <img src="/banner_images/media_1788700572488.png" alt="Citizen Landing Portal" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
-          <ul style="margin: 0; padding-left: 16px; font-size: 0.7rem; color: #334155; line-height: 1.3;">
-            <li><strong>Strict Account Isolation:</strong> Zero cross-citizen data leakage via authenticated UUID session tokens.</li>
-            <li><strong>Real-time Leaflet GIS:</strong> Pinpoint sanitation, water, and infrastructure distress locations on interactive map.</li>
-            <li><strong>Citizen SMS Dispatcher:</strong> Instant official notification broadcasting via SMS and WhatsApp.</li>
-          </ul>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 5px; font-size: 0.62rem;">
+            <div style="background: #ecfdf5; padding: 3px 4px; border-radius: 3px; border: 1px solid #a7f3d0;">
+              <strong style="color: #166534;">🤖 AI Scheme Finder:</strong> 12+ AP Welfare schemes
+            </div>
+            <div style="background: #eff6ff; padding: 3px 4px; border-radius: 3px; border: 1px solid #bfdbfe;">
+              <strong style="color: #1e40af;">🚨 1-Tap SOS:</strong> 112, 108, 104, 1902 Helplines
+            </div>
+          </div>
         </div>
 
         <div class="panel-box">
-          <div class="panel-header">Technology Stack & Implementation</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.68rem;">
-            <div style="border: 1px solid #e2e8f0; padding: 5px; border-radius: 4px; background: #f8fafc;">
-              <strong style="color: #15803d;">⚡ Frontend Framework:</strong><br />Next.js 16.2 (Turbopack), React 19, TypeScript
+          <div class="panel-header">Technology Stack</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 0.62rem;">
+            <div style="border: 1px solid #e2e8f0; padding: 3px 5px; border-radius: 3px; background: #f8fafc;">
+              <strong style="color: #15803d;">⚡ Frontend:</strong> Next.js 16, React 19, TS
             </div>
-            <div style="border: 1px solid #e2e8f0; padding: 5px; border-radius: 4px; background: #f8fafc;">
-              <strong style="color: #15803d;">🔥 Cloud & Real-Time:</strong><br />Firebase Cloud Firestore, Auth & Live Event Bus
+            <div style="border: 1px solid #e2e8f0; padding: 3px 5px; border-radius: 3px; background: #f8fafc;">
+              <strong style="color: #15803d;">🔥 Backend:</strong> Firebase Cloud Firestore
             </div>
-            <div style="border: 1px solid #e2e8f0; padding: 5px; border-radius: 4px; background: #f8fafc;">
-              <strong style="color: #15803d;">🗺️ Geospatial Mapping:</strong><br />Leaflet GIS Engine, OpenStreetMap Tiles
+            <div style="border: 1px solid #e2e8f0; padding: 3px 5px; border-radius: 3px; background: #f8fafc;">
+              <strong style="color: #15803d;">🗺️ GIS Maps:</strong> Leaflet + OpenStreetMap
             </div>
-            <div style="border: 1px solid #e2e8f0; padding: 5px; border-radius: 4px; background: #f8fafc;">
-              <strong style="color: #15803d;">🎨 Design System:</strong><br />CSS Modules, GeeksForGeeks Theming, Responsive
+            <div style="border: 1px solid #e2e8f0; padding: 3px 5px; border-radius: 3px; background: #f8fafc;">
+              <strong style="color: #15803d;">🔒 Auth:</strong> UUID Isolated Sessions
             </div>
           </div>
         </div>
@@ -241,58 +248,66 @@
 
       <!-- Column 2 -->
       <section class="col">
-        <div class="panel-box" style="flex: 1;">
-          <div class="panel-header">System Workflow & Architecture</div>
-          
-          <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; background: #f8fafc; padding: 6px; border-radius: 6px; border: 1px solid #e2e8f0;">
-            <div style="display: flex; align-items: center; gap: 6px; background: #ecfdf5; padding: 4px 8px; border-radius: 4px; border: 1px solid #a7f3d0;">
-              <span style="font-size: 1rem;">👨‍🌾</span>
-              <div style="font-size: 0.67rem;"><strong>1. Citizen Tier:</strong> AI Scheme Finder, Grievance Submission, SOS Directory, Live Status Tracker.</div>
+        <div class="panel-box">
+          <div class="panel-header">Multi-Role Governance Workflow</div>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.64rem;">
+            <div style="display: flex; align-items: center; gap: 5px; background: #ecfdf5; padding: 3px 6px; border-radius: 3px; border: 1px solid #a7f3d0;">
+              <span style="font-size: 0.85rem;">👨‍🌾</span>
+              <div><strong>1. Citizen Tier:</strong> AI Petition Formalization, Geotagging & Status Tracker</div>
             </div>
-            <div style="text-align: center; font-size: 0.65rem; color: #16a34a; font-weight: 900;">↓ (Real-time Synced Firestore Event)</div>
-            <div style="display: flex; align-items: center; gap: 6px; background: #f0fdf4; padding: 4px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">
-              <span style="font-size: 1rem;">🧑‍💼</span>
-              <div style="font-size: 0.67rem;"><strong>2. Secretary (Admin):</strong> 48h SLA Countdown, Urgency Scoring, Resolution SMS/WhatsApp Dispatcher.</div>
+            <div style="text-align: center; font-size: 0.6rem; color: #16a34a; font-weight: 900; margin: -2px 0;">↓</div>
+            <div style="display: flex; align-items: center; gap: 5px; background: #f0fdf4; padding: 3px 6px; border-radius: 3px; border: 1px solid #bbf7d0;">
+              <span style="font-size: 0.85rem;">🧑‍💼</span>
+              <div><strong>2. Secretary Tier:</strong> 48h SLA Countdown & Official SMS Resolution Dispatcher</div>
             </div>
-            <div style="text-align: center; font-size: 0.65rem; color: #16a34a; font-weight: 900;">↓ (Automated Escalation & Monthly Synthesis)</div>
-            <div style="display: flex; align-items: center; gap: 6px; background: #eff6ff; padding: 4px 8px; border-radius: 4px; border: 1px solid #bfdbfe;">
-              <span style="font-size: 1rem;">🔭</span>
-              <div style="font-size: 0.67rem;"><strong>3. Optimizer Eye (MRO/MPDO):</strong> Mandal Village Performance Radar, Flagged Area Detection, Grant Recommender.</div>
+            <div style="text-align: center; font-size: 0.6rem; color: #16a34a; font-weight: 900; margin: -2px 0;">↓</div>
+            <div style="display: flex; align-items: center; gap: 5px; background: #eff6ff; padding: 3px 6px; border-radius: 3px; border: 1px solid #bfdbfe;">
+              <span style="font-size: 0.85rem;">🔭</span>
+              <div><strong>3. Optimizer Eye (MRO):</strong> Real-Time Mandal Radar & Village Flagging</div>
             </div>
-            <div style="text-align: center; font-size: 0.65rem; color: #16a34a; font-weight: 900;">↓ (State Discretionary Sanction Pool)</div>
-            <div style="display: flex; align-items: center; gap: 6px; background: #faf5ff; padding: 4px 8px; border-radius: 4px; border: 1px solid #e9d5ff;">
-              <span style="font-size: 1rem;">🏛️</span>
-              <div style="font-size: 0.67rem;"><strong>4. Higher Authority (State/CM):</strong> ₹1.00 Crore Budget Ledger, Statewide Policy Analysis, Grant Authorization.</div>
+            <div style="text-align: center; font-size: 0.6rem; color: #16a34a; font-weight: 900; margin: -2px 0;">↓</div>
+            <div style="display: flex; align-items: center; gap: 5px; background: #faf5ff; padding: 3px 6px; border-radius: 3px; border: 1px solid #e9d5ff;">
+              <span style="font-size: 0.85rem;">🏛️</span>
+              <div><strong>4. Higher Authority (State/CM):</strong> ₹1.00 Crore Discretionary Budget Ledger</div>
             </div>
           </div>
+        </div>
 
-          <div class="badge-sub">Mathematical Urgency & SLA Model</div>
-          <div style="background: #f1f5f9; padding: 6px 8px; border-radius: 4px; border: 1px solid #cbd5e1; font-size: 0.68rem; margin-bottom: 6px; text-align: center; font-family: monospace;">
-            <strong>P_score = [ w₁ · (N_res / N_tot) + w₂ · (1 - T_breach / N_tot) ] × 100</strong><br />
-            <span style="font-size: 0.62rem; color: #475569;">where w₁ = 0.65 (Resolution weight), w₂ = 0.35 (SLA Adherence weight)</span>
+        <div class="panel-box" style="background: #0f172a; color: #fff;">
+          <div class="panel-header" style="background: #1d4ed8;">📸 Web UI Snap: Optimizer Eye (MRO/MPDO) Dashboard</div>
+          <div style="border: 1px solid #334155; border-radius: 4px; overflow: hidden; max-height: 135px; display: flex; justify-content: center; align-items: center; background: #000;">
+            <img src="/banner_images/media_1788830721749.png" alt="Optimizer Eye Real-time Dashboard" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
-
-          <div style="font-size: 0.68rem; color: #334155; line-height: 1.3;">
-            • <strong>🔴 Critical:</strong> Remaining SLA &lt; 12 Hours (Auto-Escalated to MRO)<br />
-            • <strong>🟠 High:</strong> Remaining SLA 12–24 Hours<br />
-            • <strong>🟢 Normal:</strong> Remaining SLA 24–48 Hours
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 5px; text-align: center; font-size: 0.58rem;">
+            <div style="background: rgba(255,255,255,0.1); padding: 2px; borderRadius: 3px;">
+              <span style="color: #94a3b8;">Villages</span><br />
+              <strong style="color: #fff; font-size: 0.7rem;">7 Monitored</strong>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 2px; borderRadius: 3px;">
+              <span style="color: #94a3b8;">Resolution</span><br />
+              <strong style="color: #6ee7b7; font-size: 0.7rem;">57% Active</strong>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 2px; borderRadius: 3px;">
+              <span style="color: #94a3b8;">Flagged</span><br />
+              <strong style="color: #fca5a5; font-size: 0.7rem;">3 Villages</strong>
+            </div>
           </div>
         </div>
 
         <div class="panel-box">
-          <div class="panel-header">Discretionary State Grant Ledger (₹1.00 Cr Pool)</div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; text-align: center; font-size: 0.66rem;">
-            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px; border-radius: 4px;">
+          <div class="panel-header">Discretionary Development Grant Ledger (₹1.00 Cr)</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; text-align: center; font-size: 0.62rem;">
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 3px; border-radius: 3px;">
               <span style="color: #64748b;">Total Pool</span><br />
-              <strong style="color: #0f172a; font-size: 0.8rem;">₹1,00,00,000</strong>
+              <strong style="color: #0f172a; font-size: 0.75rem;">₹1,00,00,000</strong>
             </div>
-            <div style="background: #ecfdf5; border: 1px solid #86efac; padding: 4px; border-radius: 4px;">
+            <div style="background: #ecfdf5; border: 1px solid #86efac; padding: 3px; border-radius: 3px;">
               <span style="color: #166534;">Sanctioned (8)</span><br />
-              <strong style="color: #15803d; font-size: 0.8rem;">₹49,20,000</strong>
+              <strong style="color: #15803d; font-size: 0.75rem;">₹49,20,000</strong>
             </div>
-            <div style="background: #f0f9ff; border: 1px solid #7dd3fc; padding: 4px; border-radius: 4px;">
-              <span style="color: #0369a1;">Available Bal</span><br />
-              <strong style="color: #0284c7; font-size: 0.8rem;">₹50,80,000</strong>
+            <div style="background: #f0f9ff; border: 1px solid #7dd3fc; padding: 3px; border-radius: 3px;">
+              <span style="color: #0369a1;">Available</span><br />
+              <strong style="color: #0284c7; font-size: 0.75rem;">₹50,80,000</strong>
             </div>
           </div>
         </div>
@@ -300,100 +315,87 @@
 
       <!-- Column 3 -->
       <section class="col">
-        <div class="panel-box" style="flex: 1;">
-          <div class="panel-header">Experimental Results & Telemetry</div>
-          
-          <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; margin-bottom: 8px; text-align: center;">
+        <div class="panel-box">
+          <div class="panel-header">Village Performance & Telemetry Results</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.6rem; text-align: center; margin-bottom: 4px;">
             <thead>
-              <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; color: #334155;">
-                <th style="padding: 3px 4px; text-align: left;">Village</th>
-                <th style="padding: 3px 4px;">Total</th>
-                <th style="padding: 3px 4px;">Resolved</th>
-                <th style="padding: 3px 4px;">Rate</th>
-                <th style="padding: 3px 4px;">Score</th>
-                <th style="padding: 3px 4px;">Status</th>
+              <tr style="background: #f1f5f9; border-bottom: 1px solid #cbd5e1; color: #334155;">
+                <th style="padding: 2px; text-align: left;">Village</th>
+                <th style="padding: 2px;">Total</th>
+                <th style="padding: 2px;">Resolved</th>
+                <th style="padding: 2px;">Rate</th>
+                <th style="padding: 2px;">Status</th>
               </tr>
             </thead>
             <tbody>
               <tr style="border-bottom: 1px solid #e2e8f0; background: #f0fdf4;">
-                <td style="padding: 3px 4px; text-align: left; font-weight: 700;">Gollapudi</td>
+                <td style="padding: 2px; text-align: left; font-weight: 700;">Gollapudi</td>
                 <td>7</td>
                 <td>6</td>
                 <td>85.7%</td>
-                <td style="font-weight: 800; color: #16a34a;">88</td>
-                <td><span style="background: #dcfce7; color: #15803d; padding: 1px 4px; border-radius: 3px; font-weight: 700;">🟢 Excellent</span></td>
+                <td><span style="color: #15803d; fontWeight: 700;">🟢 Excellent</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
-                <td style="padding: 3px 4px; text-align: left; font-weight: 700;">Penamaluru</td>
+                <td style="padding: 2px; text-align: left; font-weight: 700;">Penamaluru</td>
                 <td>4</td>
                 <td>3</td>
                 <td>75.0%</td>
-                <td style="font-weight: 800; color: #16a34a;">78</td>
-                <td><span style="background: #dcfce7; color: #15803d; padding: 1px 4px; border-radius: 3px; font-weight: 700;">🟢 Good</span></td>
+                <td><span style="color: #15803d; fontWeight: 700;">🟢 Good</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
-                <td style="padding: 3px 4px; text-align: left; font-weight: 700;">Kankipadu</td>
+                <td style="padding: 2px; text-align: left; font-weight: 700;">Kankipadu</td>
                 <td>3</td>
                 <td>2</td>
                 <td>66.7%</td>
-                <td style="font-weight: 800; color: #16a34a;">70</td>
-                <td><span style="background: #dcfce7; color: #15803d; padding: 1px 4px; border-radius: 3px; font-weight: 700;">🟢 Normal</span></td>
+                <td><span style="color: #15803d; fontWeight: 700;">🟢 Normal</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
-                <td style="padding: 3px 4px; text-align: left; font-weight: 700;">Poranki</td>
+                <td style="padding: 2px; text-align: left; font-weight: 700;">Poranki</td>
                 <td>2</td>
                 <td>1</td>
                 <td>50.0%</td>
-                <td style="font-weight: 800; color: #ca8a04;">52</td>
-                <td><span style="background: #fef9c3; color: #854d0e; padding: 1px 4px; border-radius: 3px; font-weight: 700;">🟡 Average</span></td>
+                <td><span style="color: #854d0e; fontWeight: 700;">🟡 Average</span></td>
               </tr>
-              <tr style="border-bottom: 1px solid #e2e8f0; background: #fef2f2;">
-                <td style="padding: 3px 4px; text-align: left; font-weight: 700;">Nunna</td>
+              <tr style="background: #fef2f2;">
+                <td style="padding: 2px; text-align: left; font-weight: 700;">Nunna</td>
                 <td>3</td>
                 <td>1</td>
                 <td>33.3%</td>
-                <td style="font-weight: 800; color: #dc2626;">38</td>
-                <td><span style="background: #fee2e2; color: #991b1b; padding: 1px 4px; border-radius: 3px; font-weight: 700;">🔴 Flagged</span></td>
-              </tr>
-              <tr style="background: #fef2f2;">
-                <td style="padding: 3px 4px; text-align: left; font-weight: 700;">Mangalagiri</td>
-                <td>2</td>
-                <td>0</td>
-                <td>0.0%</td>
-                <td style="font-weight: 800; color: #dc2626;">10</td>
-                <td><span style="background: #fee2e2; color: #991b1b; padding: 1px 4px; border-radius: 3px; font-weight: 700;">🔴 Flagged</span></td>
+                <td><span style="color: #dc2626; fontWeight: 700;">🔴 Flagged</span></td>
               </tr>
             </tbody>
           </table>
-
-          <div class="panel-header" style="margin-top: 4px;">Conclusions & Impact</div>
-          <ul style="margin: 0; padding-left: 16px; font-size: 0.68rem; color: #334155; line-height: 1.3;">
-            <li><strong>Zero Grievance Leakage:</strong> Enforces accountability across all 4 administrative tiers.</li>
-            <li><strong>Rapid 48-Hour Closure:</strong> Reduces average public issue turnaround time by 64%.</li>
-            <li><strong>Transparent Grant Sanctions:</strong> Accelerated ₹49.20 Lakhs in emergency drinking water and health infrastructure.</li>
-          </ul>
         </div>
 
-        <div class="panel-box">
-          <div class="panel-header" style="font-size: 0.75rem; padding: 3px 0;">References</div>
-          <ol style="margin: 0 0 6px 0; padding-left: 14px; font-size: 0.64rem; color: #475569; line-height: 1.25;">
-            <li>Govt. of Andhra Pradesh, "Grama / Ward Sachivalayam Portal & Citizen Service Charter", 2026.</li>
-            <li>IEEE Transactions on Services Computing, "Decentralized SLA & Multi-Role Governance", 2025.</li>
-          </ol>
+        <div class="panel-box" style="background: #fdf4ff;">
+          <div class="panel-header" style="background: #9333ea;">📸 Web UI Snap: Secretary Admin Dashboard</div>
+          <div style="border: 1px solid #e9d5ff; border-radius: 4px; overflow: hidden; max-height: 135px; display: flex; justify-content: center; align-items: center; background: #fff;">
+            <img src="/banner_images/media_1788586398513.png" alt="Admin Secretary Portal" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div style="font-size: 0.62rem; color: #6b21a8; margin-top: 4px; text-align: center; font-weight: 600;">
+            ⏱️ 48-Hour SLA Countdown · Auto SMS/WhatsApp Resolution Dispatcher
+          </div>
+        </div>
 
-          <div class="panel-header" style="font-size: 0.75rem; padding: 3px 0;">Acknowledgements</div>
-          <p style="margin: 0; font-size: 0.64rem; color: #475569; line-height: 1.2; font-style: italic;">
-            Sincere gratitude to the Department of ECE, Faculty Mentors, and Administration at AITS Tirupati for project guidance and research support.
-          </p>
+        <div class="panel-box" style="font-size: 0.62rem;">
+          <div class="panel-header">Conclusions & References</div>
+          <ul style="margin: 0 0 4px 0; padding-left: 14px; color: #334155; line-height: 1.25;">
+            <li><strong>Zero Leakage:</strong> Real-time accountability across all 4 civic administrative tiers.</li>
+            <li><strong>64% Faster Resolution:</strong> Enforced by strict 48h SLA timers and priority scoring.</li>
+          </ul>
+          <div style="border-top: 1px solid #e2e8f0; padding-top: 3px; color: #64748b; font-style: italic; font-size: 0.58rem;">
+            1. Govt. of AP Grama/Ward Sachivalayam Mission (2026).<br />
+            2. Sincere thanks to ECE Faculty & Administration at AITS Tirupati.
+          </div>
         </div>
       </section>
     </main>
 
     <!-- Footer -->
-    <footer style="border-top: 2px solid #e2e8f0; padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #64748b;">
+    <footer style="border-top: 2px solid #e2e8f0; padding-top: 6px; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: #64748b;">
       <span>Project: <strong>Sachivalayam Platform (The Government Service Optimization Eye)</strong></span>
-      <span>Size: <strong>2ft × 2ft (Square 1:1 Aspect Ratio)</strong></span>
-      <span>Institutional Partner: <strong>AITS Tirupati, AP</strong></span>
+      <span>Banner Size: <strong>2ft × 2ft (Square 1:1 Aspect Ratio)</strong></span>
+      <span>Partner: <strong>AITS Tirupati, Andhra Pradesh</strong></span>
     </footer>
   </div>
 
