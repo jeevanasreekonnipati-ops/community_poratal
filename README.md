@@ -1,109 +1,164 @@
 # 🏛️ Sachivalayam & Community Resource Portal (CRP)
 
-An intelligent, multi-tier civic management platform connecting **Citizens**, **Village Secretaries (Admins)**, **MRO / Optimizers**, and **State Higher Authorities** with real-time mapping, governance tracking, and grievance redressal.
+[![Next.js 16](https://img.shields.io/badge/Next.js-16.2.9-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![React 19](https://img.shields.io/badge/React-19.0.0-61dafb?style=flat&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-Firestore%20%26%20Auth-ffca28?style=flat&logo=firebase)](https://firebase.google.com/)
+[![Leaflet](https://img.shields.io/badge/Leaflet-OpenStreetMap-199900?style=flat&logo=leaflet)](https://leafletjs.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+An intelligent, multi-tier civic governance platform connecting **Citizens**, **Village Secretaries (Admins)**, **MRO / MPDO Optimizers**, and **State Higher Authorities** with real-time mapping, SLA grievance tracking, AI-powered welfare navigation, emergency response, and development grant fund allocation.
 
 ---
 
-## 🌟 Key Features
+## 🌐 Live Application
+- **Production URL:** [https://community-poratal.vercel.app](https://community-poratal.vercel.app)
+- **GitHub Repository:** [https://github.com/jeevanasreekonnipati-ops/community_poratal](https://github.com/jeevanasreekonnipati-ops/community_poratal)
 
-### 1. 🌍 Citizen Dashboard
-- **📍 Live Geospatial Map:** Interactive Leaflet / OpenStreetMap interface displaying all approved community amenities (Schools, Hospitals, Water, Sanitation, Transport, Parks).
-- **📝 Real-Time Resource Surveying:** Report infrastructure needs with auto-detected GPS coordinates or pin-on-map selection.
-- **🏛️ Elected Officials Mapping:** Dynamic lookup of representatives (Prime Minister, Chief Minister, Member of Parliament [MP], Member of Legislative Assembly [MLA]) auto-detected from user's current GPS location via reverse-geocoding.
-- **📜 Government Support Schemes:** Searchable, categorized catalogue of major central & state welfare schemes (PM Awas Yojana, Jal Jeevan Mission, PM Surya Ghar, Ayushman Bharat, etc.) with eligibility criteria and direct application links.
+---
 
-### 2. 🛡️ Secretary (Admin) Dashboard
-- **⏳ Real-Time Moderation:** Instant live stream of incoming citizen surveys from Firebase Firestore with one-click **Approve** / **Reject** workflows.
-- **👥 User Role Management:** Live administrative panel to promote/assign roles (`citizen`, `admin`, `optimizer`, `authority`) to registered users.
-- **📄 Report Generation (PDF):** One-click generation and download of formatted governance status reports using `jsPDF` and `jspdf-autotable`.
-- **📊 CSV Export:** Direct export of verified location and infrastructure datasets for offline analysis and auditing.
-- **📋 Real-Time Audit Logs:** Complete traceability with timestamped system logs for every administrative decision.
+## 🌟 Comprehensive Feature Suite
 
-### 3. 🔭 Optimizer (MRO) Dashboard
-- **📊 Village-Level Analytics:** Aggregated statistics of reported vs. resolved infrastructure needs across mandals and districts.
-- **⚡ Resource Balancing:** Identification of high-stress zones and automated resource allocation recommendations.
+### 1. 🧑‍🌾 Citizen Dashboard (`/dashboards/citizen`)
+- **📢 Real-Time Village Notice Board:** Live marquee and ticker displaying urgent village advisories, free health camps, water pipeline maintenance, and agricultural subsidies.
+- **🤖 AI Scheme Navigator & Grievance Assistant:**
+  - *Scheme Finder:* Filters government welfare schemes (Aarogyasri, Rythu Bharosa, Amma Vodi, Vidya Deevena, Jal Jeevan) by beneficiary category, age, and income.
+  - *AI Grievance Formalizer:* Converts conversational complaints into formal government petitions with SLA urgency tags and auto-fills the reporting form with 1 click.
+- **🚨 1-Tap Emergency SOS Directory:** Quick dialers for **112** (National Emergency), **108** (Ambulance), **104** (Telemedicine), **1902** (CM Spandana Grievance), **181** (Women Safety), **1930** (Cyber Fraud), and **14400** (ACB).
+- **🗺️ Interactive Geospatial Map:** Click-to-pin and 1-tap GPS geolocation detection displaying all approved community amenities (Schools, Hospitals, Water Plants, Sanitation, Transport, Parks, Government Support).
+- **🏛️ Elected Officials Mapping:** Dynamic lookup of representatives (Prime Minister, Chief Minister, MP, MLA) auto-detected from user coordinates.
+- **📋 100% Private Issue History Tracker:** Strictly isolated per account with submission timestamp, live status badges (*Approved*, *Pending*, *Rejected*), days-elapsed counter, and live approval celebration banners 🎉.
 
-### 4. 🏛️ Higher Authority Dashboard
-- **📈 State Supervision:** Macro-level monitoring of statewide schemes, budget allocations, and performance metrics across departments.
+---
+
+### 2. 🧑‍💼 Secretary (Admin) Dashboard (`/dashboards/admin`)
+- **⏱️ 48-Hour SLA Countdown Clock:** Real-time countdown clock tracking compliance with Citizen Charter SLAs and flagging overdue breaches.
+- **🏷️ AI Urgency Priority Scoring:** Automatic categorization into `🔴 CRITICAL` (Drinking water, hospitals), `🟠 HIGH` (Schools, welfare support), and `🟢 NORMAL`.
+- **💬 Citizen SMS / WhatsApp Dispatcher:** Pre-formatted official approval/resolution notification templates with 1-click clipboard copy.
+- **📢 Live Notice Broadcaster:** Tool for Secretaries to publish urgent advisories directly to all citizen dashboards in real time.
+- **📄 PDF & CSV Report Generators:** One-click generation of formatted governance survey reports and CSV exports for offline auditing.
+- **👥 User Role Management & Audit Logs:** Live panel to update user roles (`citizen`, `admin`, `optimizer`, `authority`) with timestamped action logs.
+
+---
+
+### 3. 🔭 Optimizer (MRO / MPDO) Dashboard (`/dashboards/optimizer`)
+- **📊 Welfare Scheme Gap Analysis:** Tracks unserved populations across major central and state schemes (Jal Jeevan, Rythu Bharosa, PMAY, Cheyutha).
+- **🏆 Village Performance Rankings:** Automatic grading of mandal villages by resolution speed and responsiveness.
+- **💰 Mandal Development Grants & Fund Tracker:** Monitors state-sanctioned infrastructure project funds and local expenditure.
+- **📋 Comprehensive Reports Directory:** Filterable by village and resolution status with Secretary response inspection.
+- **📨 1-Click Monthly Escalation to Higher Authority:** Compiles mandal metrics and transmits official monthly reports directly to the District Collector.
+- **🗺️ Problem Hotspot Map:** Visual geographical distribution of unresolved issues across the mandal.
+
+---
+
+### 4. 🏛️ Higher Authority (Collector & State Oversight) Dashboard (`/dashboards/authority`)
+- **📈 State Executive Summary:** Statewide resolution metrics, overall performance index (`84% Excellent`), and critical low-performing district alerts.
+- **💰 Special Development Grant Allocator & Budget Ledger:**
+  - *Live State Budget Pool:* Real-time ledger displaying Total Discretionary Pool (**₹50,00,000**), Total Sanctioned, and Remaining Available Pool.
+  - *Grant Sanction Form:* Authorize accelerated development grants (e.g., ₹5,00,000 for RO water purification, ₹8,50,000 for road works) with instant ledger updates.
+- **📨 MRO Reports (Direct Inbox):** Centralized repository of monthly escalation reports submitted by mandal MROs.
+- **📍 Statewide Heatmap:** Macro-level geographic visualization of pending vs. resolved civic infrastructure needs.
+
+---
+
+## ⚡ Role Switching & Security Passcodes
+
+Users can switch between all 4 dashboards instantly using the **`⚡ Switch Role with Passcode`** modal in the left sidebar:
+
+| Role | Dashboard URL | Passcode |
+| :--- | :--- | :--- |
+| **🧑‍🌾 Citizen** | `/dashboards/citizen` | *No passcode required* |
+| **🧑‍💼 Secretary (Admin)** | `/dashboards/admin` | `admin123` |
+| **🔭 MRO / MPDO (Optimizer)** | `/dashboards/optimizer` | `optimizer123` |
+| **🏛️ Higher Authority (Collector)** | `/dashboards/authority` | `authority123` |
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend & Routing:** [Next.js 16 (Turbopack)](https://nextjs.org/) + [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- **Backend & Database:** [Firebase Firestore](https://firebase.google.com/) (Real-time NoSQL Data) + [Firebase Authentication](https://firebase.google.com/products/auth)
-- **Mapping & Geolocation:** [React-Leaflet](https://react-leaflet.js.org/) + [OpenStreetMap](https://www.openstreetmap.org/) + [Nominatim Reverse Geocoding API](https://nominatim.org/)
-- **Reporting & Exporting:** [jsPDF](https://github.com/parallax/jsPDF) + [jsPDF-AutoTable](https://github.com/simonbengtsson/jsPDF-AutoTable)
-- **UI / UX:** Clean GeeksForGeeks-inspired light interface, responsive navigation sidebar, floating India Map watermark, and custom CSS variables.
+| Layer | Technology |
+| :--- | :--- |
+| **Framework & Engine** | [Next.js 16 (App Router + Turbopack)](https://nextjs.org/) + [React 19](https://react.dev/) |
+| **Language** | [TypeScript 5](https://www.typescriptlang.org/) |
+| **Cloud Database & Auth** | [Firebase Firestore](https://firebase.google.com/) + [Firebase Authentication](https://firebase.google.com/products/auth) |
+| **Geospatial & Mapping** | [Leaflet](https://leafletjs.com/) + [React-Leaflet](https://react-leaflet.js.org/) + [OpenStreetMap](https://www.openstreetmap.org/) *(100% Free - No API Key Required)* |
+| **Reporting & Exporting** | [jsPDF](https://github.com/parallax/jsPDF) + [jspdf-autotable](https://github.com/simonbengtsson/jsPDF-AutoTable) |
+| **Styling & Design** | GeeksForGeeks-inspired clean UI, Glassmorphism panels, India Watermark background, CSS Modules |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Local Development Setup
 
-### Prerequisites
-- Node.js (v18.x or higher)
-- npm or yarn
-- A Firebase project with Firestore and Auth enabled
+### 1. Clone Repository
+```bash
+git clone https://github.com/jeevanasreekonnipati-ops/community_poratal.git
+cd community_poratal
+```
 
-### Installation
+### 2. Install Dependencies
+```bash
+npm install --legacy-peer-deps
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/jeevanasreekonnipati-ops/community_poratal.git
-   cd community_poratal
-   ```
+### 3. Environment Configuration
+Create a `.env.local` file in the root directory (refer to `.env.example`):
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyAosZ0fHjUFgfFY-UyKL-czl5wY-lnxme8
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=csp-project-c312a.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=csp-project-c312a
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=csp-project-c312a.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=977575288645
+NEXT_PUBLIC_FIREBASE_APP_ID=1:977575288645:web:79dc6e71227d6e1995a82c
+```
 
-2. **Install dependencies:**
-   ```bash
-   npm install --legacy-peer-deps
-   ```
+### 4. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-3. **Configure Environment Variables:**
-   Create a `.env.local` file in the project root:
-   ```env
-   NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
-   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
-   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
-   ```
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open in browser:**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+### 5. Build for Production
+```bash
+npm run build
+npm run start
+```
 
 ---
 
-## 📁 Project Structure
+## 📁 Repository Structure
 
 ```
 ├── src/
 │   ├── app/
-│   │   ├── auth/                 # Sign In / Registration with Firebase Auth
+│   │   ├── auth/                    # Authentication (Email/Password & Google OAuth)
 │   │   ├── dashboards/
-│   │   │   ├── layout.tsx        # Persistent GFG-style Sidebar Layout
-│   │   │   ├── admin/            # Moderation, Roles, PDF/CSV Exports, Logs
-│   │   │   ├── authority/        # State-level governance & scheme overview
-│   │   │   ├── citizen/          # Survey submission, Live Map, Officials & Schemes
-│   │   │   └── optimizer/        # Resource distribution & village analytics
-│   │   ├── globals.css           # Design tokens, theme variables, reset
-│   │   ├── layout.tsx            # Root Navbar, Watermark & Theme controls
-│   │   └── page.tsx              # Landing Page with pastel feature cards
+│   │   │   ├── layout.tsx           # GFG-style Sidebar & Passcode Role Switcher
+│   │   │   ├── citizen/page.tsx     # Citizen Portal (Map, AI Assistant, SOS, Private History)
+│   │   │   ├── admin/page.tsx       # Secretary Admin (SLA Timers, Notice Broadcaster, SMS)
+│   │   │   ├── optimizer/page.tsx   # MRO Optimizer (Scheme Gaps, Funds, Monthly Escalation)
+│   │   │   └── authority/page.tsx   # Higher Authority (State Budget Ledger & Grant Sanctions)
+│   │   ├── globals.css              # Theme tokens, Glassmorphism styling, India Map watermark
+│   │   └── page.tsx                 # Landing Page with feature cards & role entry points
 │   ├── components/
-│   │   ├── GovtSupportPanel.tsx  # Central & State welfare schemes explorer
-│   │   ├── Map.tsx               # Leaflet map container with custom pins & GPS
-│   │   ├── RepresentativesPanel.tsx # Geolocation-based MP/MLA/CM/PM lookup
-│   │   └── ThemeControls.tsx     # Color switcher & constant India Map watermark
+│   │   ├── AIAssistantModal.tsx     # Smart Welfare Scheme Navigator & AI Grievance Formalizer
+│   │   ├── AuthGuard.tsx            # RBAC Role Guard with inline passcode unlocker
+│   │   ├── EmergencyDirectoryModal.tsx # 1-Tap SOS Emergency Helpline Directory
+│   │   ├── GovtSupportPanel.tsx     # Government support schemes explorer
+│   │   ├── Map.tsx                  # Interactive Leaflet Map with GPS & click-to-pin
+│   │   ├── Navbar.tsx               # Reactive Navbar with user session & role badges
+│   │   ├── NoticeBoardBanner.tsx    # Live rotating village announcement ticker
+│   │   └── RepresentativesPanel.tsx # Geolocation-based MP/MLA/CM/PM lookup
 │   └── lib/
-│       ├── firebase.ts           # Firebase App, Auth & Firestore initialization
-│       ├── representatives.ts    # AP Lok Sabha & Assembly constituency mappings
-│       └── useResources.ts       # Real-time Firestore hooks for resource CRUD
-├── public/                       # Static assets & icons
+│       ├── firebase.ts              # Firebase initialization & SDK exports
+│       ├── funds.ts                 # Development Grant allocations & Budget Ledger store
+│       ├── noticeBoard.ts           # Village notice board store & Firestore sync
+│       ├── performanceScoring.ts    # Performance scoring algorithms & tier grading
+│       ├── representatives.ts       # Central & Andhra Pradesh elected officials data
+│       ├── schemes.ts               # Welfare schemes database & eligibility criteria
+│       ├── useResources.ts          # Real-time reactive resource survey hook
+│       └── userProfile.ts           # User profiles, submissions & monthly report store
+├── public/                          # Static icons, banners & assets
+├── .env.example                     # Reference environment variables
 ├── package.json
 └── README.md
 ```
@@ -112,11 +167,12 @@ An intelligent, multi-tier civic management platform connecting **Citizens**, **
 
 ## 🔒 Security & Privacy
 
-- Client coordinates are processed strictly via standard client-side browser geolocation and OpenStreetMap Nominatim for public constituency lookup.
-- Firebase credentials are encapsulated via environment configurations.
+- **Account Isolation:** Citizen issue history is strictly scoped to the authenticated user's `uid` and verified `email`.
+- **Zero Data Leakage:** Stale profile and session caches are automatically purged upon logout.
+- **Open Geospatial Standards:** Uses open-source OpenStreetMap tiles with no third-party tracking or paid map dependencies.
+- **Resilient Fallback:** Offline `localStorage` caching ensures uninterrupted operation during intermittent network connectivity.
 
 ---
 
 ## 📜 License
-
-This project is developed for civic governance and community empowerment.
+This project is licensed under the MIT License — open for community governance and civic empowerment.
