@@ -133,7 +133,7 @@ export default function AuthorityDashboard() {
   }));
 
   const totalSanctioned = funds.reduce((acc, curr) => acc + (curr.amountAllocated || 0), 0);
-  const stateBudgetPool = 5000000;
+  const stateBudgetPool = 10000000;
   const remainingBudget = Math.max(0, stateBudgetPool - totalSanctioned);
 
   const handleSanctionGrant = async (e: React.FormEvent) => {
