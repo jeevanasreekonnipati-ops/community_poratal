@@ -1,12 +1,49 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 export default function BannerPage() {
   const printRef = useRef<HTMLDivElement>(null);
+  const [downloading, setDownloading] = useState(false);
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadPNG = async () => {
+    if (!printRef.current) return;
+    setDownloading(true);
+
+    try {
+      // Dynamically load html2canvas if not present
+      if (!(window as any).html2canvas) {
+        await new Promise<void>((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error('Failed to load html2canvas'));
+          document.head.appendChild(script);
+        });
+      }
+
+      const html2canvas = (window as any).html2canvas;
+      const canvas = await html2canvas(printRef.current, {
+        scale: 2, // 2x High-DPI resolution for print-ready 2400x2400 image
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+      });
+
+      const link = document.createElement('a');
+      link.download = 'Sachivalayam_Platform_2x2_Banner_AITS.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (err: any) {
+      alert('Could not auto-generate image. Please use "Print / Save as PDF" or open public/banner.html.');
+      console.error(err);
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (
@@ -22,13 +59,39 @@ export default function BannerPage() {
         padding: '10px 24px',
         display: 'flex',
         alignItems: 'center',
-        gap: '16px',
+        gap: '14px',
         boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
         marginBottom: '20px',
+        flexWrap: 'wrap',
       }}>
         <span style={{ color: '#f8fafc', fontWeight: 700, fontSize: '0.95rem' }}>
-          📐 2ft × 2ft Academic Project Banner (Square Format with Web UI Snaps)
+          📐 2ft × 2ft Academic Banner (AITS CSE)
         </span>
+        
+        {/* Download PNG Button */}
+        <button
+          onClick={handleDownloadPNG}
+          disabled={downloading}
+          style={{
+            padding: '8px 18px',
+            backgroundColor: '#2563eb',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '8px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            fontSize: '0.9rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 4px 12px rgba(37,99,235,0.4)',
+            transition: 'all 0.2s',
+          }}
+        >
+          {downloading ? '⏳ Generating PNG…' : '📥 Download High-Res PNG (2×2)'}
+        </button>
+
+        {/* Print / Save PDF Button */}
         <button
           onClick={handlePrint}
           style={{
@@ -49,13 +112,14 @@ export default function BannerPage() {
         >
           🖨️ Print / Save as PDF
         </button>
+
         <a
           href="/dashboards/optimizer"
           style={{
             color: '#94a3b8',
             fontSize: '0.85rem',
             textDecoration: 'none',
-            marginLeft: '10px',
+            marginLeft: '6px',
           }}
         >
           ← Back to Dashboard
@@ -82,80 +146,78 @@ export default function BannerPage() {
           position: 'relative',
         }}
       >
-        {/* ==================== HEADER ==================== */}
+        {/* ==================== EXACT REFERENCE HEADER ==================== */}
         <header style={{
           display: 'flex',
           alignItems: 'center',
           borderBottom: '3px solid #14532d',
-          paddingBottom: '10px',
+          paddingBottom: '12px',
           marginBottom: '10px',
-          gap: '16px'
+          position: 'relative',
         }}>
-          {/* Logo / Crest */}
+          {/* Authentic AITS Circular Logo */}
           <div style={{
-            width: '90px',
-            height: '90px',
-            borderRadius: '50%',
-            border: '3px solid #14532d',
+            position: 'absolute',
+            left: '10px',
+            top: '50%',
+            transform: 'translateY(-50%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexDirection: 'column',
-            backgroundColor: '#f0fdf4',
-            padding: '4px',
-            textAlign: 'center',
-            flexShrink: 0,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
           }}>
-            <span style={{ fontSize: '1.8rem' }}>🏛️</span>
-            <span style={{ fontSize: '0.55rem', fontWeight: 900, color: '#14532d', lineHeight: 1.1 }}>AITS</span>
-            <span style={{ fontSize: '0.45rem', color: '#166534' }}>TIRUPATI</span>
+            <img
+              src="/banner_images/aits_logo_hd.png"
+              alt="Annamacharya Educational Trust Logo"
+              style={{
+                width: '88px',
+                height: '88px',
+                borderRadius: '50%',
+                objectFit: 'contain',
+              }}
+            />
           </div>
 
-          {/* Title Area */}
-          <div style={{ flex: 1, textAlign: 'center' }}>
+          {/* Centered Typography Matching Reference */}
+          <div style={{ width: '100%', textAlign: 'center', padding: '0 100px' }}>
             <h1 style={{
               margin: '0 0 4px 0',
-              fontSize: '1.5rem',
-              fontWeight: 900,
-              color: '#0f172a',
-              letterSpacing: '-0.5px',
-              textTransform: 'uppercase'
+              fontSize: '1.45rem',
+              fontWeight: 800,
+              color: '#000000',
+              letterSpacing: '-0.3px',
+              fontFamily: "'Segoe UI', Arial, sans-serif"
             }}>
               Sachivalayam Platform (The Government Service Optimization Eye)
             </h1>
-            <div style={{ fontSize: '0.9rem', fontStyle: 'italic', color: '#14532d', fontWeight: 600, marginBottom: '3px' }}>
-              A Multi-Tier Real-Time Grassroots Civic Governance & Discretionary Resource Allocation Ecosystem
+            <div style={{
+              fontSize: '0.98rem',
+              fontStyle: 'italic',
+              fontWeight: 600,
+              color: '#000000',
+              marginBottom: '3px',
+              fontFamily: "'Segoe UI', Arial, sans-serif"
+            }}>
+              Department of Computer Science and Engineering
             </div>
-            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155' }}>
-              Department of Electronics and Communication Engineering
-            </div>
-            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#15803d', letterSpacing: '0.5px' }}>
+            <div style={{
+              fontSize: '1.15rem',
+              fontWeight: 900,
+              color: '#000000',
+              letterSpacing: '0.2px',
+              textTransform: 'uppercase',
+              marginBottom: '2px',
+              fontFamily: "'Segoe UI', Arial, sans-serif"
+            }}>
               ANNAMACHARYA INSTITUTE OF TECHNOLOGY AND SCIENCES
             </div>
-            <div style={{ fontSize: '0.7rem', color: '#64748b' }}>
-              Tirupati, 517520, Andhra Pradesh, India
+            <div style={{
+              fontSize: '0.78rem',
+              color: '#000000',
+              fontWeight: 600,
+              fontFamily: "'Segoe UI', Arial, sans-serif"
+            }}>
+              Tirupati, 517520, India
             </div>
-          </div>
-
-          {/* Right Emblem / QR Box */}
-          <div style={{
-            width: '90px',
-            height: '90px',
-            border: '2px solid #cbd5e1',
-            borderRadius: '8px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#f8fafc',
-            flexShrink: 0,
-            padding: '4px',
-            textAlign: 'center'
-          }}>
-            <span style={{ fontSize: '1.6rem' }}>👁️</span>
-            <span style={{ fontSize: '0.55rem', fontWeight: 800, color: '#0f172a' }}>OPTIMIZER EYE</span>
-            <span style={{ fontSize: '0.48rem', color: '#15803d', fontWeight: 700 }}>REAL-TIME GIS</span>
           </div>
         </header>
 
@@ -515,7 +577,7 @@ export default function BannerPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr style={{ borderBottom: '1px solid #e2e8f0', backgroundColor: '#f0fdf4' }}>
+                  <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f0fdf4' }}>
                     <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Gollapudi</td>
                     <td>7</td>
                     <td>6</td>
@@ -543,7 +605,7 @@ export default function BannerPage() {
                     <td>50.0%</td>
                     <td><span style={{ color: '#854d0e', fontWeight: 700 }}>🟡 Average</span></td>
                   </tr>
-                  <tr style={{ backgroundColor: '#fef2f2' }}>
+                  <tr style={{ background: '#fef2f2' }}>
                     <td style={{ padding: '2px', textAlign: 'left', fontWeight: 700 }}>Nunna</td>
                     <td>3</td>
                     <td>1</td>
@@ -627,7 +689,7 @@ export default function BannerPage() {
 
               <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '3px', color: '#64748b', fontStyle: 'italic', fontSize: '0.58rem' }}>
                 1. Govt. of AP Grama/Ward Sachivalayam Mission (2026).<br />
-                2. Sincere thanks to ECE Faculty & Administration at AITS Tirupati.
+                2. Sincere thanks to CSE Faculty & Administration at AITS Tirupati.
               </div>
             </div>
           </section>
@@ -647,7 +709,7 @@ export default function BannerPage() {
         }}>
           <span>Project: <strong>Sachivalayam Platform (The Government Service Optimization Eye)</strong></span>
           <span>Banner Size: <strong>2ft × 2ft (Square 1:1 Aspect Ratio)</strong></span>
-          <span>Partner: <strong>AITS Tirupati, Andhra Pradesh</strong></span>
+          <span>Department: <strong>Computer Science and Engineering (AITS Tirupati)</strong></span>
         </footer>
       </div>
 

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sachivalayam Platform (The Government Service Optimization Eye) - 2x2 Academic Banner</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -25,15 +26,14 @@
       padding: 10px 24px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       margin-bottom: 20px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      flex-wrap: wrap;
     }
     .control-bar span { color: #f8fafc; font-weight: 700; font-size: 0.95rem; }
-    .print-btn {
+    .btn {
       padding: 8px 18px;
-      background: #16a34a;
-      color: #fff;
       border: none;
       border-radius: 8px;
       font-weight: 700;
@@ -42,10 +42,19 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(22,163,74,0.4);
       transition: all 0.2s;
+      color: #fff;
     }
-    .print-btn:hover { background: #15803d; transform: translateY(-1px); }
+    .btn-download {
+      background: #2563eb;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+    }
+    .btn-download:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .btn-print {
+      background: #16a34a;
+      box-shadow: 0 4px 12px rgba(22,163,74,0.4);
+    }
+    .btn-print:hover { background: #15803d; transform: translateY(-1px); }
     
     /* 2x2 Square Poster Canvas (1:1 Ratio) */
     .poster-canvas {
@@ -60,48 +69,57 @@
       justify-content: space-between;
     }
 
-    /* Header */
+    /* Header matching reference */
     header {
       display: flex;
       align-items: center;
       border-bottom: 3px solid #14532d;
-      padding-bottom: 10px;
+      padding-bottom: 12px;
       margin-bottom: 10px;
-      gap: 16px;
+      position: relative;
     }
-    .emblem-logo {
-      width: 90px;
-      height: 90px;
+    .aits-emblem {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 88px;
+      height: 88px;
       border-radius: 50%;
-      border: 3px solid #14532d;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: #f0fdf4;
-      text-align: center;
-      flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      object-fit: contain;
     }
-    .header-title-box { flex: 1; text-align: center; }
+    .header-text {
+      width: 100%;
+      text-align: center;
+      padding: 0 100px;
+    }
     .main-title {
-      font-size: 1.5rem;
-      font-weight: 900;
-      color: #0f172a;
-      letter-spacing: -0.5px;
-      text-transform: uppercase;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #000000;
+      letter-spacing: -0.3px;
       margin-bottom: 4px;
     }
-    .main-sub {
-      font-size: 0.9rem;
+    .dept-name {
+      font-size: 0.98rem;
       font-style: italic;
-      color: #14532d;
       font-weight: 600;
+      color: #000000;
       margin-bottom: 3px;
     }
-    .dept-name { font-size: 0.82rem; font-weight: 700; color: #334155; }
-    .inst-name { font-size: 0.8rem; font-weight: 800; color: #15803d; letter-spacing: 0.5px; }
-    .inst-loc { font-size: 0.7rem; color: #64748b; }
+    .inst-name {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #000000;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .inst-loc {
+      font-size: 0.78rem;
+      color: #000000;
+      font-weight: 600;
+    }
 
     /* 3-Column Layout */
     .grid-3col {
@@ -124,7 +142,7 @@
     .panel-header {
       background: #14532d;
       color: #ffffff;
-      textAlign: center;
+      text-align: center;
       font-weight: 800;
       font-size: 0.78rem;
       padding: 3px 0;
@@ -132,7 +150,6 @@
       margin-bottom: 6px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      text-align: center;
     }
     .badge-sub {
       background: #dcfce7;
@@ -163,31 +180,21 @@
 <body>
 
   <div class="control-bar">
-    <span>📐 2ft × 2ft Academic Presentation Banner (Square Poster with Web UI Snaps)</span>
-    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <span>📐 2ft × 2ft Academic Presentation Banner (AITS CSE)</span>
+    <button class="btn btn-download" onclick="downloadBannerImage()">📥 Download High-Res PNG (2×2)</button>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
   </div>
 
-  <div class="poster-canvas">
-    <!-- Header -->
+  <div class="poster-canvas" id="posterArea">
+    <!-- Header matching reference image exactly -->
     <header>
-      <div class="emblem-logo">
-        <span style="font-size: 1.8rem;">🏛️</span>
-        <span style="font-size: 0.55rem; font-weight: 900; color: #14532d; line-height: 1.1;">AITS</span>
-        <span style="font-size: 0.45rem; color: #166534;">TIRUPATI</span>
-      </div>
+      <img src="/banner_images/aits_logo_hd.png" alt="AITS Crest" class="aits-emblem">
 
-      <div class="header-title-box">
+      <div class="header-text">
         <h1 class="main-title">Sachivalayam Platform (The Government Service Optimization Eye)</h1>
-        <div class="main-sub">A Multi-Tier Real-Time Grassroots Civic Governance & Discretionary Resource Allocation Ecosystem</div>
-        <div class="dept-name">Department of Electronics and Communication Engineering</div>
+        <div class="dept-name">Department of Computer Science and Engineering</div>
         <div class="inst-name">ANNAMACHARYA INSTITUTE OF TECHNOLOGY AND SCIENCES</div>
-        <div class="inst-loc">Tirupati, 517520, Andhra Pradesh, India</div>
-      </div>
-
-      <div style="width: 90px; height: 90px; border: 2px solid #cbd5e1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; flex-shrink: 0; padding: 4px; text-align: center;">
-        <span style="font-size: 1.6rem;">👁️</span>
-        <span style="font-size: 0.55rem; font-weight: 800; color: #0f172a;">OPTIMIZER EYE</span>
-        <span style="font-size: 0.48rem; color: #15803d; font-weight: 700;">REAL-TIME GIS</span>
+        <div class="inst-loc">Tirupati, 517520, India</div>
       </div>
     </header>
 
@@ -333,35 +340,35 @@
                 <td>7</td>
                 <td>6</td>
                 <td>85.7%</td>
-                <td><span style="color: #15803d; fontWeight: 700;">🟢 Excellent</span></td>
+                <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Excellent</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
                 <td style="padding: 2px; text-align: left; font-weight: 700;">Penamaluru</td>
                 <td>4</td>
                 <td>3</td>
                 <td>75.0%</td>
-                <td><span style="color: #15803d; fontWeight: 700;">🟢 Good</span></td>
+                <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Good</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
                 <td style="padding: 2px; text-align: left; font-weight: 700;">Kankipadu</td>
                 <td>3</td>
                 <td>2</td>
                 <td>66.7%</td>
-                <td><span style="color: #15803d; fontWeight: 700;">🟢 Normal</span></td>
+                <td><span style={{ color: '#15803d', fontWeight: 700 }}>🟢 Normal</span></td>
               </tr>
               <tr style="border-bottom: 1px solid #e2e8f0;">
                 <td style="padding: 2px; text-align: left; font-weight: 700;">Poranki</td>
                 <td>2</td>
                 <td>1</td>
                 <td>50.0%</td>
-                <td><span style="color: #854d0e; fontWeight: 700;">🟡 Average</span></td>
+                <td><span style={{ color: '#854d0e', fontWeight: 700 }}>🟡 Average</span></td>
               </tr>
               <tr style="background: #fef2f2;">
                 <td style="padding: 2px; text-align: left; font-weight: 700;">Nunna</td>
                 <td>3</td>
                 <td>1</td>
                 <td>33.3%</td>
-                <td><span style="color: #dc2626; fontWeight: 700;">🔴 Flagged</span></td>
+                <td><span style={{ color: '#dc2626', fontWeight: 700 }}>🔴 Flagged</span></td>
               </tr>
             </tbody>
           </table>
@@ -385,7 +392,7 @@
           </ul>
           <div style="border-top: 1px solid #e2e8f0; padding-top: 3px; color: #64748b; font-style: italic; font-size: 0.58rem;">
             1. Govt. of AP Grama/Ward Sachivalayam Mission (2026).<br />
-            2. Sincere thanks to ECE Faculty & Administration at AITS Tirupati.
+            2. Sincere thanks to CSE Faculty & Administration at AITS Tirupati.
           </div>
         </div>
       </section>
@@ -395,9 +402,33 @@
     <footer style="border-top: 2px solid #e2e8f0; padding-top: 6px; margin-top: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: #64748b;">
       <span>Project: <strong>Sachivalayam Platform (The Government Service Optimization Eye)</strong></span>
       <span>Banner Size: <strong>2ft × 2ft (Square 1:1 Aspect Ratio)</strong></span>
-      <span>Partner: <strong>AITS Tirupati, Andhra Pradesh</strong></span>
+      <span>Department: <strong>Computer Science and Engineering (AITS Tirupati)</strong></span>
     </footer>
   </div>
+
+  <script>
+    async function downloadBannerImage() {
+      const poster = document.getElementById('posterArea');
+      const btn = document.querySelector('.btn-download');
+      btn.innerText = '⏳ Generating PNG…';
+      try {
+        const canvas = await html2canvas(poster, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff'
+        });
+        const a = document.createElement('a');
+        a.download = 'Sachivalayam_Platform_2x2_Banner_AITS.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+      } catch (e) {
+        alert('Could not render image automatically. Please use the Print / Save as PDF button.');
+      } finally {
+        btn.innerText = '📥 Download High-Res PNG (2×2)';
+      }
+    }
+  </script>
 
 </body>
 </html>
