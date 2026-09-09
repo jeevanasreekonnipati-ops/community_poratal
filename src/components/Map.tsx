@@ -1,18 +1,21 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// ── Fix Leaflet default icon paths broken by webpack/Next.js ─────────────────
-// Must be done once, before any icons are created.
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl:       'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl:     'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
+// ── Fix Leaflet default icon paths safely in browser only ────────────────────
+if (typeof window !== 'undefined') {
+  try {
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+      iconUrl:       'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      shadowUrl:     'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    });
+  } catch {}
+}
 
 // ── Icon colours per resource type ──────────────────────────────────────────
 const TYPE_COLORS: Record<string, string> = {
@@ -41,33 +44,38 @@ function makeIcon(type: string) {
   });
 }
 
-const GPS_ICON = L.divIcon({
-  html: `<div style="
-    width:20px;height:20px;border-radius:50%;
-    background:#2e8b57;border:3px solid white;
-    box-shadow:0 0 0 6px rgba(46,139,87,0.25);
-  "></div>`,
-  className: '',
-  iconSize:   [20, 20],
-  iconAnchor: [10, 10],
-});
+function getGpsIcon() {
+  return L.divIcon({
+    html: `<div style="
+      width:20px;height:20px;border-radius:50%;
+      background:#2e8b57;border:3px solid white;
+      box-shadow:0 0 0 6px rgba(46,139,87,0.25);
+    "></div>`,
+    className: '',
+    iconSize:   [20, 20],
+    iconAnchor: [10, 10],
+  });
+}
 
-const SELECTED_ICON = L.divIcon({
-  html: `<div style="
-    width:24px;height:24px;border-radius:50%;
-    background:#f59e0b;border:3px solid white;
-    box-shadow:0 0 0 6px rgba(245,158,11,0.3);
-  "></div>`,
-  className: '',
-  iconSize:   [24, 24],
-  iconAnchor: [12, 12],
-});
+function getSelectedIcon() {
+  return L.divIcon({
+    html: `<div style="
+      width:24px;height:24px;border-radius:50%;
+      background:#f59e0b;border:3px solid white;
+      box-shadow:0 0 0 6px rgba(245,158,11,0.3);
+    "></div>`,
+    className: '',
+    iconSize:   [24, 24],
+    iconAnchor: [12, 12],
+  });
+}
 
 // ── FlyTo helper ─────────────────────────────────────────────────────────────
 function FlyToHandler({ center }: { center: [number, number] }) {
   const map = useMap();
   const prev = useRef<string>('');
   useEffect(() => {
+    if (!center || isNaN(center[0]) || isNaN(center[1])) return;
     const key = center.join(',');
     if (key !== prev.current) {
       prev.current = key;
@@ -81,7 +89,9 @@ function FlyToHandler({ center }: { center: [number, number] }) {
 function ClickHandler({ onClick }: { onClick?: (lat: number, lng: number) => void }) {
   useMapEvents({
     click(e) {
-      if (onClick) onClick(e.latlng.lat, e.latlng.lng);
+      if (onClick && e.latlng && !isNaN(e.latlng.lat) && !isNaN(e.latlng.lng)) {
+        onClick(e.latlng.lat, e.latlng.lng);
+      }
     },
   });
   return null;
@@ -99,7 +109,7 @@ export type ResourceLocation = {
 };
 
 type MapProps = {
-  locations: ResourceLocation[];
+  locations?: ResourceLocation[];
   userPosition?: [number, number] | null;
   flyTo?: [number, number] | null;
   onMapClick?: (lat: number, lng: number) => void;
@@ -110,7 +120,7 @@ type MapProps = {
 
 // ── Main Map Component ────────────────────────────────────────────────────────
 export default function InteractiveMap({
-  locations,
+  locations = [],
   userPosition,
   flyTo,
   onMapClick,
@@ -118,17 +128,44 @@ export default function InteractiveMap({
   height = '500px',
   center,
 }: MapProps) {
-  const defaultCenter: [number, number] = center ?? userPosition ?? [15.9129, 79.7400]; // AP centre
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <div style={{ height, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f8fafc', color: '#64748b' }}>
+        🗺️ Loading map…
+      </div>
+    );
+  }
+
+  // Filter only valid numeric coordinates
+  const validLocations = (locations || []).filter(
+    loc => loc && typeof loc.lat === 'number' && !isNaN(loc.lat) && typeof loc.lng === 'number' && !isNaN(loc.lng)
+  );
+
+  const isValidUserPos = userPosition && typeof userPosition[0] === 'number' && !isNaN(userPosition[0]) && typeof userPosition[1] === 'number' && !isNaN(userPosition[1]);
+  const isValidSelectedPin = selectedPin && typeof selectedPin[0] === 'number' && !isNaN(selectedPin[0]) && typeof selectedPin[1] === 'number' && !isNaN(selectedPin[1]);
+  const isValidFlyTo = flyTo && typeof flyTo[0] === 'number' && !isNaN(flyTo[0]) && typeof flyTo[1] === 'number' && !isNaN(flyTo[1]);
+
+  const defaultCenter: [number, number] = center && !isNaN(center[0]) && !isNaN(center[1])
+    ? center
+    : isValidUserPos
+    ? (userPosition as [number, number])
+    : [13.6288, 79.4192]; // Tirupati / AP Default
 
   return (
     <MapContainer
       center={defaultCenter}
-      zoom={userPosition ? 14 : 7}
+      zoom={isValidUserPos ? 14 : 9}
       style={{ height, width: '100%', borderRadius: '0.5rem' }}
       scrollWheelZoom
     >
       <ClickHandler onClick={onMapClick} />
-      {flyTo && <FlyToHandler center={flyTo} />}
+      {isValidFlyTo && <FlyToHandler center={flyTo as [number, number]} />}
 
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -137,21 +174,21 @@ export default function InteractiveMap({
       />
 
       {/* GPS position pulse dot */}
-      {userPosition && (
-        <Marker position={userPosition} icon={GPS_ICON}>
+      {isValidUserPos && (
+        <Marker position={userPosition as [number, number]} icon={getGpsIcon()}>
           <Popup><strong>📍 Your Location</strong></Popup>
         </Marker>
       )}
 
       {/* Tap/click selected pin */}
-      {selectedPin && (
-        <Marker position={selectedPin} icon={SELECTED_ICON}>
-          <Popup>📌 Selected location<br /><small>{selectedPin[0].toFixed(5)}, {selectedPin[1].toFixed(5)}</small></Popup>
+      {isValidSelectedPin && (
+        <Marker position={selectedPin as [number, number]} icon={getSelectedIcon()}>
+          <Popup>📌 Selected location<br /><small>{selectedPin![0].toFixed(5)}, {selectedPin![1].toFixed(5)}</small></Popup>
         </Marker>
       )}
 
       {/* Resource markers from Firestore */}
-      {locations.map(loc => (
+      {validLocations.map(loc => (
         <Marker key={loc.id} position={[loc.lat, loc.lng]} icon={makeIcon(loc.type)}>
           <Popup>
             <div style={{ minWidth: 160 }}>
