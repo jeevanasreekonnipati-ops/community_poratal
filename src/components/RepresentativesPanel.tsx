@@ -121,26 +121,36 @@ export interface RepresentativesPanelProps {
 }
 
 export default function RepresentativesPanel({ userPosition, manualVillage }: RepresentativesPanelProps) {
-  const [detected, setDetected]   = useState<string>('');
-  const [reps, setReps]           = useState<ReturnType<typeof matchLocation> | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('Tirupati');
+  const [detected, setDetected]   = useState<string>('Tirupati');
+  const [reps, setReps]           = useState<ReturnType<typeof matchLocation> | null>(() => matchLocation('Tirupati'));
   const [loading, setLoading]     = useState(false);
   const [expanded, setExpanded]   = useState(true);
 
   useEffect(() => {
-    if (!userPosition) {
-      if (manualVillage) {
-        setDetected(manualVillage);
-        setReps(matchLocation(manualVillage));
-      }
+    if (manualVillage) {
+      setDetected(manualVillage);
+      setSelectedDistrict(manualVillage);
+      setReps(matchLocation(manualVillage));
       return;
     }
-    setLoading(true);
-    reverseGeocode(userPosition[0], userPosition[1]).then(place => {
-      setDetected(place);
-      setReps(matchLocation(place));
-      setLoading(false);
-    });
+
+    if (userPosition) {
+      setLoading(true);
+      reverseGeocode(userPosition[0], userPosition[1]).then(place => {
+        setDetected(place);
+        setSelectedDistrict(place);
+        setReps(matchLocation(place));
+        setLoading(false);
+      });
+    }
   }, [userPosition, manualVillage]);
+
+  const handleDistrictChange = (dist: string) => {
+    setSelectedDistrict(dist);
+    setDetected(dist);
+    setReps(matchLocation(dist));
+  };
 
   return (
     <section style={{
@@ -151,48 +161,82 @@ export default function RepresentativesPanel({ userPosition, manualVillage }: Re
       boxShadow: 'var(--shadow-sm)',
     }}>
       {/* Header */}
-      <button
-        onClick={() => setExpanded(e => !e)}
+      <div
         style={{
           width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '1rem 1.25rem', background: 'transparent', border: 'none',
+          padding: '1rem 1.25rem', background: 'transparent',
           borderBottom: expanded ? '1px solid var(--border-color)' : 'none',
-          cursor: 'pointer', textAlign: 'left',
+          flexWrap: 'wrap', gap: '0.75rem',
         }}
       >
-        <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>
-          🏛️ Your Elected Officials
-          {detected && <span style={{ marginLeft: 8, fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 400 }}>— {detected}</span>}
-        </span>
-        <span style={{ color: 'var(--text-secondary)' }}>{expanded ? '▲' : '▼'}</span>
-      </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }} onClick={() => setExpanded(e => !e)}>
+          <span style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)' }}>
+            🏛️ Your Elected Officials & Administration
+          </span>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+            ({detected})
+          </span>
+        </div>
+
+        {/* Quick District / Constituency Selector */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+            📍 Change Region:
+          </label>
+          <select
+            value={selectedDistrict}
+            onChange={(e) => handleDistrictChange(e.target.value)}
+            style={{
+              padding: '0.35rem 0.65rem',
+              borderRadius: '6px',
+              border: '1px solid var(--border-color)',
+              backgroundColor: 'var(--bg-color)',
+              color: 'var(--text-primary)',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            <option value="Tirupati">Tirupati (Chittoor)</option>
+            <option value="Vijayawada">Vijayawada (NTR)</option>
+            <option value="Visakhapatnam">Visakhapatnam</option>
+            <option value="Guntur">Guntur</option>
+            <option value="Nellore">Nellore</option>
+            <option value="Kurnool">Kurnool</option>
+            <option value="Eluru">Eluru</option>
+          </select>
+
+          <button
+            onClick={() => setExpanded(e => !e)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--text-secondary)',
+              fontSize: '0.9rem',
+              padding: '0.2rem 0.5rem',
+            }}
+          >
+            {expanded ? '▲' : '▼'}
+          </button>
+        </div>
+      </div>
 
       {expanded && (
         <div style={{ padding: '1.1rem 1.25rem' }}>
           {loading && (
-            <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.9rem' }}>
-              📡 Detecting your location to find representatives…
+            <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.9rem', marginBottom: '0.75rem' }}>
+              📡 Detecting your GPS location to match local representatives…
             </p>
           )}
 
-          {!loading && !reps && (
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-              Use <strong>"📍 Use My Current Location"</strong> button above to auto-detect your officials, or enter your village name.
-            </p>
-          )}
-
-          {!loading && reps && (
-            <>
+          {reps && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0.75rem' }}>
               <RepCard rep={reps.pm} />
               <RepCard rep={reps.cm} />
               {reps.mp  && <RepCard rep={reps.mp}  detected={detected} />}
               {reps.mla && <RepCard rep={reps.mla} detected={detected} />}
-              {!reps.mp && !reps.mla && (
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic', marginTop: '0.5rem' }}>
-                  ⚠️ Specific MP/MLA data not yet available for "{detected}". PM & CM are shown above.
-                </p>
-              )}
-            </>
+            </div>
           )}
         </div>
       )}
