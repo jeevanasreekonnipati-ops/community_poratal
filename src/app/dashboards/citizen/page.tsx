@@ -114,6 +114,9 @@ export default function CitizenDashboard() {
   const formRef = useRef<HTMLFormElement>(null);
   const trackerRef = useRef<HTMLElement>(null);
 
+  // ---- Client Hydration Guard ----
+  const [mounted, setMounted] = useState(false);
+
   // ---- User & Session state ----
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -148,6 +151,7 @@ export default function CitizenDashboard() {
 
   // Initialize session token on client
   useEffect(() => {
+    setMounted(true);
     if (typeof window !== 'undefined') {
       let sid = sessionStorage.getItem('anon_citizen_id');
       if (!sid) {
@@ -195,7 +199,6 @@ export default function CitizenDashboard() {
       (err) => {
         setGpsLoading(false);
         setGpsError(`Location notice: ${err.message}. Using default Andhra Pradesh region coordinates.`);
-        // Fallback to Tirupati default
         setSelectedPin([13.6288, 79.4192]);
         setFlyTo([13.6288, 79.4192]);
       },
@@ -254,7 +257,6 @@ export default function CitizenDashboard() {
       setLocationName('');
       setDescription('');
       
-      // Scroll to tracker
       setTimeout(() => {
         trackerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 300);
@@ -285,7 +287,7 @@ export default function CitizenDashboard() {
     return false;
   });
 
-  // If no submissions exist yet for this browser session, show verified demo citizen reports so the tracker is immediately alive
+  // If no submissions exist yet for this browser session, show verified demo citizen reports
   if (mySubmissions.length === 0) {
     mySubmissions = [
       {
@@ -296,7 +298,7 @@ export default function CitizenDashboard() {
         locationName: 'Panchayat RO Drinking Water Plant, Tirupati',
         description: 'Water filtration motor repaired and operational. 2000 LPH clean drinking water supply restored to Ward 3 & 4.',
         status: 'approved',
-        createdAt: new Date(Date.now() - 26 * 60 * 60 * 1000), // 26 hours ago
+        createdAt: new Date(Date.now() - 26 * 60 * 60 * 1000),
         citizenName: 'Citizen Resident',
       },
       {
@@ -307,7 +309,7 @@ export default function CitizenDashboard() {
         locationName: 'Temple Street LED Lighting Grid',
         description: 'Reported non-functional streetlights along temple lane. Inspection assigned to electrical assistant.',
         status: 'pending',
-        createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000), // 8 hours ago
+        createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
         citizenName: 'Citizen Resident',
       },
     ];
@@ -389,9 +391,11 @@ export default function CitizenDashboard() {
           {!dataLoading && (
             <div className={styles.liveTag}>🟢 Live — {approvedLocations.length} community resources tracked in GIS grid</div>
           )}
-          <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-            Session: <strong>{currentUser?.email || (userProfile?.name ? userProfile.name : 'Citizen Resident')}</strong>
-          </span>
+          {mounted && (
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+              Session: <strong>{currentUser?.email || (userProfile?.name ? userProfile.name : 'Citizen Resident')}</strong>
+            </span>
+          )}
         </div>
       </header>
 
